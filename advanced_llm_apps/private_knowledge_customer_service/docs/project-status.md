@@ -4,7 +4,7 @@
 
 ## 总体状态
 
-规划与重组完成，尚未进入业务代码实现。
+已完成扫描基础和真实 pgvector 验证；当前暂停新增功能，先按用户要求完成 `awesome-llm-apps` 复用路线校正。
 
 ## 里程碑
 
@@ -54,6 +54,16 @@
 - 首轮测试发现更新时新旧片段唯一键冲突；已修复为保存点内先删除并 flush，再插入。
 - 修复后真实 PostgreSQL 集成测试：2 项通过。
 
+## 2026-07-15 复用路线校正
+
+- 用户再次明确：仓库已有能力不得重复开发，本系统必须基于现有模板搭建。
+- 审计确认此前对模板主要是“参考”，复用强度不足；已停止原 Task 6 的自写检索方案。
+- Web 工程改为直接采用 `multimodal_agentic_rag/frontend` 基线。
+- 混合检索与重排改为直接适配 `local_hybrid_search_rag` 使用的 RAGLite 函数。
+- DeepSeek 与 Ollama 调用分别复用仓库现有 OpenAI-compatible 和 Agno 模式。
+- 目录增量扫描、六类定位解析、公开/敏感权限与隐私开关属于模板缺失能力，继续保留。
+- 复用矩阵见 `docs/reuse-audit.md`。
+
 ## 下一步
 
-进入 Task 6，实现本地 Embedding、混合检索、重排、权限过滤和引用证据包，为最小 Web 问答闭环提供查询 API。
+按复用矩阵适配 RAGLite 检索与现有引用契约，然后直接迁入并改造 `multimodal_agentic_rag/frontend`，形成最小网页问答闭环。

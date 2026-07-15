@@ -22,6 +22,7 @@
 - [需求](docs/requirements.md)
 - [设计](docs/design.md)
 - [项目状态](docs/project-status.md)
+- [awesome-llm-apps 复用审计](docs/reuse-audit.md)
 - [实施计划](../../../docs/plans/2026-07-15-private-knowledge-customer-service.md)
 
 ## 计划结构

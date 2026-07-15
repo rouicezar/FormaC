@@ -101,9 +101,13 @@
 
 ## 8. 模板复用边界
 
-- 复用 `rag_tutorials/multimodal_agentic_rag` 的 FastAPI/React 分层、证据与引用同源思想。
-- 参考 `rag_tutorials/local_hybrid_search_rag` 的混合检索和本地重排。
+- 直接以 `rag_tutorials/multimodal_agentic_rag/frontend` 作为 Web 产品工程基线，并适配复用其 FastAPI `/health`、`/space`、`/ask` 契约及引用响应结构。
+- 直接调用 `rag_tutorials/local_hybrid_search_rag` 已使用的 RAGLite `hybrid_search`、`retrieve_chunks` 与 `rerank_chunks`，禁止重新实现融合和重排算法。
+- 复用 `rag_tutorials/autonomous_rag` 的 PostgreSQL + pgvector 知识库存储模式。
+- 复用 `rag_tutorials/agentic_rag_embedding_gemma` 的 Agno Ollama/OllamaEmbedder 配置方式。
+- 复用 `advanced_ai_agents/single_agent_apps/ai_system_architect_r1` 的 DeepSeek OpenAI-compatible 调用方式。
 - 参考 `advanced_ai_agents/single_agent_apps/ai_customer_support_agent` 的客服会话记忆。
 - 参考 `voice_ai_agents/customer_support_voice_agent` 的知识客服流程，但首版不引入语音。
 - 参考 `always_on_agents/always_on_hn_briefing_agent` 的定时任务、幂等和安全默认。
 - 不直接复制演示应用的内存存储、硬编码模型或 Streamlit 单体结构。
+- 详细复用与新增边界见 [复用审计](reuse-audit.md)。

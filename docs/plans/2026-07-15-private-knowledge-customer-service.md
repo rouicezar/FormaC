@@ -107,22 +107,22 @@
 5. Rerun focused and backend tests; expect PASS.
 6. Commit: `feat: add incremental knowledge scanning`.
 
-### Task 6: Local embedding, hybrid retrieval, and citations
+### Task 6: Adapt the existing RAGLite hybrid retrieval and citation contract
 
 **Files:**
-- Create: `backend/app/retrieval/embeddings.py`
-- Create: `backend/app/retrieval/search.py`
-- Create: `backend/app/retrieval/reranker.py`
+- Create: `backend/app/retrieval/raglite_adapter.py`
 - Create: `backend/app/retrieval/evidence.py`
 - Create: `backend/tests/retrieval/test_search.py`
 
 **Steps:**
 
-1. Write failing tests for semantic + keyword fusion, partition filters, deterministic evidence ordering, and source locations.
-2. Run `uv run pytest tests/retrieval/test_search.py -v`; expect failure.
-3. Implement local embedding interface, PostgreSQL vector/full-text queries, reciprocal-rank fusion, local reranking, and evidence packets.
-4. Rerun tests and verify an external identity can never retrieve `sensitive` chunks.
-5. Commit: `feat: add permission-aware hybrid retrieval`.
+1. Read and cite the reuse sources `rag_tutorials/local_hybrid_search_rag/local_main.py` and `rag_tutorials/multimodal_agentic_rag/backend/rag_store.py` in the adapter module.
+2. Write failing contract tests for RAGLite hybrid search, retrieve, rerank, partition routing, deterministic evidence ordering, and source locations.
+3. Run `uv run pytest tests/retrieval/test_search.py -v`; expect failure.
+4. Adapt RAGLite `hybrid_search`, `retrieve_chunks`, and `rerank_chunks`; do not implement replacement fusion or reranking algorithms.
+5. Map results to the existing multimodal template's `citation/source/similarity/evidence` contract, extended with source locator metadata.
+6. Rerun tests and verify an external identity can never route to the sensitive RAGLite store.
+7. Commit: `feat: adapt existing hybrid retrieval template`.
 
 ### Task 7: Pluggable models and privacy gateway
 
@@ -139,9 +139,10 @@
 1. Write failing policy-table tests for public/sensitive evidence, internal/external identity, local/cloud provider, and sensitive-cloud checkbox states.
 2. Add a capturing fake cloud provider and assert forbidden sensitive text never enters its request.
 3. Run focused tests; expect failure.
-4. Implement the provider protocol, DeepSeek-compatible adapter, Ollama adapter, and decisions `GENERATE`, `EXCERPT_ONLY`, `HANDOFF`.
-5. Rerun privacy and provider tests; expect PASS without real network calls.
-6. Commit: `feat: enforce pluggable model privacy policy`.
+4. Adapt the DeepSeek `OpenAI(base_url="https://api.deepseek.com")` pattern from `ai_system_architect_r1` and the Agno Ollama pattern from `agentic_rag_embedding_gemma`; do not write replacement HTTP clients.
+5. Implement only the provider selection boundary and privacy decisions `GENERATE`, `EXCERPT_ONLY`, `HANDOFF`.
+6. Rerun privacy and provider tests; expect PASS without real network calls.
+7. Commit: `feat: enforce pluggable model privacy policy`.
 
 ### Task 8: Authentication and employee whitelist
 
@@ -226,11 +227,13 @@
 
 **Steps:**
 
-1. Write failing Vitest tests for local login, Feishu login action, protected routes, and administrator-only routes.
-2. Run `npm test -- auth.test.tsx`; expect failure.
-3. Implement the typed API client, auth state, login page, and route guards.
-4. Rerun focused tests and `npm test`; expect PASS.
-5. Commit: `feat: add web authentication shell`.
+1. Copy `rag_tutorials/multimodal_agentic_rag/frontend` as the frontend baseline, preserving its Vite/React setup, workspace layout, Q&A panel, status feedback, and citation list.
+2. Write failing Vitest tests for local login, Feishu login action, protected routes, and administrator-only routes.
+3. Run `npm test -- auth.test.tsx`; expect failure.
+4. Adapt the existing source panel to local-folder scan status and adapt `/ask` without rebuilding the page shell.
+5. Implement only the missing typed API client, auth state, login page, and route guards.
+6. Rerun focused tests and `npm test`; expect PASS.
+7. Commit: `feat: adapt multimodal RAG web shell`.
 
 ### Task 13: Admin console
 
