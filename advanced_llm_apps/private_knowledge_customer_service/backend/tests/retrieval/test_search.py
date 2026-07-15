@@ -23,6 +23,10 @@ class CapturingRagLite:
         self.chunks = chunks
         self.calls: list[tuple[str, str]] = []
 
+    def has_chunks(self, *, config: object) -> bool:
+        self.calls.append(("has_chunks", str(config)))
+        return bool(self.results[str(config)][0])
+
     def hybrid_search(self, query: str, *, num_results: int, config: object):
         self.calls.append(("hybrid_search", str(config)))
         return self.results[str(config)]
@@ -84,11 +88,11 @@ def test_internal_identity_searches_both_partition_stores_and_keeps_locations():
 
     assert {config for _, config in api.calls} == {"public-db", "sensitive-db"}
     assert packet.provider == "raglite-hybrid"
-    assert [match.citation for match in packet.matches] == ["sec-1", "pub-1", "pub-2"]
+    assert [match.citation for match in packet.matches] == ["sec-1", "pub-2", "pub-1"]
     assert packet.matches[0].source == "sensitive/pricing.pptx"
     assert packet.matches[0].locator == {"slide": 4}
-    assert packet.matches[1].locator == {"page": 2}
-    assert packet.matches[2].locator == {"sheet": "服务时间", "row": 3}
+    assert packet.matches[1].locator == {"sheet": "服务时间", "row": 3}
+    assert packet.matches[2].locator == {"page": 2}
 
 
 def test_results_are_deterministic_when_rerank_order_ties():
@@ -106,3 +110,13 @@ def test_missing_source_metadata_is_rejected():
 
     with pytest.raises(ValueError, match="source metadata"):
         retriever.search("退款", identity=IdentityKind.EXTERNAL)
+
+
+def test_empty_sensitive_store_is_skipped_after_last_document_is_deleted():
+    retriever, api = make_retriever()
+    api.results["sensitive-db"] = ([], [])
+
+    packet = retriever.search("内部规则", identity=IdentityKind.INTERNAL)
+
+    assert all(match.partition is KnowledgePartition.PUBLIC for match in packet.matches)
+    assert ("hybrid_search", "sensitive-db") not in api.calls

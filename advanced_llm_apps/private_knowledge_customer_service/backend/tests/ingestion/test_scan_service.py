@@ -1,4 +1,5 @@
 from pathlib import Path
+from dataclasses import dataclass
 
 from fastapi.testclient import TestClient
 
@@ -11,6 +12,33 @@ def make_root(tmp_path: Path) -> Path:
     (root / "public").mkdir(parents=True)
     (root / "sensitive").mkdir()
     return root
+
+
+@dataclass
+class FakePreparedUpdate:
+    source: str
+    committed: bool = False
+    rolled_back: bool = False
+
+    def commit(self) -> None:
+        self.committed = True
+
+    def rollback(self) -> None:
+        self.rolled_back = True
+
+
+class FakeKnowledgeIndex:
+    def __init__(self) -> None:
+        self.prepared: list[FakePreparedUpdate] = []
+        self.deleted: list[tuple[str, str]] = []
+
+    def prepare_replace(self, entry, chunks):
+        update = FakePreparedUpdate(entry.relative_path.as_posix())
+        self.prepared.append(update)
+        return update
+
+    def delete_source(self, partition, relative_path: str) -> None:
+        self.deleted.append((partition.value, relative_path))
 
 
 def test_initial_scan_and_unchanged_scan(tmp_path: Path) -> None:
@@ -89,6 +117,49 @@ def test_failed_replacement_preserves_previous_index(tmp_path: Path) -> None:
     assert report.failed == 1
     assert repository.sources["sensitive/policy.md"].content_hash == original_hash
     assert repository.sources["sensitive/policy.md"].chunks[0].text == "Original policy"
+
+
+def test_scan_commits_prepared_index_only_after_metadata_replace(tmp_path: Path) -> None:
+    root = make_root(tmp_path)
+    (root / "public" / "faq.txt").write_text("中文公开答案", encoding="utf-8")
+    repository = InMemoryScanRepository()
+    index = FakeKnowledgeIndex()
+
+    report = ScanService(root, repository, knowledge_index=index).scan(trigger="manual")
+
+    assert report.added == 1
+    assert index.prepared[0].committed is True
+    assert index.prepared[0].rolled_back is False
+
+
+def test_metadata_failure_rolls_back_prepared_index(tmp_path: Path) -> None:
+    root = make_root(tmp_path)
+    (root / "sensitive" / "policy.md").write_text("敏感规则", encoding="utf-8")
+    repository = InMemoryScanRepository()
+    repository.fail_replacements.add("sensitive/policy.md")
+    index = FakeKnowledgeIndex()
+
+    report = ScanService(root, repository, knowledge_index=index).scan(trigger="manual")
+
+    assert report.failed == 1
+    assert index.prepared[0].committed is False
+    assert index.prepared[0].rolled_back is True
+
+
+def test_deleted_source_is_removed_from_index_before_metadata(tmp_path: Path) -> None:
+    root = make_root(tmp_path)
+    path = root / "sensitive" / "policy.md"
+    path.write_text("敏感规则", encoding="utf-8")
+    repository = InMemoryScanRepository()
+    index = FakeKnowledgeIndex()
+    service = ScanService(root, repository, knowledge_index=index)
+    service.scan(trigger="manual")
+
+    path.unlink()
+    report = service.scan(trigger="manual")
+
+    assert report.deleted == 1
+    assert index.deleted == [("sensitive", "sensitive/policy.md")]
 
 
 def test_manual_scan_api_starts_and_returns_a_report(tmp_path: Path) -> None:

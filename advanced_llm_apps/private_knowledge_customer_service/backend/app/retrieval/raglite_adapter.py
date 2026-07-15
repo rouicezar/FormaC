@@ -37,6 +37,8 @@ class RagLiteChunk(Protocol):
 
 
 class RagLiteApi(Protocol):
+    def has_chunks(self, *, config: Any) -> bool: ...
+
     def hybrid_search(
         self, query: str, *, num_results: int, config: Any
     ) -> tuple[list[str], list[float]]: ...
@@ -50,6 +52,14 @@ class RagLiteApi(Protocol):
 
 class ImportedRagLiteApi:
     """Lazy imports keep health and scan commands usable before RAGLite setup."""
+
+    @staticmethod
+    def has_chunks(*, config: Any) -> bool:
+        from raglite._database import Chunk, create_database_engine
+        from sqlmodel import Session, select
+
+        with Session(create_database_engine(config)) as session:
+            return session.exec(select(Chunk.id).limit(1)).first() is not None
 
     @staticmethod
     def hybrid_search(query: str, *, num_results: int, config: Any):
@@ -97,8 +107,13 @@ class RagLiteHybridRetriever:
         if identity is IdentityKind.INTERNAL:
             stores.append(self.sensitive_store)
 
-        matches: list[EvidenceMatch] = []
+        candidates: list[tuple[RagLiteChunk, float, KnowledgePartition]] = []
         for store in stores:
+            # RAGLite 0.2.1's PostgreSQL vector_search raises while unpacking
+            # an empty result set. Skip an empty physical store before calling
+            # the unchanged template search chain.
+            if not self.raglite.has_chunks(config=store.config):
+                continue
             chunk_ids, scores = self.raglite.hybrid_search(
                 query,
                 num_results=num_results,
@@ -108,15 +123,34 @@ class RagLiteHybridRetriever:
                 continue
             score_by_id = dict(zip(chunk_ids, scores, strict=True))
             chunks = self.raglite.retrieve_chunks(chunk_ids, config=store.config)
-            chunks = self.raglite.rerank_chunks(query, chunks, config=store.config)
-            matches.extend(
-                self._to_evidence(chunk, score_by_id[chunk.id], store.partition)
+            candidates.extend(
+                (chunk, score_by_id[chunk.id], store.partition)
                 for chunk in chunks
             )
 
-        # Hybrid scores from the two identically configured stores are comparable.
-        # Citation id is a stable tie-breaker, making API output deterministic.
-        matches.sort(key=lambda item: (-item.similarity, item.citation))
+        if not candidates:
+            return EvidencePacket(provider="raglite-hybrid", matches=())
+
+        # Each physical store computes its own RRF scores, so those scores are not
+        # sufficient for cross-store ordering. Reuse RAGLite's existing reranker
+        # once over the combined candidates instead of implementing a new ranker.
+        reranked = self.raglite.rerank_chunks(
+            query,
+            [candidate[0] for candidate in candidates],
+            config=self.public_store.config,
+        )
+        candidate_by_id = {
+            chunk.id: (score, partition)
+            for chunk, score, partition in candidates
+        }
+        matches = [
+            self._to_evidence(
+                chunk,
+                candidate_by_id[chunk.id][0],
+                candidate_by_id[chunk.id][1],
+            )
+            for chunk in reranked
+        ]
         return EvidencePacket(provider="raglite-hybrid", matches=tuple(matches[:num_results]))
 
     @staticmethod

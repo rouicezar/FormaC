@@ -72,6 +72,26 @@ class ScanRepository(Protocol):
     def get_report(self, run_id: UUID) -> ScanReport | None: ...
 
 
+class PreparedIndexUpdate(Protocol):
+    def commit(self) -> None: ...
+
+    def rollback(self) -> None: ...
+
+
+class KnowledgeIndex(Protocol):
+    def prepare_replace(
+        self,
+        entry: InventoryEntry,
+        chunks: list[CanonicalChunk],
+    ) -> PreparedIndexUpdate: ...
+
+    def delete_source(
+        self,
+        partition: KnowledgePartition,
+        relative_path: str,
+    ) -> None: ...
+
+
 class InMemoryScanRepository:
     def __init__(self) -> None:
         self.sources: dict[str, StoredSource] = {}
@@ -241,9 +261,15 @@ class SqlAlchemyScanRepository:
 
 
 class ScanService:
-    def __init__(self, knowledge_root: Path, repository: ScanRepository) -> None:
+    def __init__(
+        self,
+        knowledge_root: Path,
+        repository: ScanRepository,
+        knowledge_index: KnowledgeIndex | None = None,
+    ) -> None:
         self.knowledge_root = knowledge_root
         self.repository = repository
+        self.knowledge_index = knowledge_index
 
     def scan(self, trigger: str) -> ScanReport:
         report = ScanReport(trigger=trigger)
@@ -262,11 +288,23 @@ class ScanService:
                 chunks = chunk_sections(parse_document(entry.absolute_path))
                 if not chunks:
                     raise ValueError("document contains no indexable text")
-                self.repository.atomic_replace(
-                    self.knowledge_root,
-                    entry,
-                    chunks,
+                prepared = (
+                    self.knowledge_index.prepare_replace(entry, chunks)
+                    if self.knowledge_index
+                    else None
                 )
+                try:
+                    self.repository.atomic_replace(
+                        self.knowledge_root,
+                        entry,
+                        chunks,
+                    )
+                except Exception:
+                    if prepared:
+                        prepared.rollback()
+                    raise
+                if prepared:
+                    prepared.commit()
             except Exception as error:
                 report.failed += 1
                 report.errors.append(
@@ -284,6 +322,11 @@ class ScanService:
 
         for relative_path in sorted(set(stored_sources) - current_paths):
             try:
+                if self.knowledge_index:
+                    self.knowledge_index.delete_source(
+                        stored_sources[relative_path].partition,
+                        relative_path,
+                    )
                 self.repository.delete_source(self.knowledge_root, relative_path)
                 report.deleted += 1
             except Exception as error:
