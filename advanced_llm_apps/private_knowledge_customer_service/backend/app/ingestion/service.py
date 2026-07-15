@@ -176,6 +176,7 @@ class SqlAlchemyScanRepository:
                 self.session.add(source)
             else:
                 source.chunks.clear()
+                self.session.flush()
                 source.partition = entry.partition
                 source.content_hash = entry.fingerprint.content_hash
                 source.modified_at_ns = entry.fingerprint.modified_at_ns
