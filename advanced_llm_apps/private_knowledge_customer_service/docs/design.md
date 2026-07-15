@@ -29,7 +29,7 @@
 | 模块 | 职责 |
 | --- | --- |
 | `api` | 管理、问答、认证、健康检查 API |
-| `channels/feishu` | 回调验证、事件去重、身份映射、消息卡片 |
+| `channels/feishu` | 回调验证、事件去重、身份映射、纯文本协议 |
 | `ingestion` | 文件发现、指纹、解析、分块、增量索引 |
 | `retrieval` | 权限过滤、混合召回、重排、证据包 |
 | `model_providers` | DeepSeek/OpenAI-compatible 与 Ollama 适配器 |
@@ -42,35 +42,39 @@
 
 ### 管理后台
 
-- `/admin/dashboard`：文件、索引、问答、工单与依赖健康度。
-- `/admin/knowledge`：公开/敏感目录、文件状态、错误和手动扫描。
-- `/admin/retrieval-lab`：问题、身份模拟、召回、重排、上下文和答案。
-- `/admin/support`：会话队列、工单详情、人工回复与恢复机器人。
-- `/admin/identities`：飞书用户白名单和变更记录。
-- `/admin/models`：模型提供商、连接测试、敏感云端开关。
-- `/admin/integrations/feishu`：应用凭证状态、回调与客服群配置。
-- `/admin/audit`：筛选、查看和导出审计事件。
+- `/admin/login`：本地超级管理员安全入口。
+- `/admin/dashboard`：查询与问答分列统计、文件、索引和依赖健康度。
+- `/admin/knowledge`、`/admin/knowledge/scan-detail`：公开/敏感目录、文件状态、手动扫描和异常诊断。
+- `/admin/models`：云端与本地模型、连接测试、敏感云端开关。
+- `/admin/users`：绑定用户、外部身份、内部授权和降级管理。
+- `/admin/records`、`/admin/analytics`：全局查询/问答记录与分项分析。
+- `/admin/shortcuts`：公开与内部快捷模板管理。
+- `/admin/feishu`：飞书凭证、回调状态与纯文本协议配置。
+- `/admin/audit`：关键设置、身份和隐私操作审计。
+- `/admin/retrieval-lab`：身份模拟、召回、重排、权限过滤、上下文和答案调试。
 
-### 网页问答端
+### 用户端
 
-- `/chat`：会话列表、消息流、引用抽屉、原文模式、反馈和转人工。
-- `/login`：飞书 OAuth 与本地账号登录。
-- 员工和外部客户使用同一界面，但服务端决定可见知识范围。
-- 管理员可打开检索调试抽屉，普通用户永远看不到内部分数或敏感元数据。
+- `/app/home`：动态身份、可见范围、原文查询与知识问答双入口。
+- `/app/search`：不调用模型的原文查询及定位结果。
+- `/app/chat`：基于证据的知识问答、引用和隐私降级状态。
+- `/app/shortcuts`、`/app/history`：个人高频入口、查询/问答次数和历史。
+- `/app/documents`：授权范围内的只读文档列表与预览。
+- `/app/bind-feishu`、`/app/profile`：飞书绑定、历史合并确认和个人身份信息。
+- 匿名、外部和内部用户使用同一套界面，由服务端强制决定知识范围；普通用户看不到检索分数或敏感元数据。
 
 ### 飞书端
 
-- 私聊消息直接进入问答流程。
+- 私聊文本支持 `查询：`、`问答：`、`历史` 和 `帮助`，无前缀文本默认进入问答流程。
 - 群聊只响应 `@机器人` 或工单交互事件。
-- 客户回答卡片包含引用、未解决和转人工操作。
-- 内部客服群接收工单卡片，并可接管、回复、关闭或恢复机器人。
+- 用户侧只返回纯文本结论或原文及引用，不使用菜单或卡片。
 
 ## 5. 核心数据模型
 
 - `knowledge_sources`：路径、分区、哈希、解析器版本、索引状态。
 - `document_chunks`：正文、向量、关键词字段、页码/工作表/幻灯片定位。
 - `scan_runs`：触发方式、统计、耗时和错误摘要。
-- `identity_whitelist`：飞书用户 ID、本地账号映射、操作者和有效期。
+- `user_identities`：飞书用户 ID、绑定状态、外部/内部身份、授权操作者和变更时间。
 - `conversations` / `messages`：渠道、参与者、状态、模型和引用。
 - `handoff_tickets`：触发原因、摘要、负责人、接管状态和解决结果。
 - `model_configs`：非秘密配置和秘密引用，不保存明文 API Key。

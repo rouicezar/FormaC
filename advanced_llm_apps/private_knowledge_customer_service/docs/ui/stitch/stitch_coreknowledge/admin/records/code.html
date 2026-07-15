@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Han+Sans+SC,+Microsoft+YaHei,+sans-serif:wght@100..900&display=swap" rel="stylesheet"/>
+<title>全局记录 - KnowledgeEngine</title>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #dfe3e0;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c1c8c5;
+        }
+        .bento-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .bento-card:hover {
+            box-shadow: 0px 2px 8px rgba(45, 74, 67, 0.05);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-low": "#f0f5f1",
+                      "secondary-fixed-dim": "#b8cbc5",
+                      "on-error": "#ffffff",
+                      "on-primary-container": "#99b9b0",
+                      "primary-fixed-dim": "#adcdc4",
+                      "surface-container-high": "#e5e9e6",
+                      "on-tertiary": "#ffffff",
+                      "primary-container": "#2d4a43",
+                      "on-secondary-fixed-variant": "#394a46",
+                      "inverse-primary": "#adcdc4",
+                      "on-tertiary-container": "#ff993b",
+                      "on-tertiary-fixed": "#2f1500",
+                      "tertiary-fixed-dim": "#ffb77d",
+                      "background": "#f6faf7",
+                      "on-secondary-container": "#576863",
+                      "surface": "#f6faf7",
+                      "inverse-on-surface": "#edf2ee",
+                      "surface-bright": "#f6faf7",
+                      "inverse-surface": "#2c312f",
+                      "on-primary-fixed-variant": "#2f4c45",
+                      "on-background": "#181d1b",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed": "#ffdcc3",
+                      "surface-tint": "#47645d",
+                      "tertiary-container": "#6b3700",
+                      "secondary": "#51625d",
+                      "surface-container-lowest": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed": "#d4e7e1",
+                      "on-secondary-fixed": "#0e1e1b",
+                      "primary": "#16332d",
+                      "surface-container": "#ebefec",
+                      "on-primary-fixed": "#02201a",
+                      "on-error-container": "#93000a",
+                      "surface-variant": "#dfe3e0",
+                      "on-primary": "#ffffff",
+                      "outline-variant": "#c1c8c5",
+                      "error": "#ba1a1a",
+                      "primary-fixed": "#c9e9e0",
+                      "surface-dim": "#d7dbd8",
+                      "on-tertiary-fixed-variant": "#6e3900",
+                      "surface-container-highest": "#dfe3e0",
+                      "tertiary": "#4a2500",
+                      "on-surface": "#181d1b",
+                      "secondary-container": "#d4e7e1",
+                      "outline": "#727976",
+                      "on-surface-variant": "#414846"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xl": "40px",
+                      "container-max": "1280px",
+                      "lg": "24px",
+                      "gutter": "20px",
+                      "unit": "4px",
+                      "sm": "8px",
+                      "xs": "4px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                      "body-md": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                      "label-md": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                      "body-lg": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                      "label-sm": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                      "headline-sm": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                      "headline-md": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""]
+              },
+              "fontSize": {
+                      "body-md": ["14px", {"lineHeight": "22px", "fontWeight": "400"}],
+                      "label-md": ["13px", {"lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                      "body-lg": ["16px", {"lineHeight": "26px", "fontWeight": "400"}],
+                      "headline-lg": ["30px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.03em", "fontWeight": "500"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-surface font-body-md">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation (Mapping from Shared Components SideNavBar 1) -->
+<aside class="docked left-0 h-full w-64 flex flex-col py-md px-sm bg-surface border-r border-outline-variant transition-colors duration-200">
+<div class="mb-xl px-md">
+<h1 class="font-headline-sm text-headline-sm font-semibold text-primary">Enterprise Admin</h1>
+<p class="text-on-surface-variant font-label-sm">Knowledge Core</p>
+</div>
+<nav class="flex-1 space-y-xs overflow-y-auto">
+<a class="flex items-center gap-md px-md py-sm rounded-lg bg-secondary-container text-on-secondary-container font-bold transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-body-md">Knowledge Base</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">hub</span>
+<span class="font-body-md">Data Connectors</span>
+</a>
+<!-- Active Item for this page context -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg bg-secondary-container text-on-secondary-container font-bold" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-body-md">Scanning Logs</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">key</span>
+<span class="font-body-md">API Settings</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">shield_person</span>
+<span class="font-body-md">Access Control</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline-variant pt-md px-md">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+</div>
+<div>
+<p class="font-label-md font-bold text-on-surface">系统管理员</p>
+<p class="text-[10px] text-on-surface-variant">管理员</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden">
+<!-- Top Navbar (Mapping from Shared Components TopNavBar) -->
+<header class="bg-surface-bright border-b border-outline-variant flex justify-between items-center w-full px-lg py-sm">
+<div class="flex items-center gap-lg">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">KnowledgeEngine</span>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-outline text-lg">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-surface text-body-md border border-outline-variant rounded-full focus:outline-none focus:border-primary w-64 transition-all" placeholder="搜索全局记录..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<nav class="flex gap-md mr-lg">
+<a class="text-on-surface-variant font-label-md hover:text-primary transition-colors" href="#">最近</a>
+<a class="text-on-surface-variant font-label-md hover:text-primary transition-colors" href="#">收藏</a>
+<a class="text-on-surface-variant font-label-md hover:text-primary transition-colors" href="#">共享</a>
+</nav>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary p-2">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary p-2">settings</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of a tech executive in a brightly lit, minimalist office setting. The executive is wearing a dark grey suit and is smiling subtly at the camera. The background features clean white lines, large windows, and a soft green potted plant, embodying the quiet intelligence and corporate modern aesthetic of the design system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAQeUZD2vmCiJOZzFz9squZ0c_MBfFma0xIM7v3DS3guUvIK30rLF-Hf_E8WSjDl6qTqMJins3HUuBa4__hafvEj1N4jLaG5apE8uv8KSv4l-0DTDh8AxLuN1HLPwk6eUUsYJE4H2NgCnN7dB_k5ayLUqpov1nXIoA_qrQL5ksM51LTq27oPUpGHVCGVLdfQKkZnD3wM-8LqJ4qzV7Qm3v4hed8xfOSOvXmVvzDdPbO7e7CXTLmAiEYPeWW_dt6RGdokscyISCW0N8"/>
+</div>
+</div>
+</header>
+<!-- Workspace Content -->
+<div class="flex-1 overflow-y-auto p-lg bg-background">
+<div class="max-w-container-max mx-auto space-y-lg">
+<!-- Alert Notice -->
+<div class="bg-surface-container-low border-l-4 border-primary px-lg py-md flex items-center gap-md rounded shadow-sm">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">gpp_maybe</span>
+<p class="text-on-primary-fixed-variant font-label-md">管理员仅具备查看与归档权限，任何修改原文的行为均被系统物理禁止。</p>
+</div>
+<!-- Page Title & Stats -->
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary">全局记录</h2>
+<p class="text-on-surface-variant font-body-md mt-1">监控、审计及合规管理全平台用户交互活动。</p>
+</div>
+<div class="flex gap-md">
+<button class="flex items-center gap-xs px-md py-2 border border-outline text-primary rounded-lg font-label-md hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-lg">filter_alt</span>
+                                筛选器
+                            </button>
+<button class="flex items-center gap-xs px-md py-2 bg-primary text-on-primary rounded-lg font-label-md hover:bg-opacity-90 transition-all">
+<span class="material-symbols-outlined text-lg">archive</span>
+                                批量合规归档
+                            </button>
+</div>
+</div>
+<!-- Stats Overview (Asymmetric Layout) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-md">
+<div class="bento-card bg-surface border border-outline-variant p-md rounded-xl">
+<p class="text-on-surface-variant font-label-sm">今日查询总数</p>
+<div class="flex items-baseline gap-sm mt-2">
+<span class="text-headline-md font-bold text-primary">1,284</span>
+<span class="text-[10px] text-green-600 font-bold">+12%</span>
+</div>
+</div>
+<div class="bento-card bg-surface border border-outline-variant p-md rounded-xl">
+<p class="text-on-surface-variant font-label-sm">平均响应耗时</p>
+<div class="flex items-baseline gap-sm mt-2">
+<span class="text-headline-md font-bold text-primary">0.82s</span>
+<span class="text-[10px] text-on-surface-variant font-bold">Stable</span>
+</div>
+</div>
+<div class="bento-card bg-surface border border-outline-variant p-md rounded-xl">
+<p class="text-on-surface-variant font-label-sm">高频引用的文件</p>
+<div class="flex items-baseline gap-sm mt-2">
+<span class="text-headline-md font-bold text-primary">24</span>
+<span class="text-[10px] text-on-surface-variant font-bold">Files</span>
+</div>
+</div>
+<div class="bento-card bg-surface border border-outline-variant p-md rounded-xl">
+<p class="text-on-surface-variant font-label-sm">系统合规指数</p>
+<div class="flex items-baseline gap-sm mt-2">
+<span class="text-headline-md font-bold text-primary">100%</span>
+<span class="material-symbols-outlined text-green-600 text-lg">verified_user</span>
+</div>
+</div>
+</div>
+<!-- Main Table -->
+<div class="bg-surface border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="px-md py-4 font-label-md text-on-surface-variant">用户</th>
+<th class="px-md py-4 font-label-md text-on-surface-variant">身份</th>
+<th class="px-md py-4 font-label-md text-on-surface-variant">类型</th>
+<th class="px-md py-4 font-label-md text-on-surface-variant">渠道</th>
+<th class="px-md py-4 font-label-md text-on-surface-variant">时间</th>
+<th class="px-md py-4 font-label-md text-on-surface-variant">关键词 / 问题摘要</th>
+<th class="px-md py-4 font-label-md text-on-surface-variant">引用文件</th>
+<th class="px-md py-4 font-label-md text-on-surface-variant">模型</th>
+<th class="px-md py-4 font-label-md text-on-surface-variant">耗时</th>
+<th class="px-md py-4 font-label-md text-on-surface-variant text-right">操作</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-md py-4">
+<div class="flex items-center gap-sm">
+<div class="w-7 h-7 rounded-full bg-secondary-fixed text-primary flex items-center justify-center font-bold text-[10px]">ZH</div>
+<span class="font-body-md text-on-surface">张伟</span>
+</div>
+</td>
+<td class="px-md py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-secondary-container text-on-secondary-container">内部</span>
+</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">知识问答</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">Web端</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant whitespace-nowrap">2023-10-24 14:22</td>
+<td class="px-md py-4 max-w-xs overflow-hidden text-ellipsis whitespace-nowrap font-body-md text-on-surface">
+                                            如何计算Q4的财务折旧率？
+                                        </td>
+<td class="px-md py-4">
+<div class="flex items-center gap-1 text-primary cursor-pointer hover:underline">
+<span class="material-symbols-outlined text-sm">description</span>
+<span class="font-label-sm">2023财务报告.pdf</span>
+</div>
+</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">GPT-4o</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">1.2s</td>
+<td class="px-md py-4 text-right">
+<div class="flex justify-end gap-md">
+<button class="text-primary hover:text-primary-container font-label-sm">合规归档</button>
+<button class="text-primary hover:text-primary-container font-label-sm">查看详情</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-md py-4">
+<div class="flex items-center gap-sm">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold text-[10px]">LI</div>
+<span class="font-body-md text-on-surface">Li Si</span>
+</div>
+</td>
+<td class="px-md py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-surface-variant text-on-surface-variant">外部</span>
+</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">原文查询</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">API</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant whitespace-nowrap">2023-10-24 14:15</td>
+<td class="px-md py-4 max-w-xs overflow-hidden text-ellipsis whitespace-nowrap font-body-md text-on-surface">
+                                            查询关于"隐私协议"的原始条款
+                                        </td>
+<td class="px-md py-4">
+<div class="flex items-center gap-1 text-primary cursor-pointer hover:underline">
+<span class="material-symbols-outlined text-sm">description</span>
+<span class="font-label-sm">用户服务协议.v2.docx</span>
+</div>
+</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">Claude-3.5</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">0.4s</td>
+<td class="px-md py-4 text-right">
+<div class="flex justify-end gap-md">
+<button class="text-primary hover:text-primary-container font-label-sm">合规归档</button>
+<button class="text-primary hover:text-primary-container font-label-sm">查看详情</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 (Sensitive data marker) -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-md py-4">
+<div class="flex items-center gap-sm">
+<div class="w-7 h-7 rounded-full bg-tertiary-fixed text-tertiary flex items-center justify-center font-bold text-[10px]">G</div>
+<span class="font-body-md text-on-surface">Guest_882</span>
+</div>
+</td>
+<td class="px-md py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-outline-variant text-on-surface-variant">访客</span>
+</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">知识问答</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">移动端</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant whitespace-nowrap">2023-10-24 13:50</td>
+<td class="px-md py-4 max-w-xs overflow-hidden text-ellipsis whitespace-nowrap font-body-md text-on-surface flex items-center gap-2">
+                                            研发路线图 2024
+                                            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-tertiary-container text-on-tertiary-fixed">涉密</span>
+</td>
+<td class="px-md py-4">
+<div class="flex items-center gap-1 text-primary cursor-pointer hover:underline">
+<span class="material-symbols-outlined text-sm">description</span>
+<span class="font-label-sm">核心机密档案.pdf</span>
+</div>
+</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">Custom-LLM</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">2.1s</td>
+<td class="px-md py-4 text-right">
+<div class="flex justify-end gap-md">
+<button class="text-tertiary hover:text-on-tertiary-fixed-variant font-label-sm">合规归档</button>
+<button class="text-primary hover:text-primary-container font-label-sm">查看详情</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-md py-4">
+<div class="flex items-center gap-sm">
+<div class="w-7 h-7 rounded-full bg-secondary-fixed text-primary flex items-center justify-center font-bold text-[10px]">WJ</div>
+<span class="font-body-md text-on-surface">王静</span>
+</div>
+</td>
+<td class="px-md py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-secondary-container text-on-secondary-container">内部</span>
+</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">原文查询</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">Web端</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant whitespace-nowrap">2023-10-24 13:42</td>
+<td class="px-md py-4 max-w-xs overflow-hidden text-ellipsis whitespace-nowrap font-body-md text-on-surface">
+                                            员工报销流程说明
+                                        </td>
+<td class="px-md py-4">
+<div class="flex items-center gap-1 text-primary cursor-pointer hover:underline">
+<span class="material-symbols-outlined text-sm">description</span>
+<span class="font-label-sm">人事手册_2023.pdf</span>
+</div>
+</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">GPT-3.5</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">0.3s</td>
+<td class="px-md py-4 text-right">
+<div class="flex justify-end gap-md">
+<button class="text-primary hover:text-primary-container font-label-sm">合规归档</button>
+<button class="text-primary hover:text-primary-container font-label-sm">查看详情</button>
+</div>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-md py-4">
+<div class="flex items-center gap-sm">
+<div class="w-7 h-7 rounded-full bg-primary-fixed text-on-primary-fixed-variant flex items-center justify-center font-bold text-[10px]">Z</div>
+<span class="font-body-md text-on-surface">周杰伦</span>
+</div>
+</td>
+<td class="px-md py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-secondary-container text-on-secondary-container">内部</span>
+</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">知识问答</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">Web端</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant whitespace-nowrap">2023-10-24 13:30</td>
+<td class="px-md py-4 max-w-xs overflow-hidden text-ellipsis whitespace-nowrap font-body-md text-on-surface">
+                                            总结上海分公司的年度销售目标
+                                        </td>
+<td class="px-md py-4">
+<div class="flex items-center gap-1 text-primary cursor-pointer hover:underline">
+<span class="material-symbols-outlined text-sm">description</span>
+<span class="font-label-sm">销售计划书.xlsx</span>
+</div>
+</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">GPT-4o</td>
+<td class="px-md py-4 font-body-md text-on-surface-variant">1.5s</td>
+<td class="px-md py-4 text-right">
+<div class="flex justify-end gap-md">
+<button class="text-primary hover:text-primary-container font-label-sm">合规归档</button>
+<button class="text-primary hover:text-primary-container font-label-sm">查看详情</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="bg-surface-container-low border-t border-outline-variant px-md py-3 flex justify-between items-center">
+<span class="text-label-sm text-on-surface-variant">显示 1 到 5 项，共 2,451 项</span>
+<div class="flex gap-sm">
+<button class="p-1 rounded hover:bg-surface-container-high text-on-surface-variant material-symbols-outlined disabled:opacity-30" disabled="">chevron_left</button>
+<button class="px-3 py-1 rounded bg-primary text-on-primary font-label-sm">1</button>
+<button class="px-3 py-1 rounded hover:bg-surface-container-high text-on-surface-variant font-label-sm">2</button>
+<button class="px-3 py-1 rounded hover:bg-surface-container-high text-on-surface-variant font-label-sm">3</button>
+<span class="px-2 py-1 text-on-surface-variant">...</span>
+<button class="px-3 py-1 rounded hover:bg-surface-container-high text-on-surface-variant font-label-sm">490</button>
+<button class="p-1 rounded hover:bg-surface-container-high text-on-surface-variant material-symbols-outlined">chevron_right</button>
+</div>
+</div>
+</div>
+<!-- Footnote / System Info -->
+<div class="flex justify-between items-center text-[10px] text-outline px-sm">
+<div class="flex gap-md">
+<span>系统版本: v4.2.1-enterprise</span>
+<span>日志保留周期: 365天</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                            系统物理写入锁已启用
+                        </div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Micro-interaction Script -->
+<script>
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('mousedown', () => {
+                el.classList.add('scale-95');
+                setTimeout(() => el.classList.remove('scale-95'), 150);
+            });
+        });
+
+        // Search highlight effect
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('shadow-md');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('shadow-md');
+        });
+    </script>
+</body></html>

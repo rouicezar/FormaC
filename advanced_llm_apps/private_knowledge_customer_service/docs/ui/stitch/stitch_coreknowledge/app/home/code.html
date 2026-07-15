@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KnowledgeEngine - 首页</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Han+Sans+SC,+Microsoft+YaHei,+sans-serif:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d7dbd8;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c1c8c5;
+        }
+        .workspace-card {
+            background: #ffffff;
+            border: 1px solid #E5E3DB;
+            transition: all 0.2s ease-in-out;
+        }
+        .workspace-card:hover {
+            border-color: #2D4A43;
+            box-shadow: 0px 2px 8px rgba(45, 74, 67, 0.05);
+        }
+        .brand-green { color: #2D4A43; }
+        .brand-bg-green { background-color: #2D4A43; }
+        .text-main { color: #2F3432; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary": "#2D4A43",
+                      "on-primary": "#ffffff",
+                      "background": "#F6F5F1",
+                      "surface": "#ffffff",
+                      "on-surface": "#2F3432",
+                      "outline-variant": "#E5E3DB",
+                      "secondary-container": "#e8edeb",
+                      "on-secondary-container": "#2D4A43",
+                      "surface-container-low": "#fafaf9"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "8px",
+                      "xl": "12px",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "container-max": "1200px",
+                      "lg": "24px",
+                      "sm": "8px",
+                      "md": "16px",
+                      "gutter": "20px",
+                      "unit": "4px",
+                      "xl": "40px"
+              },
+              "fontFamily": {
+                      "body-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                      "headline-lg": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                      "headline-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                      "label-sm": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                      "label-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary selection:text-white">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar -->
+<aside class="flex flex-col items-center h-screen py-lg space-y-xl bg-surface border-r border-outline-variant w-20 flex-shrink-0 z-20">
+<div class="mb-xl">
+<span class="material-symbols-outlined text-primary text-[28px]" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<nav class="flex flex-col space-y-lg flex-grow">
+<a class="text-primary flex flex-col items-center justify-center space-y-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-[12px] font-medium">首页</span>
+</a>
+<a class="text-gray-400 hover:text-primary flex flex-col items-center justify-center space-y-1 transition-colors" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="text-[12px] font-medium">原文查询</span>
+</a>
+<a class="text-gray-400 hover:text-primary flex flex-col items-center justify-center space-y-1 transition-colors" href="#">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="text-[12px] font-medium">知识问答</span>
+</a>
+<a class="text-gray-400 hover:text-primary flex flex-col items-center justify-center space-y-1 transition-colors" href="#">
+<span class="material-symbols-outlined">bolt</span>
+<span class="text-[12px] font-medium">快捷入口</span>
+</a>
+<a class="text-gray-400 hover:text-primary flex flex-col items-center justify-center space-y-1 transition-colors" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="text-[12px] font-medium">文档中心</span>
+</a>
+<a class="text-gray-400 hover:text-primary flex flex-col items-center justify-center space-y-1 transition-colors" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="text-[12px] font-medium">历史记录</span>
+</a>
+</nav>
+<div class="flex flex-col space-y-lg mt-auto pb-4">
+<a class="text-gray-400 hover:text-primary flex flex-col items-center justify-center space-y-1" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="text-[12px] font-medium">帮助</span>
+</a>
+<a class="text-gray-400 hover:text-primary flex flex-col items-center justify-center space-y-1" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[12px] font-medium">个人中心</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-grow overflow-y-auto relative">
+<!-- Header -->
+<header class="bg-surface/80 backdrop-blur-md sticky top-0 z-10 px-lg py-md border-b border-outline-variant flex justify-between items-center">
+<div class="flex items-center space-x-md">
+<div class="flex items-center px-sm py-1 bg-secondary-container rounded-md">
+<span class="material-symbols-outlined text-[16px] mr-1 text-primary">verified_user</span>
+<span class="text-[13px] font-medium text-primary">当前身份：内部用户</span>
+</div>
+<div class="flex items-center px-sm py-1 bg-white border border-outline-variant rounded-md">
+<span class="material-symbols-outlined text-[16px] mr-1 text-gray-500">visibility</span>
+<span class="text-[13px] text-gray-600">访问范围：公开及敏感知识</span>
+</div>
+</div>
+<div class="flex items-center space-x-md">
+<div class="flex items-center space-x-1 text-primary">
+<span class="material-symbols-outlined text-[18px]">link</span>
+<span class="text-[13px]">飞书绑定状态：已绑定</span>
+</div>
+<div class="w-px h-4 bg-outline-variant mx-2"></div>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="用户头像" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI7chFeOJM2ANHn15hoC2RpsTGDRK-ktHmS2F9fMnySafb3bz7PL9_ti5imri318gOPEHCaw_ugGG7jYKsG7X3iYRJIHODD15XCnKTGVVQoCwUL4eW-OhHt01dUxlP4_iMgeLuBKRyASOmhtDLXLhaB6PKdofD5HMm9FI8_iRoVATMWrqfeY9enBUrRoFEbp7H7Y5xm-sIvY8V9XQN6q-18rSQkteK3X4Tdci8uhImLg0qC7j7Mb3N3v2PpT-XmZR_uVIg8nZdiHMw"/>
+</div>
+</div>
+</header>
+<div class="max-w-container-max mx-auto px-lg py-xl space-y-xl">
+<!-- Greeting -->
+<section class="space-y-1">
+<h1 class="text-[28px] font-bold text-on-surface">欢迎回来，系统管理员</h1>
+<p class="text-gray-500 text-[14px]">这是您的专属知识管理空间，今日已有 24 条知识更新。</p>
+</section>
+<!-- Main Entrances -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<!-- Entrance 1 -->
+<div class="workspace-card p-xl rounded-xl group cursor-pointer flex flex-col justify-between min-h-[220px]">
+<div class="space-y-md">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary transition-transform group-hover:scale-105">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">description</span>
+</div>
+<div class="space-y-2">
+<h3 class="text-[22px] font-bold text-on-surface">原文查询</h3>
+<p class="text-gray-500 text-[15px] leading-relaxed">直接检索本地文档，不调用大模型，确保 100% 资料准确性。</p>
+</div>
+</div>
+<div class="mt-8 flex items-center text-primary font-medium group-hover:translate-x-1 transition-transform">
+<span>进入检索</span>
+<span class="material-symbols-outlined ml-1 text-[18px]">arrow_forward</span>
+</div>
+</div>
+<!-- Entrance 2 -->
+<div class="workspace-card p-xl rounded-xl group cursor-pointer flex flex-col justify-between min-h-[220px] bg-primary text-white border-none">
+<div class="space-y-md">
+<div class="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center text-white transition-transform group-hover:scale-105">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div class="space-y-2">
+<h3 class="text-[22px] font-bold">知识问答</h3>
+<p class="text-white/70 text-[15px] leading-relaxed">基于知识库证据，由大模型进行总结、汇总或比较。</p>
+</div>
+</div>
+<div class="mt-8 flex items-center font-medium group-hover:translate-x-1 transition-transform">
+<span>发起提问</span>
+<span class="material-symbols-outlined ml-1 text-[18px]">bolt</span>
+</div>
+</div>
+</div>
+<!-- Stats and History -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Stats -->
+<div class="lg:col-span-1 space-y-lg">
+<div class="workspace-card p-lg rounded-xl flex flex-col space-y-md">
+<h4 class="text-[13px] font-bold text-gray-400 flex items-center uppercase tracking-wider">
+<span class="material-symbols-outlined text-[18px] mr-2">analytics</span>
+                            使用统计
+                        </h4>
+<div class="grid grid-cols-1 gap-4 pt-2">
+<div class="p-md rounded-lg bg-background border border-outline-variant">
+<span class="text-gray-500 text-[12px]">查询次数</span>
+<div class="text-[24px] font-bold text-primary mt-1">1,284</div>
+</div>
+<div class="p-md rounded-lg bg-background border border-outline-variant">
+<span class="text-gray-500 text-[12px]">问答次数</span>
+<div class="text-[24px] font-bold text-primary mt-1">456</div>
+</div>
+</div>
+</div>
+</div>
+<!-- History -->
+<div class="lg:col-span-2 workspace-card rounded-xl overflow-hidden">
+<div class="px-lg py-md border-b border-outline-variant flex justify-between items-center">
+<h4 class="text-[15px] font-bold text-on-surface">最近记录</h4>
+<button class="text-primary hover:underline text-[13px] font-medium">查看全部</button>
+</div>
+<div class="divide-y divide-outline-variant">
+<div class="p-lg hover:bg-background transition-colors flex items-center justify-between group">
+<div class="flex items-center space-x-md">
+<div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
+<span class="material-symbols-outlined">search</span>
+</div>
+<div class="space-y-1">
+<div class="text-[14px] font-bold text-on-surface flex items-center">
+<span>2024年度财务审计准则原文</span>
+<span class="ml-3 px-2 py-px rounded bg-gray-100 text-[11px] text-gray-500 font-normal">原文查询</span>
+</div>
+<div class="text-[12px] text-gray-400">2小时前 · 包含 4 个匹配段落</div>
+</div>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-primary">
+<span class="material-symbols-outlined">open_in_new</span>
+</button>
+</div>
+<div class="p-lg hover:bg-background transition-colors flex items-center justify-between group border-l-[3px] border-primary/20">
+<div class="flex items-center space-x-md">
+<div class="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+</div>
+<div class="space-y-1">
+<div class="text-[14px] font-bold text-on-surface flex items-center">
+<span>如何评估供应链金融的信用风险？</span>
+<span class="ml-3 px-2 py-px rounded bg-primary/10 text-[11px] text-primary font-normal">知识问答</span>
+</div>
+<div class="text-[12px] text-gray-400">昨天 16:45 · 引用了 8 篇文档</div>
+</div>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-primary">
+<span class="material-symbols-outlined">open_in_new</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

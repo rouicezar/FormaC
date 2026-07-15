@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KnowledgeEngine - 管理首页</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Han+Sans+SC,+Microsoft+YaHei,+sans-serif:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed": "#02201a",
+                        "surface-container": "#ebefec",
+                        "tertiary-fixed-dim": "#ffb77d",
+                        "surface-variant": "#dfe3e0",
+                        "on-tertiary-fixed-variant": "#6e3900",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#ff993b",
+                        "surface-container-high": "#e5e9e6",
+                        "tertiary-fixed": "#ffdcc3",
+                        "primary-fixed": "#c9e9e0",
+                        "tertiary-container": "#6b3700",
+                        "secondary-fixed": "#d4e7e1",
+                        "surface": "#f6faf7",
+                        "inverse-surface": "#2c312f",
+                        "outline": "#727976",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#dfe3e0",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d7dbd8",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#99b9b0",
+                        "on-secondary-fixed": "#0e1e1b",
+                        "tertiary": "#4a2500",
+                        "on-secondary-fixed-variant": "#394a46",
+                        "inverse-primary": "#adcdc4",
+                        "on-primary-fixed-variant": "#2f4c45",
+                        "inverse-on-surface": "#edf2ee",
+                        "surface-tint": "#47645d",
+                        "on-secondary-container": "#576863",
+                        "primary-container": "#2d4a43",
+                        "on-tertiary-fixed": "#2f1500",
+                        "primary-fixed-dim": "#adcdc4",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#b8cbc5",
+                        "on-surface-variant": "#414846",
+                        "on-background": "#181d1b",
+                        "secondary-container": "#d4e7e1",
+                        "surface-container-low": "#f0f5f1",
+                        "secondary": "#51625d",
+                        "outline-variant": "#c1c8c5",
+                        "surface-bright": "#f6faf7",
+                        "primary": "#16332d",
+                        "on-surface": "#181d1b",
+                        "background": "#f6faf7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "container-max": "1280px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "gutter": "20px",
+                        "unit": "4px",
+                        "xl": "40px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "headline-lg": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "headline-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "body-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "label-sm": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "headline-sm": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "label-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 16px;
+        }
+        .zebra-row:nth-child(even) {
+            background-color: rgba(240, 245, 241, 0.5);
+        }
+        .subtle-outline {
+            border: 1px solid #E5E3DB;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary-fixed">
+<div class="flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<aside class="flex flex-col h-screen py-md px-sm bg-surface border-r border-outline-variant w-64 shrink-0">
+<div class="px-md mb-xl">
+<h1 class="font-headline-sm text-headline-sm font-semibold text-primary">知识引擎管理</h1>
+<p class="text-label-sm text-on-surface-variant">Knowledge Core</p>
+</div>
+<nav class="flex-1 space-y-xs overflow-y-auto px-xs">
+<a class="flex items-center gap-md px-md py-sm rounded-lg bg-primary-container text-on-primary font-bold transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md">管理首页</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+<span class="font-body-md">知识库</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+<span class="font-body-md">模型配置</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-body-md">用户管理</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-body-md">全局记录</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-body-md">数据分析</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="rocket_launch">rocket_launch</span>
+<span class="font-body-md">快捷入口</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="font-body-md">飞书接入</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+<span class="font-body-md">审计日志</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="biotech">biotech</span>
+<span class="font-body-md">检索实验室</span>
+</a>
+</nav>
+<div class="mt-auto px-md pt-md border-t border-outline-variant">
+<button class="w-full bg-primary-container text-on-primary py-sm rounded-lg font-label-md flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                新建数据源
+            </button>
+</div>
+</aside>
+<div class="flex-1 flex flex-col overflow-hidden">
+<!-- TopNavBar -->
+<header class="bg-surface-bright border-b border-outline-variant px-lg py-sm flex justify-between items-center w-full">
+<div class="flex items-center gap-lg flex-1">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">KnowledgeEngine</span>
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="w-full pl-[40px] pr-md py-xs bg-surface border border-outline-variant rounded-lg focus:outline-none focus:border-primary text-body-md" placeholder="搜索资源、文档或审计事件..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm pr-md border-r border-outline-variant">
+<button class="p-xs hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-xs hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+<div class="flex items-center gap-sm ml-sm cursor-pointer group">
+<div class="w-8 h-8 rounded-full overflow-hidden bg-primary-container flex items-center justify-center text-on-primary font-bold">管</div>
+<span class="text-label-md group-hover:text-primary transition-colors">系统管理员</span>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto p-lg bg-[#F6F5F1]">
+<div class="max-w-container-max mx-auto space-y-md">
+<!-- Row 1: Knowledge Stats -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-md">
+<div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant flex flex-col gap-xs">
+<span class="text-label-sm text-on-surface-variant">知识库状态</span>
+<div class="flex items-center gap-sm">
+<span class="text-headline-md font-bold text-primary">正常运行</span>
+<span class="w-2 h-2 rounded-full bg-[#2D4A43] animate-pulse"></span>
+</div>
+<div class="text-label-sm text-[#2D4A43]">系统自检: 100%</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant flex flex-col gap-xs">
+<span class="text-label-sm text-on-surface-variant">公开文档</span>
+<div class="text-headline-md font-bold text-primary">8,245</div>
+<div class="text-label-sm text-on-surface-variant">较昨日 +12</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant flex flex-col gap-xs">
+<span class="text-label-sm text-on-surface-variant">敏感文档</span>
+<div class="text-headline-md font-bold text-primary">4,597</div>
+<div class="text-label-sm text-error">需要权限分级: 82</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant flex flex-col gap-xs">
+<span class="text-label-sm text-on-surface-variant">知识片段</span>
+<div class="text-headline-md font-bold text-primary">128,402</div>
+<div class="text-label-sm text-on-surface-variant">向量化成功率: 99.9%</div>
+</div>
+</section>
+<!-- Row 2: User & Interaction Stats -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-md">
+<div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant flex flex-col gap-xs">
+<span class="text-label-sm text-on-surface-variant">用户总数</span>
+<div class="text-headline-md font-bold text-primary">3,120</div>
+<div class="flex gap-xs text-[10px] text-on-surface-variant">
+<span>匿名: 420</span> | <span>外部: 850</span> | <span>内部: 1,820</span> | <span>管理: 30</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant flex flex-col gap-xs">
+<span class="text-label-sm text-on-surface-variant">身份分布</span>
+<div class="h-8 flex rounded-full overflow-hidden mt-1 bg-surface-container">
+<div class="h-full bg-primary" style="width: 58%"></div>
+<div class="h-full bg-secondary" style="width: 27%"></div>
+<div class="h-full bg-outline" style="width: 15%"></div>
+</div>
+<div class="text-label-sm text-on-surface-variant">内部员工占比最高 (58%)</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant flex flex-col gap-xs">
+<span class="text-label-sm text-on-surface-variant">查询次数</span>
+<div class="text-headline-md font-bold text-primary">15,640</div>
+<div class="text-label-sm text-[#2D4A43]">人均查询: 5.2 次</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant flex flex-col gap-xs">
+<span class="text-label-sm text-on-surface-variant">问答次数</span>
+<div class="text-headline-md font-bold text-primary">4,892</div>
+<div class="text-label-sm text-on-surface-variant">转换率: 31.2%</div>
+</div>
+</section>
+<!-- Row 3: System Health & Insights Grid -->
+<div class="bento-grid">
+<!-- System Health Column -->
+<div class="col-span-12 lg:col-span-4 space-y-md">
+<div class="bg-surface-container-lowest p-lg rounded-lg border border-outline-variant">
+<h3 class="font-bold text-primary mb-md">系统健康状态</h3>
+<div class="space-y-sm">
+<div class="flex justify-between items-center py-2 border-b border-outline-variant">
+<span class="text-on-surface-variant">最近扫描结果</span>
+<span class="px-sm py-0.5 bg-primary-fixed text-on-primary-fixed-variant rounded text-label-sm">成功</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant">
+<span class="text-on-surface-variant">下次自动扫描</span>
+<span class="font-bold text-on-surface">今日 23:00</span>
+</div>
+<div class="flex justify-between items-center py-2">
+<span class="text-on-surface-variant">模型调用成功率</span>
+<span class="font-bold text-[#2D4A43]">99.2%</span>
+</div>
+</div>
+</div>
+<div class="bg-[#2D4A43] p-lg rounded-lg text-on-primary">
+<h3 class="font-bold mb-md">异常数据洞察</h3>
+<div class="space-y-sm">
+<div class="flex justify-between items-center">
+<span class="text-primary-fixed/80">零结果查询</span>
+<span class="font-bold text-primary-fixed">42 次</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-primary-fixed/80">证据不足问答</span>
+<span class="font-bold text-tertiary-fixed">128 次</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-primary-fixed/80">响应延迟 (&gt;3s)</span>
+<span class="font-bold">5.4%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Keywords and Lists Column -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest p-lg rounded-lg border border-outline-variant">
+<div class="flex justify-between items-center mb-lg">
+<h3 class="font-bold text-primary">高频交互词库</h3>
+<div class="flex gap-sm">
+<span class="px-md py-xs bg-primary-container text-on-primary rounded-full text-[10px]">高频查询</span>
+<span class="px-md py-xs bg-secondary-container text-on-secondary-container rounded-full text-[10px]">高频问答</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-lg">
+<div>
+<h4 class="text-label-sm text-on-surface-variant mb-md uppercase tracking-widest">高频查询</h4>
+<div class="space-y-sm">
+<div class="flex justify-between text-body-md border-b border-outline-variant pb-xs">
+<span>2024 年度预算</span>
+<span class="font-bold">1,240</span>
+</div>
+<div class="flex justify-between text-body-md border-b border-outline-variant pb-xs">
+<span>安全合规审计</span>
+<span class="font-bold">852</span>
+</div>
+<div class="flex justify-between text-body-md border-b border-outline-variant pb-xs">
+<span>飞书权限配置</span>
+<span class="font-bold">741</span>
+</div>
+<div class="flex justify-between text-body-md pb-xs">
+<span>人事管理制度</span>
+<span class="font-bold">690</span>
+</div>
+</div>
+</div>
+<div>
+<h4 class="text-label-sm text-on-surface-variant mb-md uppercase tracking-widest">高频问答</h4>
+<div class="space-y-sm">
+<div class="flex justify-between text-body-md border-b border-outline-variant pb-xs">
+<span>DeepSeek 接入流程</span>
+<span class="font-bold">540</span>
+</div>
+<div class="flex justify-between text-body-md border-b border-outline-variant pb-xs">
+<span>报销系统操作指南</span>
+<span class="font-bold">422</span>
+</div>
+<div class="flex justify-between text-body-md border-b border-outline-variant pb-xs">
+<span>内网访问 IP 段</span>
+<span class="font-bold">398</span>
+</div>
+<div class="flex justify-between text-body-md pb-xs">
+<span>Q3 季度业绩目标</span>
+<span class="font-bold">310</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Logs Table -->
+<section class="bg-surface-container-lowest p-lg rounded-lg border border-outline-variant">
+<div class="flex justify-between items-center mb-lg">
+<h3 class="font-bold text-primary">实时审计日志简报</h3>
+<button class="text-primary text-label-md hover:underline">查看全部日志</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="border-b border-outline-variant text-label-sm text-on-surface-variant">
+<th class="pb-sm font-medium">时间</th>
+<th class="pb-sm font-medium">操作用户</th>
+<th class="pb-sm font-medium">事件类型</th>
+<th class="pb-sm font-medium">详细信息</th>
+<th class="pb-sm font-medium text-right">结果状态</th>
+</tr>
+</thead>
+<tbody class="text-body-md">
+<tr class="zebra-row group">
+<td class="py-md text-on-surface-variant">14:22:10</td>
+<td class="py-md font-bold">李云龙</td>
+<td class="py-md">模型配置修改</td>
+<td class="py-md">修改了 [DeepSeek-V3] API 端点</td>
+<td class="py-md text-right"><span class="px-sm py-1 bg-primary-fixed text-on-primary-fixed-variant rounded text-label-sm">已授权</span></td>
+</tr>
+<tr class="zebra-row group">
+<td class="py-md text-on-surface-variant">13:45:05</td>
+<td class="py-md font-bold">张万和</td>
+<td class="py-md">敏感文档访问</td>
+<td class="py-md">查看了 [Q4 财务预测.pdf]</td>
+<td class="py-md text-right"><span class="px-sm py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded text-label-sm">风险警告</span></td>
+</tr>
+<tr class="zebra-row group">
+<td class="py-md text-on-surface-variant">12:10:55</td>
+<td class="py-md font-bold">系统作业</td>
+<td class="py-md">自动知识抽取</td>
+<td class="py-md">从 [技术周报] 提取 450 个片段</td>
+<td class="py-md text-right"><span class="px-sm py-1 bg-primary-fixed text-on-primary-fixed-variant rounded text-label-sm">成功</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+</div>
+</div>
+</body></html>

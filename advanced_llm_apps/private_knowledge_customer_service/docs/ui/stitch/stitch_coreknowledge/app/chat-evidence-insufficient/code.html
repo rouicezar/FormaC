@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KnowledgeEngine - 知识问答</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f0f5f1",
+                    "secondary-fixed-dim": "#b8cbc5",
+                    "on-error": "#ffffff",
+                    "on-primary-container": "#99b9b0",
+                    "primary-fixed-dim": "#adcdc4",
+                    "surface-container-high": "#e5e9e6",
+                    "on-tertiary": "#ffffff",
+                    "primary-container": "#2d4a43",
+                    "on-secondary-fixed-variant": "#394a46",
+                    "inverse-primary": "#adcdc4",
+                    "on-tertiary-container": "#ff993b",
+                    "on-tertiary-fixed": "#2f1500",
+                    "tertiary-fixed-dim": "#ffb77d",
+                    "background": "#f6faf7",
+                    "on-secondary-container": "#576863",
+                    "surface": "#f6faf7",
+                    "inverse-on-surface": "#edf2ee",
+                    "surface-bright": "#f6faf7",
+                    "inverse-surface": "#2c312f",
+                    "on-primary-fixed-variant": "#2f4c45",
+                    "on-background": "#181d1b",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed": "#ffdcc3",
+                    "surface-tint": "#47645d",
+                    "tertiary-container": "#6b3700",
+                    "secondary": "#51625d",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed": "#d4e7e1",
+                    "on-secondary-fixed": "#0e1e1b",
+                    "primary": "#16332d",
+                    "surface-container": "#ebefec",
+                    "on-primary-fixed": "#02201a",
+                    "on-error-container": "#93000a",
+                    "surface-variant": "#dfe3e0",
+                    "on-primary": "#ffffff",
+                    "outline-variant": "#c1c8c5",
+                    "error": "#ba1a1a",
+                    "primary-fixed": "#c9e9e0",
+                    "surface-dim": "#d7dbd8",
+                    "on-tertiary-fixed-variant": "#6e3900",
+                    "surface-container-highest": "#dfe3e0",
+                    "tertiary": "#4a2500",
+                    "on-surface": "#181d1b",
+                    "secondary-container": "#d4e7e1",
+                    "outline": "#727976",
+                    "on-surface-variant": "#414846"
+            },
+            "borderRadius": {
+                    "DEFAULT": "4px",
+                    "lg": "8px",
+                    "xl": "12px",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "40px",
+                    "container-max": "1280px",
+                    "lg": "24px",
+                    "gutter": "20px",
+                    "unit": "4px",
+                    "sm": "8px",
+                    "xs": "4px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "body-md": ["Source Han Sans SC", "Microsoft YaHei", "sans-serif"],
+                    "label-md": ["Source Han Sans SC", "Microsoft YaHei", "sans-serif"],
+                    "body-lg": ["Source Han Sans SC", "Microsoft YaHei", "sans-serif"],
+                    "headline-lg": ["Source Han Sans SC", "Microsoft YaHei", "sans-serif"],
+                    "label-sm": ["Source Han Sans SC", "Microsoft YaHei", "sans-serif"],
+                    "headline-sm": ["Source Han Sans SC", "Microsoft YaHei", "sans-serif"],
+                    "headline-md": ["Source Han Sans SC", "Microsoft YaHei", "sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 1;
+        }
+        body {
+            background-color: #f6faf7;
+            color: #181d1b;
+        }
+        .ai-border {
+            border-left: 3px solid #16332d;
+            background-color: rgba(22, 51, 45, 0.02);
+        }
+        .custom-shadow {
+            box-shadow: 0px 2px 8px rgba(45, 74, 67, 0.05);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-hidden flex h-screen">
+<!-- Sidebar (Predicted: SideNavBar #2) -->
+<aside class="flex flex-col items-center h-screen py-lg space-y-xl bg-surface border-r border-outline-variant w-20 flex-shrink-0 transition-all duration-150 ease-in-out">
+<div class="font-headline-sm text-headline-sm font-bold text-primary mb-xl">KE</div>
+<nav class="flex flex-col space-y-md items-center w-full">
+<button class="text-primary flex flex-col items-center justify-center p-md w-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">chat</span>
+<span class="font-label-sm text-label-sm">Chat</span>
+</button>
+<button class="text-outline flex flex-col items-center justify-center p-md w-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined mb-1">menu_book</span>
+<span class="font-label-sm text-label-sm">Library</span>
+</button>
+<button class="text-outline flex flex-col items-center justify-center p-md w-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined mb-1">history</span>
+<span class="font-label-sm text-label-sm">History</span>
+</button>
+<button class="text-outline flex flex-col items-center justify-center p-md w-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined mb-1">search</span>
+<span class="font-label-sm text-label-sm">Search</span>
+</button>
+</nav>
+<div class="mt-auto flex flex-col space-y-md items-center w-full">
+<button class="text-outline flex flex-col items-center justify-center p-md w-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined mb-1">help</span>
+<span class="font-label-sm text-label-sm">Help</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-bold overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a user in a corporate environment, soft directional lighting, neutral background, reflecting high-end corporate modern aesthetics and minimalist focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6Gl44yJqRSsvaqkzyBBgV2CkbPHW48EijQg3aF3MUyF_NvMDoWlvNVOOM9v2JkxrNLiMhx5pL8RiNOrQB8OzoDQM0ygJjhwYC5nrvXB9rI48Rwl3VsC3QEBKvVzi6jwhXEEBupsVCIrrLKA6-83XFiCZhfvCYn_mi6BtMOI5V5Wwium1JcnsCtync4mFFdI23p6XJcHOaEe8qr2eimr1UKCJ2MROVyiX9q8_RwBWpuhE5Cxq6VTshi35hEZMs0N3CDw_OWiZZVMjM"/>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden">
+<!-- Top Navbar (Predicted: TopNavBar) -->
+<header class="flex justify-between items-center w-full px-lg py-sm bg-surface-bright border-b border-outline-variant">
+<div class="flex items-center gap-md">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">KnowledgeEngine</h1>
+<div class="hidden md:flex gap-md ml-lg">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Recent</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Favorites</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Shared</a>
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<button class="p-sm text-on-surface-variant hover:text-primary transition-all scale-95 active:scale-90">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-sm text-on-surface-variant hover:text-primary transition-all scale-95 active:scale-90">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<!-- Content Area -->
+<div class="flex-1 overflow-y-auto p-lg flex flex-col items-center">
+<div class="w-full max-w-[800px] space-y-lg">
+<!-- User Question -->
+<div class="flex flex-col items-end animate-in fade-in slide-in-from-bottom-4 duration-500">
+<div class="bg-secondary-container text-on-secondary-container px-lg py-md rounded-xl max-w-[85%] custom-shadow">
+<p class="font-body-lg text-body-lg">公司的火星殖民计划是什么？</p>
+</div>
+</div>
+<!-- Model Response Area (Insufficient Evidence State) -->
+<div class="flex flex-col items-start animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200">
+<div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl w-full ai-border custom-shadow space-y-md">
+<!-- Header & Warning -->
+<div class="flex items-center gap-sm text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<span class="font-label-md text-label-md font-bold">知识库引擎</span>
+</div>
+<!-- Amber Alert Box -->
+<div class="bg-tertiary-fixed border border-tertiary-fixed-dim p-md rounded-lg flex items-start gap-md">
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant mt-0.5">warning</span>
+<div class="space-y-1">
+<p class="font-body-md text-body-md text-on-tertiary-fixed font-semibold">
+                                    抱歉，在现有知识库中未找到关于“火星殖民计划”的相关证据。
+                                </p>
+</div>
+</div>
+<!-- Supplementary Explanation -->
+<div class="space-y-md px-sm">
+<p class="font-body-md text-body-md text-on-surface-variant">
+                                为了保证回答的真实性，模型不会在缺乏证据的情况下生成答案。您可以尝试：
+                            </p>
+<ul class="space-y-sm">
+<li class="flex items-center gap-sm font-body-md text-body-md text-on-surface">
+<span class="w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center text-[10px] font-bold">1</span>
+                                    缩小提问范围，或使用更具体的关键词。
+                                </li>
+<li class="flex items-center gap-sm font-body-md text-body-md text-on-surface">
+<span class="w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center text-[10px] font-bold">2</span>
+                                    联系管理员确认该相关项目文档是否已成功导入。
+                                </li>
+</ul>
+</div>
+<!-- Collapsible Retrieval Results -->
+<div class="pt-md border-t border-outline-variant">
+<button class="flex items-center justify-between w-full p-sm hover:bg-surface-container transition-colors rounded" id="retrievalToggle">
+<div class="flex items-center gap-sm text-outline">
+<span class="material-symbols-outlined text-sm">find_in_page</span>
+<span class="font-label-md text-label-md">查看原文检索结果（0条）</span>
+</div>
+<span class="material-symbols-outlined text-outline transition-transform" id="toggleIcon">expand_more</span>
+</button>
+<div class="hidden mt-md px-sm py-md border border-dashed border-outline-variant rounded-lg bg-surface-container-low text-center" id="retrievalContent">
+<p class="font-label-sm text-label-sm text-outline">未匹配到任何语义相关的知识切片</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Input Area -->
+<footer class="p-lg bg-surface border-t border-outline-variant">
+<div class="max-w-[800px] mx-auto relative">
+<input class="w-full pl-md pr-xl py-lg bg-surface-container-lowest border border-outline-variant rounded-xl focus:border-primary focus:ring-0 font-body-md text-body-md custom-shadow transition-all" placeholder="输入您的问题..." type="text"/>
+<button class="absolute right-md top-1/2 -translate-y-1/2 p-sm bg-primary text-on-primary rounded-lg hover:bg-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+<div class="max-w-[800px] mx-auto mt-md flex justify-center gap-md">
+<span class="font-label-sm text-label-sm text-outline flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">lock</span> 专有企业知识库保护
+                </span>
+<span class="font-label-sm text-label-sm text-outline flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">verified_user</span> 检索增强生成 (RAG)
+                </span>
+</div>
+</footer>
+</main>
+<script>
+        // Collapsible Logic
+        const toggleBtn = document.getElementById('retrievalToggle');
+        const content = document.getElementById('retrievalContent');
+        const icon = document.getElementById('toggleIcon');
+
+        toggleBtn.addEventListener('click', () => {
+            const isHidden = content.classList.contains('hidden');
+            if (isHidden) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        });
+
+        // Hover Micro-interactions
+        const inputField = document.querySelector('input');
+        inputField.addEventListener('focus', () => {
+            inputField.parentElement.classList.add('scale-[1.005]');
+        });
+        inputField.addEventListener('blur', () => {
+            inputField.parentElement.classList.remove('scale-[1.005]');
+        });
+    </script>
+</body></html>

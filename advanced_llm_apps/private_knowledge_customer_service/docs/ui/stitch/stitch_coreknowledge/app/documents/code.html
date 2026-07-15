@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>文档中心 - KnowledgeEngine</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Han+Sans+SC,+Microsoft+YaHei,+sans-serif:wght@100..900&display=swap" rel="stylesheet"/>
+<!-- Load Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-secondary-container": "#576863",
+                "inverse-surface": "#2c312f",
+                "on-primary": "#ffffff",
+                "secondary": "#51625d",
+                "on-error-container": "#93000a",
+                "secondary-fixed": "#d4e7e1",
+                "primary-fixed": "#c9e9e0",
+                "primary-fixed-dim": "#adcdc4",
+                "error-container": "#ffdad6",
+                "surface-container": "#ebefec",
+                "outline-variant": "#c1c8c5",
+                "outline": "#727976",
+                "surface-container-lowest": "#ffffff",
+                "surface-container-high": "#e5e9e6",
+                "surface-dim": "#d7dbd8",
+                "surface-container-low": "#f0f5f1",
+                "on-surface": "#181d1b",
+                "inverse-on-surface": "#edf2ee",
+                "surface-variant": "#dfe3e0",
+                "on-tertiary-fixed": "#2f1500",
+                "secondary-fixed-dim": "#b8cbc5",
+                "on-error": "#ffffff",
+                "inverse-primary": "#adcdc4",
+                "on-tertiary-fixed-variant": "#6e3900",
+                "tertiary-fixed": "#ffdcc3",
+                "tertiary": "#4a2500",
+                "surface-bright": "#f6faf7",
+                "surface-tint": "#47645d",
+                "secondary-container": "#d4e7e1",
+                "background": "#f6faf7",
+                "on-secondary-fixed-variant": "#394a46",
+                "tertiary-container": "#6b3700",
+                "on-secondary": "#ffffff",
+                "on-primary-fixed": "#02201a",
+                "on-background": "#181d1b",
+                "on-surface-variant": "#414846",
+                "primary-container": "#2d4a43",
+                "surface-container-highest": "#dfe3e0",
+                "on-primary-container": "#99b9b0",
+                "tertiary-fixed-dim": "#ffb77d",
+                "on-tertiary-container": "#ff993b",
+                "on-secondary-fixed": "#0e1e1b",
+                "primary": "#16332d",
+                "surface": "#f6faf7",
+                "on-primary-fixed-variant": "#2f4c45",
+                "on-tertiary": "#ffffff",
+                "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "xs": "4px",
+                "sm": "8px",
+                "unit": "4px",
+                "container-max": "1280px",
+                "md": "16px",
+                "xl": "40px",
+                "lg": "24px",
+                "gutter": "20px"
+            },
+            "fontFamily": {
+                "label-sm": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                "headline-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                "headline-lg": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                "body-lg": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                "body-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                "label-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                "headline-sm": ["Source Han Sans SC, Microsoft YaHei, sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            background-color: #f6faf7;
+            color: #181d1b;
+            font-family: "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #c1c8c5; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #727976; }
+
+        /* Drawer animation */
+        #preview-drawer {
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #preview-drawer.open {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation (Mapped from JSON: SideNavBar #3) -->
+<nav class="flex flex-col items-center h-screen py-lg space-y-xl bg-surface border-r border-outline-variant w-20 flex-shrink-0">
+<div class="mb-xl">
+<span class="material-symbols-outlined text-primary text-3xl font-bold">menu_book</span>
+</div>
+<div class="flex flex-col items-center space-y-lg w-full">
+<a class="text-outline hover:bg-surface-container-low transition-all duration-150 flex flex-col items-center justify-center p-sm w-full group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:text-primary">chat</span>
+<span class="font-label-sm text-label-sm">问答</span>
+</a>
+<a class="text-primary flex flex-col items-center justify-center p-sm w-full bg-secondary-container" href="/app/documents">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-sm text-label-sm font-bold">书库</span>
+</a>
+<a class="text-outline hover:bg-surface-container-low transition-all duration-150 flex flex-col items-center justify-center p-sm w-full group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:text-primary">history</span>
+<span class="font-label-sm text-label-sm">历史</span>
+</a>
+<a class="text-outline hover:bg-surface-container-low transition-all duration-150 flex flex-col items-center justify-center p-sm w-full group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:text-primary">search</span>
+<span class="font-label-sm text-label-sm">搜索</span>
+</a>
+</div>
+<div class="mt-auto flex flex-col items-center space-y-lg w-full">
+<a class="text-outline hover:bg-surface-container-low transition-all duration-150 flex flex-col items-center justify-center p-sm w-full group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:text-primary">help</span>
+<span class="font-label-sm text-label-sm">帮助</span>
+</a>
+<a class="text-outline hover:bg-surface-container-low transition-all duration-150 flex flex-col items-center justify-center p-sm w-full group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:text-primary">feedback</span>
+<span class="font-label-sm text-label-sm">反馈</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0 bg-background overflow-hidden relative">
+<!-- Header (Mapped from JSON: TopNavBar structure) -->
+<header class="flex justify-between items-center w-full px-lg py-sm border-b border-outline-variant bg-surface-bright">
+<div class="flex items-center gap-md">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">文档中心</h1>
+<div class="h-6 w-px bg-outline-variant mx-sm"></div>
+<div class="flex items-center gap-xs text-on-surface-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span>当前有权限访问的文档总数: 12,842</span>
+</div>
+</div>
+<div class="flex-1 max-w-md mx-xl">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded px-10 py-1.5 font-body-md text-body-md focus:ring-1 focus:ring-primary focus:border-primary transition-all" placeholder="搜索文档名称、关键词或编号..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container-high transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="flex items-center gap-sm pl-md border-l border-outline-variant">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-xs uppercase">
+                        AD
+                    </div>
+<div class="hidden lg:block">
+<p class="font-label-md text-label-md text-on-surface leading-none">系统管理员</p>
+<p class="text-[10px] text-outline uppercase tracking-wider">Enterprise Admin</p>
+</div>
+</div>
+</div>
+</header>
+<!-- Filters Section -->
+<section class="p-lg bg-surface border-b border-outline-variant grid grid-cols-12 gap-md items-end">
+<div class="col-span-3">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1.5">文件类型</label>
+<div class="flex flex-wrap gap-xs">
+<button class="px-3 py-1 bg-primary text-on-primary rounded text-xs font-label-sm">全部</button>
+<button class="px-3 py-1 bg-surface-container-high text-on-surface-variant hover:bg-outline-variant rounded text-xs font-label-sm transition-colors">PDF</button>
+<button class="px-3 py-1 bg-surface-container-high text-on-surface-variant hover:bg-outline-variant rounded text-xs font-label-sm transition-colors">Word</button>
+<button class="px-3 py-1 bg-surface-container-high text-on-surface-variant hover:bg-outline-variant rounded text-xs font-label-sm transition-colors">TXT</button>
+</div>
+</div>
+<div class="col-span-3">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1.5">所属目录</label>
+<select class="w-full border-outline-variant bg-surface rounded py-1 text-sm font-body-md focus:ring-primary focus:border-primary">
+<option>全部目录</option>
+<option>财务审计</option>
+<option>合规审查</option>
+<option>技术档案</option>
+<option>战略规划</option>
+</select>
+</div>
+<div class="col-span-3">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1.5">权限范围</label>
+<div class="flex items-center p-1 bg-surface-container-high rounded-lg w-fit">
+<button class="px-4 py-1 rounded-md text-xs font-label-md transition-all bg-surface-container-lowest text-primary shadow-sm" onclick="toggleActive(this)">公开</button>
+<button class="px-4 py-1 rounded-md text-xs font-label-md transition-all text-on-surface-variant hover:text-on-surface" onclick="toggleActive(this)">敏感</button>
+</div>
+</div>
+<div class="col-span-3 flex justify-end">
+<button class="flex items-center gap-xs px-4 py-1.5 border border-outline text-on-surface font-label-md text-label-md rounded hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+<span>高级筛选</span>
+</button>
+</div>
+</section>
+<!-- Document Table -->
+<div class="flex-1 overflow-auto custom-scrollbar">
+<div class="p-lg min-w-[1000px]">
+<table class="w-full border-separate border-spacing-0">
+<thead>
+<tr class="text-left bg-surface-container-low">
+<th class="py-3 px-4 border-b border-outline-variant font-label-md text-label-md text-outline">文件名</th>
+<th class="py-3 px-4 border-b border-outline-variant font-label-md text-label-md text-outline">类型</th>
+<th class="py-3 px-4 border-b border-outline-variant font-label-md text-label-md text-outline">所属目录</th>
+<th class="py-3 px-4 border-b border-outline-variant font-label-md text-label-md text-outline">权限标签</th>
+<th class="py-3 px-4 border-b border-outline-variant font-label-md text-label-md text-outline">更新时间</th>
+<th class="py-3 px-4 border-b border-outline-variant font-label-md text-label-md text-outline text-right">文件大小</th>
+<th class="py-3 px-4 border-b border-outline-variant font-label-md text-label-md text-outline text-center">操作</th>
+</tr>
+</thead>
+<tbody class="bg-surface">
+<!-- Table Rows -->
+<tr class="group hover:bg-surface-container-lowest transition-colors border-b border-outline-variant">
+<td class="py-3 px-4 border-b border-outline-variant">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">picture_as_pdf</span>
+<span class="font-body-md text-body-md font-medium">2023年度集团战略风险评估报告.pdf</span>
+</div>
+</td>
+<td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant">PDF</td>
+<td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant">战略规划</td>
+<td class="py-3 px-4 border-b border-outline-variant">
+<span class="px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed-variant text-[10px] font-bold">敏感</span>
+</td>
+<td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant">2023-11-24 14:20</td>
+<td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant text-right">4.2 MB</td>
+<td class="py-3 px-4 border-b border-outline-variant text-center">
+<button class="text-primary hover:underline font-label-md text-label-md" onclick="openPreview('2023年度集团战略风险评估报告.pdf')">查看原文</button>
+</td>
+</tr>
+<tr class="group hover:bg-surface-container-lowest transition-colors">
+<td class="py-3 px-4 border-b border-outline-variant">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">description</span>
+<span class="font-body-md text-body-md font-medium">员工知识管理手册修订版 v2.0.docx</span>
+</div>
+</td>
+<td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant">Word</td>
+<td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant">合规审查</td>
+<td class="py-3 px-4 border-b border-outline-variant">
+<span class="px-2 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed-variant text-[10px] font-bold">公开</span>
+</td>
+<td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant">2023-12-01 09:45</td>
+<td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant text-right">856 KB</td>
+<td class="py-3 px-4 border-b border-outline-variant text-center">
+<button class="text-primary hover:underline font-label-md text-label-md" onclick="openPreview('员工知识管理手册修订版 v2.0.docx')">查看原文</button>
+</td>
+</tr>
+<tr class="group hover:bg-surface-container-lowest transition-colors">
+<td class="py-3 px-4 border-b border-outline-variant">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant">article</span>
+<span class="font-body-md text-body-md font-medium">系统集成接口规范摘要.txt</span>
+</div>
+</td>
+<td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant">TXT</td>
+<td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant">技术档案</td>
+<td class="py-3 px-4 border-b border-outline-variant">
+<span class="px-2 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed-variant text-[10px] font-bold">公开</span>
+</td>
+<td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant">2023-10-15 17:10</td>
+<td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant text-right">42 KB</td>
+<td class="py-3 px-4 border-b border-outline-variant text-center">
+<button class="text-primary hover:underline font-label-md text-label-md" onclick="openPreview('系统集成接口规范摘要.txt')">查看原文</button>
+</td>
+</tr>
+<tr class="group hover:bg-surface-container-lowest transition-colors">
+<td class="py-3 px-4 border-b border-outline-variant">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">picture_as_pdf</span>
+<span class="font-body-md text-body-md font-medium">第三季度财务合规抽检清单.pdf</span>
+</div>
+</td>
+<td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant">PDF</td>
+<td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant">财务审计</td>
+<td class="py-3 px-4 border-b border-outline-variant">
+<span class="px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed-variant text-[10px] font-bold">敏感</span>
+</td>
+<td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant">2023-11-02 11:30</td>
+<td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant text-right">2.1 MB</td>
+<td class="py-3 px-4 border-b border-outline-variant text-center">
+<button class="text-primary hover:underline font-label-md text-label-md" onclick="openPreview('第三季度财务合规抽检清单.pdf')">查看原文</button>
+</td>
+</tr>
+<!-- More filler rows for high density look -->
+<script>
+                            const mockData = [
+                                { name: "知识库迁移技术方案建议书.pdf", type: "PDF", dir: "技术档案", tag: "敏感", time: "2023-09-22", size: "1.5 MB" },
+                                { name: "2024招聘计划与薪酬预算.docx", type: "Word", dir: "人力资源", tag: "敏感", time: "2023-12-05", size: "124 KB" },
+                                { name: "供应商行为准则汇编.pdf", type: "PDF", dir: "合规审查", tag: "公开", time: "2023-08-11", size: "3.8 MB" },
+                                { name: "服务器安全基线配置.txt", type: "TXT", dir: "技术档案", tag: "敏感", time: "2023-10-30", size: "15 KB" },
+                                { name: "市场营销渠道合作备忘录.docx", type: "Word", dir: "市场拓展", tag: "公开", time: "2023-11-15", size: "430 KB" },
+                                { name: "上半年项目进度回顾总结.pdf", type: "PDF", dir: "战略规划", tag: "公开", time: "2023-07-28", size: "5.2 MB" },
+                            ];
+
+                            mockData.forEach(item => {
+                                document.write(`
+                                    <tr class="group hover:bg-surface-container-lowest transition-colors">
+                                        <td class="py-3 px-4 border-b border-outline-variant">
+                                            <div class="flex items-center gap-sm">
+                                                <span class="material-symbols-outlined ${item.type === 'PDF' ? 'text-error' : item.type === 'Word' ? 'text-primary' : 'text-on-surface-variant'}" style="font-variation-settings: 'FILL' ${item.type !== 'TXT' ? '1' : '0'};">
+                                                    ${item.type === 'PDF' ? 'picture_as_pdf' : item.type === 'Word' ? 'description' : 'article'}
+                                                </span>
+                                                <span class="font-body-md text-body-md font-medium">${item.name}</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant">${item.type}</td>
+                                        <td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant">${item.dir}</td>
+                                        <td class="py-3 px-4 border-b border-outline-variant">
+                                            <span class="px-2 py-0.5 rounded ${item.tag === '敏感' ? 'bg-tertiary-fixed text-on-tertiary-fixed-variant' : 'bg-secondary-fixed text-on-secondary-fixed-variant'} text-[10px] font-bold">${item.tag}</span>
+                                        </td>
+                                        <td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant">${item.time} 10:00</td>
+                                        <td class="py-3 px-4 border-b border-outline-variant font-body-md text-body-md text-on-surface-variant text-right">${item.size}</td>
+                                        <td class="py-3 px-4 border-b border-outline-variant text-center">
+                                            <button onclick="openPreview('${item.name}')" class="text-primary hover:underline font-label-md text-label-md">查看原文</button>
+                                        </td>
+                                    </tr>
+                                `);
+                            });
+                        </script>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Footer Pagination -->
+<footer class="p-md bg-surface border-t border-outline-variant flex justify-between items-center px-lg">
+<span class="font-label-md text-label-md text-on-surface-variant">第 1-10 条，共 1,284 页</span>
+<div class="flex items-center gap-xs">
+<button class="p-1 rounded hover:bg-surface-container-high transition-colors text-outline">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-primary text-on-primary font-label-md text-label-md">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container-high font-label-md text-label-md transition-colors">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container-high font-label-md text-label-md transition-colors">3</button>
+<span class="px-1">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container-high font-label-md text-label-md transition-colors">1284</button>
+<button class="p-1 rounded hover:bg-surface-container-high transition-colors text-primary">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</footer>
+<!-- Preview Drawer (Overlay/Read-only) -->
+<div class="fixed inset-0 bg-black/20 backdrop-blur-[2px] z-40 hidden" id="preview-overlay" onclick="closePreview()"></div>
+<aside class="fixed right-0 top-0 h-full w-[600px] bg-white z-50 shadow-2xl flex flex-col" id="preview-drawer">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary text-3xl" id="preview-icon">description</span>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface" id="preview-title">文档标题</h2>
+<p class="font-label-sm text-label-sm text-outline">预览模式 · 仅供阅读 · 下载功能由管理员禁用</p>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full hover:bg-surface-container-high flex items-center justify-center" onclick="closePreview()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-auto bg-surface-dim p-xl flex justify-center">
+<div class="w-full max-w-[500px] bg-white shadow-sm min-h-screen p-xl relative border border-outline-variant">
+<!-- Content Placeholder Skeleton -->
+<div class="space-y-md">
+<div class="h-8 w-3/4 bg-surface-container-high rounded animate-pulse"></div>
+<div class="space-y-sm pt-md">
+<div class="h-4 w-full bg-surface-container-low rounded"></div>
+<div class="h-4 w-full bg-surface-container-low rounded"></div>
+<div class="h-4 w-5/6 bg-surface-container-low rounded"></div>
+<div class="h-4 w-full bg-surface-container-low rounded"></div>
+<div class="h-4 w-4/6 bg-surface-container-low rounded"></div>
+</div>
+<div class="h-40 w-full bg-surface-container-low rounded border border-outline-variant border-dashed flex items-center justify-center text-outline font-label-md">
+                            [ 图表内容预览 ]
+                        </div>
+<div class="space-y-sm pt-md">
+<div class="h-4 w-full bg-surface-container-low rounded"></div>
+<div class="h-4 w-full bg-surface-container-low rounded"></div>
+<div class="h-4 w-full bg-surface-container-low rounded"></div>
+</div>
+</div>
+<!-- Watermark -->
+<div class="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.03] select-none">
+<div class="grid grid-cols-3 gap-xl transform -rotate-12 scale-150">
+<script>
+                                for(let i=0; i<30; i++) {
+                                    document.write(`<div class="text-xs font-bold whitespace-nowrap">KNOWLEDGE ENGINE - INTERNAL USE ONLY</div>`);
+                                }
+                            </script>
+</div>
+</div>
+</div>
+</div>
+<div class="p-lg bg-surface border-t border-outline-variant flex justify-between">
+<div class="flex gap-md">
+<button class="flex items-center gap-xs px-4 py-2 border border-outline-variant rounded text-on-surface font-label-md hover:bg-surface-container-low">
+<span class="material-symbols-outlined text-[18px]">bookmark</span>
+<span>加入收藏</span>
+</button>
+<button class="flex items-center gap-xs px-4 py-2 border border-outline-variant rounded text-on-surface font-label-md hover:bg-surface-container-low">
+<span class="material-symbols-outlined text-[18px]">share</span>
+<span>分享链接</span>
+</button>
+</div>
+<div class="flex items-center gap-xs text-outline font-label-sm">
+<span class="material-symbols-outlined text-[16px]">info</span>
+<span>预览过程中如有显示错误请联系管理员</span>
+</div>
+</div>
+</aside>
+</main>
+<script>
+        function toggleActive(btn) {
+            const container = btn.parentElement;
+            container.querySelectorAll('button').forEach(b => {
+                b.classList.remove('bg-surface-container-lowest', 'text-primary', 'shadow-sm');
+                b.classList.add('text-on-surface-variant');
+            });
+            btn.classList.add('bg-surface-container-lowest', 'text-primary', 'shadow-sm');
+            btn.classList.remove('text-on-surface-variant');
+        }
+
+        function openPreview(title) {
+            document.getElementById('preview-title').innerText = title;
+            document.getElementById('preview-overlay').classList.remove('hidden');
+            document.getElementById('preview-drawer').classList.add('open');
+
+            // Adjust icon based on file extension
+            const icon = document.getElementById('preview-icon');
+            if (title.endsWith('.pdf')) {
+                icon.innerText = 'picture_as_pdf';
+                icon.className = 'material-symbols-outlined text-error text-3xl';
+            } else {
+                icon.innerText = 'description';
+                icon.className = 'material-symbols-outlined text-primary text-3xl';
+            }
+        }
+
+        function closePreview() {
+            document.getElementById('preview-overlay').classList.add('hidden');
+            document.getElementById('preview-drawer').classList.remove('open');
+        }
+
+        // Search bar micro-interaction
+        document.querySelector('input').addEventListener('focus', function() {
+            this.parentElement.classList.add('scale-[1.02]');
+        });
+        document.querySelector('input').addEventListener('blur', function() {
+            this.parentElement.classList.remove('scale-[1.02]');
+        });
+    </script>
+</body></html>

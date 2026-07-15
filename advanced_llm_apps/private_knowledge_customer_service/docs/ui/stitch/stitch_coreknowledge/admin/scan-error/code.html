@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>知识库管理 - 扫描异常详情</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Han+Sans+SC,+Microsoft+YaHei,+sans-serif:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f0f5f1",
+                    "secondary-fixed-dim": "#b8cbc5",
+                    "on-error": "#ffffff",
+                    "on-primary-container": "#99b9b0",
+                    "primary-fixed-dim": "#adcdc4",
+                    "surface-container-high": "#e5e9e6",
+                    "on-tertiary": "#ffffff",
+                    "primary-container": "#2d4a43",
+                    "on-secondary-fixed-variant": "#394a46",
+                    "inverse-primary": "#adcdc4",
+                    "on-tertiary-container": "#ff993b",
+                    "on-tertiary-fixed": "#2f1500",
+                    "tertiary-fixed-dim": "#ffb77d",
+                    "background": "#f6faf7",
+                    "on-secondary-container": "#576863",
+                    "surface": "#f6faf7",
+                    "inverse-on-surface": "#edf2ee",
+                    "surface-bright": "#f6faf7",
+                    "inverse-surface": "#2c312f",
+                    "on-primary-fixed-variant": "#2f4c45",
+                    "on-background": "#181d1b",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed": "#ffdcc3",
+                    "surface-tint": "#47645d",
+                    "tertiary-container": "#6b3700",
+                    "secondary": "#51625d",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed": "#d4e7e1",
+                    "on-secondary-fixed": "#0e1e1b",
+                    "primary": "#16332d",
+                    "surface-container": "#ebefec",
+                    "on-primary-fixed": "#02201a",
+                    "on-error-container": "#93000a",
+                    "surface-variant": "#dfe3e0",
+                    "on-primary": "#ffffff",
+                    "outline-variant": "#c1c8c5",
+                    "error": "#ba1a1a",
+                    "primary-fixed": "#c9e9e0",
+                    "surface-dim": "#d7dbd8",
+                    "on-tertiary-fixed-variant": "#6e3900",
+                    "surface-container-highest": "#dfe3e0",
+                    "tertiary": "#4a2500",
+                    "on-surface": "#181d1b",
+                    "secondary-container": "#d4e7e1",
+                    "outline": "#727976",
+                    "on-surface-variant": "#414846"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "40px",
+                    "container-max": "1280px",
+                    "lg": "24px",
+                    "gutter": "20px",
+                    "unit": "4px",
+                    "sm": "8px",
+                    "xs": "4px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                    "body-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                    "label-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                    "body-lg": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                    "label-sm": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                    "headline-sm": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                    "headline-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f6faf7;
+            font-family: "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .ai-accent-border {
+            border-left: 3px solid #16332d;
+            background-color: rgba(22, 51, 45, 0.02);
+        }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- App Shell Container -->
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation (Based on SideNavBar JSON) -->
+<aside class="flex flex-col h-screen py-md px-sm bg-surface border-r border-outline-variant w-64 transition-colors duration-200">
+<div class="px-md mb-xl">
+<h1 class="font-headline-sm text-headline-sm font-semibold text-primary">Enterprise Admin</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Knowledge Core</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined mr-md">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center px-md py-sm rounded-lg bg-secondary-container text-on-secondary-container font-bold" href="#">
+<span class="material-symbols-outlined mr-md">database</span>
+<span class="font-body-md text-body-md">Knowledge Base</span>
+</a>
+<a class="flex items-center px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined mr-md">hub</span>
+<span class="font-body-md text-body-md">Data Connectors</span>
+</a>
+<a class="flex items-center px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined mr-md">receipt_long</span>
+<span class="font-body-md text-body-md">Scanning Logs</span>
+</a>
+<a class="flex items-center px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined mr-md">key</span>
+<span class="font-body-md text-body-md">API Settings</span>
+</a>
+<a class="flex items-center px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined mr-md">shield_person</span>
+<span class="font-body-md text-body-md">Access Control</span>
+</a>
+</nav>
+<div class="mt-auto px-md">
+<button class="w-full py-md bg-primary text-on-primary rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">add</span>
+                    Add New Source
+                </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- Top Navigation Bar (Based on TopNavBar JSON) -->
+<header class="bg-surface-bright border-b border-outline-variant">
+<div class="flex justify-between items-center w-full px-lg py-sm max-w-container-max mx-auto">
+<div class="flex items-center gap-xl">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">KnowledgeEngine</span>
+<div class="relative hidden md:block w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+<input class="w-full bg-surface text-body-md font-body-md border-outline-variant rounded-full pl-10 py-1 focus:ring-primary focus:border-primary" placeholder="搜索资源..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<nav class="hidden md:flex gap-md">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary" href="#">Recent</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary" href="#">Favorites</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary" href="#">Shared</a>
+</nav>
+<div class="flex items-center gap-sm border-l border-outline-variant pl-lg">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full">settings</button>
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a system administrator in a clean, modern office setting with soft natural light, conveying a sense of competence and calm authority. The background features minimalist wooden shelving and architectural details in neutral tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDc-jsDSLiRYZN0gDPr8BoplbhMeGCCc1RBphujswIsLbFD_ZaphZqSYa4ucL60_niauiBxv2PMzzX2QZpjmIczrniCnkRz0I65LYUEkePhnPLUIqgFWZCMeybgiZnogHDByMibwXiBM_b7W74FPiZIZF9PznEBFSeNzasd1xoPF4_7lpr_d4TITBU9eW9UUDQLx6-4GMSAKAWUGsQzeB0j9f9v5M26h63JuG6_lA4mwFndDb806KwY_Aia-aw-MHDJ8vyGXzarwq1s"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Workspace Content -->
+<section class="flex-1 overflow-y-auto p-lg max-w-container-max mx-auto w-full">
+<!-- Page Header with Context -->
+<div class="mb-lg flex items-center justify-between">
+<div>
+<nav class="flex text-label-sm text-on-surface-variant mb-2 gap-2 items-center">
+<span>知识库管理</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span>扫描日志</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-primary font-bold">异常详情</span>
+</nav>
+<h2 class="font-headline-md text-headline-md text-primary">扫描异常状态报告</h2>
+</div>
+<div class="flex gap-md">
+<button class="px-md py-sm border border-outline text-on-surface font-label-md text-label-md rounded hover:bg-surface-container-low transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">download</span> 导出日志
+                        </button>
+</div>
+</div>
+<div class="bento-grid">
+<!-- Status Overview Card -->
+<div class="col-span-12 md:col-span-4 bg-surface-container-lowest border border-outline-variant rounded-lg p-lg">
+<div class="flex flex-col h-full">
+<div class="flex items-center gap-md mb-md">
+<div class="w-12 h-12 rounded-full bg-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">error</span>
+</div>
+<div>
+<span class="inline-block px-sm py-1 bg-error-container text-error font-label-sm text-label-sm rounded uppercase font-bold mb-1">扫描失败</span>
+<p class="font-label-md text-label-md text-on-surface-variant">发生于：2023-10-27 14:32:05</p>
+</div>
+</div>
+<div class="mt-auto pt-md border-t border-outline-variant">
+<p class="text-label-sm text-on-surface-variant mb-1">扫描对象</p>
+<p class="font-body-md text-body-md font-semibold">敏感文档存储库 (Production)</p>
+</div>
+</div>
+</div>
+<!-- Error Details Card (The Focus Area) -->
+<div class="col-span-12 md:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex flex-col shadow-[0px_2px_8px_rgba(45,74,67,0.05)]">
+<div class="p-lg ai-accent-border flex-1">
+<div class="flex items-center gap-2 mb-lg">
+<span class="material-symbols-outlined text-error">terminal</span>
+<h3 class="font-headline-sm text-headline-sm text-primary">诊断详情</h3>
+</div>
+<div class="space-y-xl">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-2">错误代码</p>
+<code class="px-md py-sm bg-surface-container-high text-error font-mono rounded text-body-md border border-outline-variant">ERR_DIR_NOT_FOUND</code>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-2">详细信息</p>
+<p class="font-body-lg text-body-lg text-on-surface leading-relaxed">
+                                        指定的敏感文档本地路径 <span class="px-2 py-0.5 bg-secondary-container text-primary font-mono rounded">/mnt/storage/secure_docs</span> 不存在或已被移除。系统在执行预扫描环境检查时，无法获取该目录的文件句柄或读取权限。
+                                    </p>
+</div>
+<div class="bg-surface p-md rounded border border-outline-variant">
+<div class="flex items-start gap-md">
+<span class="material-symbols-outlined text-tertiary mt-0.5">lightbulb</span>
+<div>
+<p class="font-label-md text-label-md text-tertiary-fixed-dim font-bold mb-1">建议操作</p>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                                                1. 请核对服务器物理路径，确保挂载点处于活跃状态。<br/>
+                                                2. 检查运行账户对该目录的读取权限（需具备执行 + 读取权限）。<br/>
+                                                3. 如果路径已变更，请重新配置目录映射关系。
+                                            </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Footer -->
+<div class="bg-surface-container-low px-lg py-md flex justify-end gap-md border-t border-outline-variant">
+<button class="px-lg py-md border border-primary text-primary font-label-md text-label-md rounded hover:bg-primary-fixed transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">folder_open</span> 更改路径
+                            </button>
+<button class="px-xl py-md bg-primary text-on-primary font-label-md text-label-md rounded hover:opacity-90 transition-opacity shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">refresh</span> 重试
+                            </button>
+</div>
+</div>
+<!-- Scan History Context -->
+<div class="col-span-12 bg-surface-container-lowest border border-outline-variant rounded-lg p-lg">
+<h4 class="font-label-md text-label-md font-bold mb-md text-on-surface-variant">最近扫描记录</h4>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant text-label-sm text-on-surface-variant">
+<th class="py-sm font-medium">时间</th>
+<th class="py-sm font-medium">操作类型</th>
+<th class="py-sm font-medium">状态</th>
+<th class="py-sm font-medium">备注</th>
+</tr>
+</thead>
+<tbody class="text-body-md">
+<tr class="border-b border-outline-variant hover:bg-background transition-colors">
+<td class="py-md">2023-10-27 14:32</td>
+<td class="py-md">全量扫描</td>
+<td class="py-md"><span class="text-error flex items-center gap-1"><span class="material-symbols-outlined text-xs">close</span>失败</span></td>
+<td class="py-md text-on-surface-variant">ERR_DIR_NOT_FOUND</td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-background transition-colors">
+<td class="py-md">2023-10-26 10:00</td>
+<td class="py-md">增量扫描</td>
+<td class="py-md"><span class="text-primary flex items-center gap-1"><span class="material-symbols-outlined text-xs">check</span>成功</span></td>
+<td class="py-md text-on-surface-variant">新增 12 个文档，耗时 45s</td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-background transition-colors">
+<td class="py-md">2023-10-25 10:00</td>
+<td class="py-md">全量扫描</td>
+<td class="py-md"><span class="text-primary flex items-center gap-1"><span class="material-symbols-outlined text-xs">check</span>成功</span></td>
+<td class="py-md text-on-surface-variant">扫描 1,240 个文档，无异常</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Micro-interaction for UI feedback -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(btn => {
+                btn.addEventListener('mousedown', () => {
+                    btn.classList.add('scale-95');
+                });
+                btn.addEventListener('mouseup', () => {
+                    btn.classList.remove('scale-95');
+                });
+                btn.addEventListener('mouseleave', () => {
+                    btn.classList.remove('scale-95');
+                });
+            });
+        });
+    </script>
+</body></html>

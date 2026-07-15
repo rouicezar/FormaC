@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>知识库管理 | KnowledgeEngine</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Han+Sans+SC,+Microsoft+YaHei,+sans-serif:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        /* Custom scrollbar for archival feel */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #E5E3DB; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #C1C8C5; }
+
+        .drawer-open { transform: translateX(0) !important; }
+        .glass-overlay { backdrop-filter: blur(4px); background: rgba(24, 29, 27, 0.2); }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed": "#02201a",
+                        "surface-container": "#ebefec",
+                        "tertiary-fixed-dim": "#ffb77d",
+                        "surface-variant": "#dfe3e0",
+                        "on-tertiary-fixed-variant": "#6e3900",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#ff993b",
+                        "surface-container-high": "#e5e9e6",
+                        "tertiary-fixed": "#ffdcc3",
+                        "primary-fixed": "#c9e9e0",
+                        "tertiary-container": "#6b3700",
+                        "secondary-fixed": "#d4e7e1",
+                        "surface": "#f6faf7",
+                        "inverse-surface": "#2c312f",
+                        "outline": "#727976",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#dfe3e0",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d7dbd8",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#99b9b0",
+                        "on-secondary-fixed": "#0e1e1b",
+                        "tertiary": "#4a2500",
+                        "on-secondary-fixed-variant": "#394a46",
+                        "inverse-primary": "#adcdc4",
+                        "on-primary-fixed-variant": "#2f4c45",
+                        "inverse-on-surface": "#edf2ee",
+                        "surface-tint": "#47645d",
+                        "on-secondary-container": "#576863",
+                        "primary-container": "#2d4a43",
+                        "on-tertiary-fixed": "#2f1500",
+                        "primary-fixed-dim": "#adcdc4",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#b8cbc5",
+                        "on-surface-variant": "#414846",
+                        "on-background": "#181d1b",
+                        "secondary-container": "#d4e7e1",
+                        "surface-container-low": "#f0f5f1",
+                        "secondary": "#51625d",
+                        "outline-variant": "#c1c8c5",
+                        "surface-bright": "#f6faf7",
+                        "primary": "#16332d",
+                        "on-surface": "#181d1b",
+                        "background": "#f6faf7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "container-max": "1280px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "gutter": "20px",
+                        "unit": "4px",
+                        "xl": "40px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "headline-lg": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "headline-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "body-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "label-sm": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "headline-sm": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "label-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }],
+                        "headline-lg": ["30px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.03em", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "500" }]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex">
+<!-- SideNavBar (Shared Component) -->
+<aside class="docked left-0 h-full w-64 flex flex-col h-screen py-md px-sm bg-surface border-r border-outline-variant transition-colors duration-200">
+<div class="mb-xl px-md">
+<h1 class="font-headline-sm text-headline-sm font-semibold text-primary">Enterprise Admin</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Knowledge Core</p>
+</div>
+<nav class="flex-grow space-y-xs">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg bg-secondary-container text-on-secondary-container font-bold" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-body-md text-body-md">Knowledge Base</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">hub</span>
+<span class="font-body-md text-body-md">Data Connectors</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-body-md text-body-md">Scanning Logs</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">key</span>
+<span class="font-body-md text-body-md">API Settings</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">shield_person</span>
+<span class="font-body-md text-body-md">Access Control</span>
+</a>
+</nav>
+<div class="mt-auto px-md">
+<button class="w-full bg-primary-container text-on-primary py-sm rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity">
+                Add New Source
+            </button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-grow overflow-y-auto">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-surface-bright border-b border-outline-variant flex justify-between items-center w-full px-lg py-sm sticky top-0 z-10">
+<div class="flex items-center gap-xl">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">KnowledgeEngine</span>
+<div class="hidden md:flex gap-lg">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary" href="#">Recent</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary" href="#">Favorites</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary" href="#">Shared</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-sm hover:bg-surface-container rounded-full"><span class="material-symbols-outlined text-on-surface-variant">notifications</span></button>
+<button class="p-sm hover:bg-surface-container rounded-full"><span class="material-symbols-outlined text-on-surface-variant">settings</span></button>
+<div class="w-8 h-8 rounded-full bg-primary-fixed overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a system administrator in a high-tech office environment. The person has a focused and calm expression, wearing a tailored dark blazer. The background features soft bokeh of server lights and glass partitions, conveying a sense of corporate authority and intelligence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvrmKuIuJg5YbJcZFi-O123PDu_L6FRjdZhXQRZvF5lhv5wrxGNz805YybqiUemyKDt4UVEuBj7oBfliPnpgszk8pOn-i9BJRpBbbjxReahK98uptkLTRHCyS_dmfavBsO6PBoGfGryKf8PNRoqI2taKA0as-7wPrgIFrqHvA_qt8pn_DQGd28mxl1XEZljdrMuC9urmTHig8qHCVyuxXyFJKTZeJSis1ZBPqkTk_1T5FIaFaeWDhQmBaMhwN5YsKFzYMApicB4Zd3"/>
+</div>
+</div>
+</header>
+<div class="max-w-container-max mx-auto p-lg">
+<!-- Header Section -->
+<div class="mb-lg">
+<h2 class="font-headline-md text-headline-md text-primary mb-xs">知识库管理</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">配置本地路径，管理文档自动解析与同步状态。</p>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-lg mb-lg">
+<!-- Path Configuration Card -->
+<section class="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl p-lg">
+<div class="flex items-center justify-between mb-lg border-b border-outline-variant pb-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">folder_open</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">路径配置</h3>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<div class="space-y-sm">
+<label class="font-label-md text-label-md text-on-surface-variant">公开文档本地路径</label>
+<div class="flex">
+<input class="flex-grow bg-surface border border-outline-variant rounded-l-lg px-md py-sm font-body-md text-body-md focus:ring-1 focus:ring-primary outline-none" type="text" value="/mnt/storage/knowledge/public"/>
+<button class="bg-surface-container border-y border-r border-outline-variant px-md rounded-r-lg hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">edit</span>
+</button>
+</div>
+</div>
+<div class="space-y-sm">
+<label class="font-label-md text-label-md text-on-surface-variant">敏感文档本地路径</label>
+<div class="flex">
+<input class="flex-grow bg-surface border border-outline-variant rounded-l-lg px-md py-sm font-body-md text-body-md focus:ring-1 focus:ring-primary outline-none" type="text" value="/mnt/storage/knowledge/secure"/>
+<button class="bg-surface-container border-y border-r border-outline-variant px-md rounded-r-lg hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">edit</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Scan Control Card -->
+<section class="col-span-12 lg:col-span-4 bg-surface-container-lowest border border-outline-variant rounded-xl p-lg">
+<div class="flex items-center gap-sm mb-lg border-b border-outline-variant pb-md">
+<span class="material-symbols-outlined text-primary">dynamic_feed</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">扫描控制</h3>
+</div>
+<div class="space-y-lg">
+<div class="flex items-center justify-between">
+<div class="space-y-xs">
+<p class="font-label-md text-label-md text-on-surface">自动扫描周期</p>
+<p class="text-[11px] text-on-surface-variant">每 24 小时执行一次增量扫描</p>
+</div>
+<select class="bg-surface border border-outline-variant rounded-lg px-sm py-xs font-label-sm text-label-sm outline-none focus:ring-1 focus:ring-primary">
+<option>1 小时</option>
+<option>6 小时</option>
+<option>12 小时</option>
+<option selected="">24 小时</option>
+</select>
+</div>
+<button class="w-full flex items-center justify-center gap-sm bg-primary text-on-primary py-md rounded-lg font-label-md text-label-md hover:bg-primary-container transition-all" onclick="triggerScan()">
+<span class="material-symbols-outlined" id="scan-icon">sync</span>
+                            手动执行全量扫描
+                        </button>
+</div>
+</section>
+<!-- Documents Overview Table -->
+<section class="col-span-12 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+<div class="p-lg border-b border-outline-variant flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">文档概览</h3>
+<div class="flex gap-md">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="pl-10 pr-md py-sm bg-surface border border-outline-variant rounded-full text-body-md outline-none focus:ring-1 focus:ring-primary w-64" placeholder="搜索文件名..." type="text"/>
+</div>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-left">
+<th class="px-lg py-md font-label-md text-label-md text-on-surface-variant">文件名</th>
+<th class="px-lg py-md font-label-md text-label-md text-on-surface-variant">类型</th>
+<th class="px-lg py-md font-label-md text-label-md text-on-surface-variant">片段数</th>
+<th class="px-lg py-md font-label-md text-label-md text-on-surface-variant">最后同步时间</th>
+<th class="px-lg py-md font-label-md text-label-md text-on-surface-variant">状态</th>
+<th class="px-lg py-md font-label-md text-label-md text-on-surface-variant text-right">操作</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary opacity-60">description</span>
+<span class="font-body-md text-body-md">2024_Q3_Strategic_Plan.pdf</span>
+</div>
+</td>
+<td class="px-lg py-md font-body-md text-body-md">PDF</td>
+<td class="px-lg py-md font-body-md text-body-md">1,248</td>
+<td class="px-lg py-md font-body-md text-body-md text-on-surface-variant">2023-10-27 09:12</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-[#1A73E8]"></span>
+<span class="font-label-sm text-label-sm text-on-surface">已同步</span>
+</div>
+</td>
+<td class="px-lg py-md text-right space-x-md">
+<button class="text-primary font-label-md hover:underline">查看详情</button>
+<button class="text-on-surface-variant font-label-md hover:text-primary">重新扫描</button>
+</td>
+</tr>
+<!-- Row 2 - Error State -->
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-error opacity-60">warning</span>
+<span class="font-body-md text-body-md">Legacy_Customer_Records.xlsx</span>
+</div>
+</td>
+<td class="px-lg py-md font-body-md text-body-md">Excel</td>
+<td class="px-lg py-md font-body-md text-body-md">0</td>
+<td class="px-lg py-md font-body-md text-body-md text-on-surface-variant">2023-10-27 08:45</td>
+<td class="px-lg py-md">
+<button class="flex items-center gap-xs cursor-pointer group/status" onclick="toggleDrawer(true)">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="font-label-sm text-label-sm text-error group-hover/status:underline">解析失败</span>
+</button>
+</td>
+<td class="px-lg py-md text-right space-x-md">
+<button class="text-primary font-label-md hover:underline">查看详情</button>
+<button class="text-on-surface-variant font-label-md hover:text-primary">重新扫描</button>
+</td>
+</tr>
+<!-- Row 3 - Syncing State -->
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary opacity-60">article</span>
+<span class="font-body-md text-body-md">Product_Specs_v2.docx</span>
+</div>
+</td>
+<td class="px-lg py-md font-body-md text-body-md">Word</td>
+<td class="px-lg py-md font-body-md text-body-md">...</td>
+<td class="px-lg py-md font-body-md text-body-md text-on-surface-variant">正在同步...</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-xs">
+<div class="animate-spin text-primary-container"><span class="material-symbols-outlined text-[14px]">progress_activity</span></div>
+<span class="font-label-sm text-label-sm text-primary">同步中</span>
+</div>
+</td>
+<td class="px-lg py-md text-right space-x-md">
+<button class="text-primary font-label-md hover:underline">查看详情</button>
+<button class="text-on-surface-variant font-label-md hover:text-primary">重新扫描</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary opacity-60">markdown</span>
+<span class="font-body-md text-body-md">API_Documentation.md</span>
+</div>
+</td>
+<td class="px-lg py-md font-body-md text-body-md">Markdown</td>
+<td class="px-lg py-md font-body-md text-body-md">86</td>
+<td class="px-lg py-md font-body-md text-body-md text-on-surface-variant">2023-10-26 21:00</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-[#1A73E8]"></span>
+<span class="font-label-sm text-label-sm text-on-surface">已同步</span>
+</div>
+</td>
+<td class="px-lg py-md text-right space-x-md">
+<button class="text-primary font-label-md hover:underline">查看详情</button>
+<button class="text-on-surface-variant font-label-md hover:text-primary">重新扫描</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Error Logs Drawer -->
+<div class="fixed inset-0 z-40 hidden glass-overlay transition-opacity duration-300" id="drawer-overlay" onclick="toggleDrawer(false)"></div>
+<div class="fixed top-0 right-0 h-full w-full max-w-md bg-surface shadow-xl z-50 transform translate-x-full transition-transform duration-300 border-l border-outline-variant flex flex-col" id="error-drawer">
+<div class="p-lg border-b border-outline-variant flex items-center justify-between">
+<h4 class="font-headline-sm text-headline-sm text-error">解析失败日志</h4>
+<button class="p-sm hover:bg-surface-container rounded-full" onclick="toggleDrawer(false)">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-grow p-lg overflow-y-auto space-y-lg">
+<div class="bg-error-container/30 p-md rounded-lg border border-error/20">
+<p class="font-label-md text-label-md text-error mb-xs">文件名: Legacy_Customer_Records.xlsx</p>
+<p class="font-body-md text-body-md text-on-surface-variant">错误代码: ERR_PARSE_042</p>
+</div>
+<div class="space-y-md">
+<h5 class="font-label-md text-label-md text-on-surface">堆栈信息:</h5>
+<pre class="bg-inverse-surface text-[#A3E635] p-md rounded text-[12px] leading-relaxed overflow-x-auto">2023-10-27 08:45:12 [ERROR] Start parsing Excel structure.
+2023-10-27 08:45:13 [DEBUG] Detected encrypted workbook protection.
+2023-10-27 08:45:13 [ERROR] Unhandled exception: File is password protected.
+Parser cannot access content without valid credentials.
+2023-10-27 08:45:13 [WARN] Skipping file to prevent system hang.
+                </pre>
+</div>
+<div class="pt-md border-t border-outline-variant">
+<h5 class="font-label-md text-label-md text-on-surface mb-sm">建议操作:</h5>
+<ul class="space-y-sm">
+<li class="flex gap-sm text-body-md text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-[18px]">check_circle</span>
+                        移除 Excel 文件的密码保护后重试
+                    </li>
+<li class="flex gap-sm text-body-md text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-[18px]">check_circle</span>
+                        确保文件未被其他系统进程占用
+                    </li>
+</ul>
+</div>
+</div>
+<div class="p-lg bg-surface-container border-t border-outline-variant space-y-md">
+<button class="w-full bg-primary text-on-primary py-md rounded-lg font-label-md text-label-md hover:bg-primary-container transition-all">重新解析</button>
+<button class="w-full border border-outline text-on-surface-variant py-md rounded-lg font-label-md text-label-md hover:bg-surface transition-all">忽略此错误</button>
+</div>
+</div>
+<script>
+        function toggleDrawer(open) {
+            const drawer = document.getElementById('error-drawer');
+            const overlay = document.getElementById('drawer-overlay');
+            if (open) {
+                drawer.classList.add('drawer-open');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.style.opacity = '1', 10);
+            } else {
+                drawer.classList.remove('drawer-open');
+                overlay.style.opacity = '0';
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        }
+
+        function triggerScan() {
+            const icon = document.getElementById('scan-icon');
+            icon.classList.add('animate-spin');
+
+            // Artificial delay for feedback
+            setTimeout(() => {
+                icon.classList.remove('animate-spin');
+                alert('扫描任务已提交至后台引擎。');
+            }, 2000);
+        }
+    </script>
+</body></html>

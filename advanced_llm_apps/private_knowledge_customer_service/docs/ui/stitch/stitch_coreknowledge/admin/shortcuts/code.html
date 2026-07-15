@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>快捷入口管理 | KnowledgeEngine</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Han+Sans+SC,+Microsoft+YaHei,+sans-serif:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        /* Custom Scrollbar for Enterprise feel */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #dfe3e0; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #c1c8c5; }
+
+        .glass-panel {
+            background: rgba(252, 252, 250, 0.8);
+            backdrop-filter: blur(8px);
+        }
+
+        .zebra-row:nth-child(even) {
+            background-color: #f0f5f1;
+        }
+
+        .status-active {
+            color: #16332d;
+            background-color: #d4e7e1;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#edf2ee",
+                        "on-secondary-fixed": "#0e1e1b",
+                        "surface-variant": "#dfe3e0",
+                        "outline": "#727976",
+                        "on-surface": "#181d1b",
+                        "surface-container-low": "#f0f5f1",
+                        "on-primary-fixed": "#02201a",
+                        "secondary-container": "#d4e7e1",
+                        "tertiary-fixed-dim": "#ffb77d",
+                        "on-secondary-fixed-variant": "#394a46",
+                        "surface": "#f6faf7",
+                        "secondary-fixed-dim": "#b8cbc5",
+                        "on-secondary-container": "#576863",
+                        "primary-fixed-dim": "#adcdc4",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-highest": "#dfe3e0",
+                        "surface-bright": "#f6faf7",
+                        "surface-container": "#ebefec",
+                        "tertiary-container": "#6b3700",
+                        "secondary": "#51625d",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#414846",
+                        "on-tertiary-container": "#ff993b",
+                        "background": "#f6faf7",
+                        "tertiary-fixed": "#ffdcc3",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#2f1500",
+                        "on-background": "#181d1b",
+                        "tertiary": "#4a2500",
+                        "outline-variant": "#c1c8c5",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#c9e9e0",
+                        "primary-container": "#2d4a43",
+                        "surface-dim": "#d7dbd8",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#16332d",
+                        "on-primary-fixed-variant": "#2f4c45",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#99b9b0",
+                        "surface-container-high": "#e5e9e6",
+                        "on-primary": "#ffffff",
+                        "inverse-surface": "#2c312f",
+                        "secondary-fixed": "#d4e7e1",
+                        "inverse-primary": "#adcdc4",
+                        "on-tertiary-fixed-variant": "#6e3900",
+                        "surface-tint": "#47645d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "40px",
+                        "container-max": "1280px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "gutter": "20px",
+                        "xs": "4px",
+                        "unit": "4px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                        "headline-lg": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                        "body-lg": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                        "headline-sm": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                        "label-md": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                        "body-md": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                        "headline-md": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex font-body-md text-body-md overflow-hidden">
+<!-- Left SideNavBar (Enterprise Admin) -->
+<aside class="flex flex-col h-screen py-md px-sm bg-surface border-r border-outline-variant w-64 shrink-0 transition-colors duration-200">
+<div class="px-md mb-lg">
+<h1 class="font-headline-sm text-headline-sm font-semibold text-primary">Enterprise Admin</h1>
+<p class="text-on-surface-variant text-label-sm font-label-sm opacity-70">Knowledge Core</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-sm" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center px-md py-sm rounded-lg bg-secondary-container text-on-secondary-container font-bold transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-sm" data-icon="database">database</span>
+<span>Knowledge Base</span>
+</a>
+<a class="flex items-center px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-sm" data-icon="hub">hub</span>
+<span>Data Connectors</span>
+</a>
+<a class="flex items-center px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-sm" data-icon="receipt_long">receipt_long</span>
+<span>Scanning Logs</span>
+</a>
+<a class="flex items-center px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-sm" data-icon="key">key</span>
+<span>API Settings</span>
+</a>
+<a class="flex items-center px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-sm" data-icon="shield_person">shield_person</span>
+<span>Access Control</span>
+</a>
+</nav>
+<div class="mt-auto px-md py-md">
+<button class="w-full flex items-center justify-center bg-primary text-on-primary py-sm rounded-lg font-bold hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined mr-xs" data-icon="add">add</span>
+<span>Add New Source</span>
+</button>
+</div>
+</aside>
+<div class="flex-1 flex flex-col min-w-0">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full px-lg py-sm bg-surface-bright border-b border-outline-variant shrink-0">
+<div class="flex items-center space-x-lg">
+<div class="font-headline-sm text-headline-sm font-bold text-primary">KnowledgeEngine</div>
+<div class="hidden md:flex space-x-md text-on-surface-variant font-label-md text-label-md">
+<a class="hover:text-primary transition-colors" href="#">Recent</a>
+<a class="hover:text-primary transition-colors" href="#">Favorites</a>
+<a class="hover:text-primary transition-colors" href="#">Shared</a>
+</div>
+</div>
+<div class="flex items-center space-x-md">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="pl-xl pr-md py-xs bg-surface-container-low border border-outline-variant rounded-full text-label-md focus:outline-none focus:border-primary w-64" placeholder="Search templates..." type="text"/>
+</div>
+<button class="p-xs text-on-surface-variant hover:text-primary transition-transform active:scale-95">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-primary transition-transform active:scale-95">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A clean professional headshot of a system administrator in a high-key corporate environment, minimalist office background, calm and focused expression, captured in soft professional lighting, dark green and white color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcVdnwYB7fNXRIsg6eAyEAtOf3VeN78uw6ecxqSvKq6AyVoRTRGggTJzqSzLJBKLYTkgLl9LzWY2SWW2Zh4TlidIGTZ0sxZuQMCOzAVMR4NpaXQTuoaVLwjLXFwVRwadL5i9t728nBfC2SXlev51ixbw9_Xx9AoBTfLBR0anBKGJXX_y99t20Jrk2SmYSX4wzIu6Qt3bXl889Ebv5s5Syq0iGa7WpOCvGyiXh0VXjHrfd6RNyrYqLOLzF6x4OP6Ste4LYBRjgzHkH9"/>
+</div>
+</div>
+</header>
+<!-- Main Content Workspace -->
+<main class="flex-1 overflow-y-auto p-lg max-w-container-max mx-auto w-full">
+<!-- Breadcrumbs & Actions -->
+<div class="flex justify-between items-end mb-lg">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary mb-xs">快捷入口管理</h2>
+<p class="text-on-surface-variant">创建和维护公共或内部专属的AI辅助入口模板。</p>
+</div>
+<button class="flex items-center px-lg py-md bg-primary text-on-primary rounded-lg font-bold shadow-sm hover:opacity-90 transition-all">
+<span class="material-symbols-outlined mr-sm" data-icon="add_circle">add_circle</span>
+<span>创建快捷入口</span>
+</button>
+</div>
+<!-- Focus Notice -->
+<div class="mb-lg p-md bg-surface-container-low border-l-4 border-primary flex items-start space-x-md rounded-r-lg">
+<span class="material-symbols-outlined text-primary mt-xs" data-icon="info">info</span>
+<div class="flex-1">
+<p class="font-bold text-primary">系统提示：仅保存模板</p>
+<p class="text-on-surface-variant text-label-md">系统仅存储快捷入口的配置与问题模板。为保证企业数据安全，系统**不缓存**任何生成的AI对话答案。每次调用均实时从数据源检索。</p>
+</div>
+</div>
+<!-- Bento Layout Content -->
+<div class="grid grid-cols-1 gap-lg">
+<!-- Management Table Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-[0px_2px_8px_rgba(45,74,67,0.05)]">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container border-b border-outline-variant">
+<th class="px-lg py-md font-bold text-primary text-label-md">标题 / 描述</th>
+<th class="px-lg py-md font-bold text-primary text-label-md">类型</th>
+<th class="px-lg py-md font-bold text-primary text-label-md">问题模板预览</th>
+<th class="px-lg py-md font-bold text-primary text-label-md">可见范围</th>
+<th class="px-lg py-md font-bold text-primary text-label-md text-center">排序</th>
+<th class="px-lg py-md font-bold text-primary text-label-md">状态</th>
+<th class="px-lg py-md font-bold text-primary text-label-md text-right">操作</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="zebra-row hover:bg-surface-container-high transition-colors">
+<td class="px-lg py-md">
+<div class="font-bold text-on-surface">Q3季度业绩目标</div>
+<div class="text-on-surface-variant text-label-sm truncate max-w-xs">用于快速查询季度关键绩效指标及部门分布。</div>
+</td>
+<td class="px-lg py-md">
+<span class="px-sm py-xs bg-secondary-container text-on-secondary-container rounded text-label-sm">知识问答</span>
+</td>
+<td class="px-lg py-md">
+<div class="text-label-sm text-on-surface-variant border-l-2 border-primary-fixed-dim pl-sm italic">
+                                            “请总结Q3季度各部门业绩目标并对比...”
+                                        </div>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center text-on-surface-variant">
+<span class="material-symbols-outlined text-sm mr-xs" data-icon="groups">groups</span>
+<span>全部用户</span>
+</div>
+</td>
+<td class="px-lg py-md text-center font-mono">01</td>
+<td class="px-lg py-md">
+<div class="flex items-center">
+<div class="w-2 h-2 rounded-full bg-primary mr-sm"></div>
+<span class="text-primary font-bold">已启用</span>
+</div>
+</td>
+<td class="px-lg py-md text-right space-x-md">
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined" data-icon="edit">edit</span></button>
+<button class="text-on-surface-variant hover:text-error"><span class="material-symbols-outlined" data-icon="delete">delete</span></button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="zebra-row hover:bg-surface-container-high transition-colors">
+<td class="px-lg py-md">
+<div class="font-bold text-on-surface">HR入职指引</div>
+<div class="text-on-surface-variant text-label-sm truncate max-w-xs">新员工入职流程、系统权限申请流程。</div>
+</td>
+<td class="px-lg py-md">
+<span class="px-sm py-xs bg-secondary-container text-on-secondary-container rounded text-label-sm">办事流程</span>
+</td>
+<td class="px-lg py-md">
+<div class="text-label-sm text-on-surface-variant border-l-2 border-primary-fixed-dim pl-sm italic">
+                                            “新入职员工需要完成哪些行政流程...”
+                                        </div>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center text-on-surface-variant">
+<span class="material-symbols-outlined text-sm mr-xs" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span>HR 部门</span>
+</div>
+</td>
+<td class="px-lg py-md text-center font-mono">02</td>
+<td class="px-lg py-md">
+<div class="flex items-center">
+<div class="w-2 h-2 rounded-full bg-primary mr-sm"></div>
+<span class="text-primary font-bold">已启用</span>
+</div>
+</td>
+<td class="px-lg py-md text-right space-x-md">
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined" data-icon="edit">edit</span></button>
+<button class="text-on-surface-variant hover:text-error"><span class="material-symbols-outlined" data-icon="delete">delete</span></button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="zebra-row hover:bg-surface-container-high transition-colors">
+<td class="px-lg py-md">
+<div class="font-bold text-on-surface opacity-60">IT报修常见FAQ</div>
+<div class="text-on-surface-variant text-label-sm truncate max-w-xs">内部办公系统维护时间及常见故障排除。</div>
+</td>
+<td class="px-lg py-md">
+<span class="px-sm py-xs bg-surface-variant text-on-surface-variant rounded text-label-sm">知识问答</span>
+</td>
+<td class="px-lg py-md">
+<div class="text-label-sm text-on-surface-variant border-l-2 border-outline-variant pl-sm italic opacity-60">
+                                            “如何连接办公楼B座的访客Wi-Fi...”
+                                        </div>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center text-on-surface-variant opacity-60">
+<span class="material-symbols-outlined text-sm mr-xs" data-icon="public">public</span>
+<span>公开</span>
+</div>
+</td>
+<td class="px-lg py-md text-center font-mono opacity-60">03</td>
+<td class="px-lg py-md">
+<div class="flex items-center opacity-60">
+<div class="w-2 h-2 rounded-full bg-outline mr-sm"></div>
+<span class="text-on-surface-variant">未启用</span>
+</div>
+</td>
+<td class="px-lg py-md text-right space-x-md">
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined" data-icon="edit">edit</span></button>
+<button class="text-on-surface-variant hover:text-error"><span class="material-symbols-outlined" data-icon="delete">delete</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-lg py-md bg-surface border-t border-outline-variant flex justify-between items-center">
+<span class="text-label-sm text-on-surface-variant">显示 1 到 3 条，共 24 条记录</span>
+<div class="flex space-x-sm">
+<button class="p-xs rounded hover:bg-surface-container border border-outline-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="px-sm py-xs rounded bg-primary text-on-primary font-bold">1</button>
+<button class="px-sm py-xs rounded hover:bg-surface-container border border-outline-variant transition-colors">2</button>
+<button class="px-sm py-xs rounded hover:bg-surface-container border border-outline-variant transition-colors">3</button>
+<button class="p-xs rounded hover:bg-surface-container border border-outline-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Footer Summary / Info Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<div class="p-lg bg-surface border border-outline-variant rounded-xl flex items-center space-x-md">
+<div class="w-12 h-12 rounded-full bg-primary-fixed-dim flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="rocket_launch">rocket_launch</span>
+</div>
+<div>
+<div class="font-bold text-on-surface">激活总数</div>
+<div class="text-headline-sm font-bold text-primary">18 / 24</div>
+</div>
+</div>
+<div class="p-lg bg-surface border border-outline-variant rounded-xl flex items-center space-x-md">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</div>
+<div>
+<div class="font-bold text-on-surface">曝光率</div>
+<div class="text-headline-sm font-bold text-primary">1.2k+ <span class="text-label-sm font-normal text-on-surface-variant">次/日</span></div>
+</div>
+</div>
+<div class="p-lg bg-surface border border-outline-variant rounded-xl flex items-center space-x-md">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed-variant">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+</div>
+<div>
+<div class="font-bold text-on-surface">权限合规</div>
+<div class="text-headline-sm font-bold text-primary">100%</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Create Shortcut Overlay (Hidden by default, for demonstration) -->
+<div class="fixed inset-0 bg-on-surface/20 backdrop-blur-sm hidden items-center justify-center z-50" id="modal-overlay">
+<div class="bg-surface rounded-xl border border-outline-variant shadow-lg w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+<div class="px-lg py-md border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-headline-sm text-primary">创建快捷入口</h3>
+<button class="text-on-surface-variant hover:text-primary" onclick="closeModal()"><span class="material-symbols-outlined" data-icon="close">close</span></button>
+</div>
+<div class="p-lg space-y-md">
+<div class="grid grid-cols-2 gap-lg">
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface-variant">入口标题</label>
+<input class="w-full px-md py-sm bg-surface-bright border border-outline-variant rounded-lg focus:border-primary outline-none" placeholder="例：Q3季度业绩目标" type="text"/>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface-variant">类型</label>
+<select class="w-full px-md py-sm bg-surface-bright border border-outline-variant rounded-lg focus:border-primary outline-none">
+<option>知识问答</option>
+<option>办事流程</option>
+<option>文档摘要</option>
+</select>
+</div>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface-variant">详细描述</label>
+<textarea class="w-full px-md py-sm bg-surface-bright border border-outline-variant rounded-lg focus:border-primary outline-none h-20" placeholder="描述该入口的用途..."></textarea>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface-variant">问题模板 (Prompt Template)</label>
+<textarea class="w-full px-md py-sm bg-surface-bright border border-outline-variant rounded-lg focus:border-primary outline-none h-24" placeholder="“请总结...”"></textarea>
+<p class="text-[11px] text-on-surface-variant opacity-60">提示：使用 {{DATA}} 引用特定知识库。</p>
+</div>
+<div class="grid grid-cols-2 gap-lg">
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface-variant">可见范围</label>
+<select class="w-full px-md py-sm bg-surface-bright border border-outline-variant rounded-lg focus:border-primary outline-none">
+<option>全部用户</option>
+<option>仅限管理员</option>
+<option>指定部门</option>
+</select>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface-variant">显示排序</label>
+<input class="w-full px-md py-sm bg-surface-bright border border-outline-variant rounded-lg focus:border-primary outline-none" type="number" value="1"/>
+</div>
+</div>
+</div>
+<div class="px-lg py-md bg-surface-container border-t border-outline-variant flex justify-end space-x-md">
+<button class="px-lg py-sm text-on-surface-variant font-bold hover:bg-surface-variant rounded-lg transition-colors" onclick="closeModal()">取消</button>
+<button class="px-lg py-sm bg-primary text-on-primary font-bold rounded-lg hover:opacity-90 transition-opacity">保存并发布</button>
+</div>
+</div>
+</div>
+<script>
+        function openModal() {
+            document.getElementById('modal-overlay').classList.remove('hidden');
+            document.getElementById('modal-overlay').classList.add('flex');
+        }
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.add('hidden');
+            document.getElementById('modal-overlay').classList.remove('flex');
+        }
+
+        // Add event listener to the main "Create" button
+        document.querySelector('button.bg-primary.text-on-primary.rounded-lg').addEventListener('click', openModal);
+    </script>
+</body></html>

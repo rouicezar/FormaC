@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>个人中心 - KnowledgeEngine</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Han+Sans+SC,+Microsoft+YaHei,+sans-serif:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #f6faf7;
+            color: #181d1b;
+        }
+        .workspace-card {
+            background-color: #ffffff;
+            border: 1px solid #e5e9e6;
+            transition: all 0.2s ease;
+        }
+        .zebra-row:nth-child(odd) {
+            background-color: #f0f5f1;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-container": "#576863",
+                      "inverse-surface": "#2c312f",
+                      "on-primary": "#ffffff",
+                      "secondary": "#51625d",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed": "#d4e7e1",
+                      "primary-fixed": "#c9e9e0",
+                      "primary-fixed-dim": "#adcdc4",
+                      "error-container": "#ffdad6",
+                      "surface-container": "#ebefec",
+                      "outline-variant": "#c1c8c5",
+                      "outline": "#727976",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-high": "#e5e9e6",
+                      "surface-dim": "#d7dbd8",
+                      "surface-container-low": "#f0f5f1",
+                      "on-surface": "#181d1b",
+                      "inverse-on-surface": "#edf2ee",
+                      "surface-variant": "#dfe3e0",
+                      "on-tertiary-fixed": "#2f1500",
+                      "secondary-fixed-dim": "#b8cbc5",
+                      "on-error": "#ffffff",
+                      "inverse-primary": "#adcdc4",
+                      "on-tertiary-fixed-variant": "#6e3900",
+                      "tertiary-fixed": "#ffdcc3",
+                      "tertiary": "#4a2500",
+                      "surface-bright": "#f6faf7",
+                      "surface-tint": "#47645d",
+                      "secondary-container": "#d4e7e1",
+                      "background": "#f6faf7",
+                      "on-secondary-fixed-variant": "#394a46",
+                      "tertiary-container": "#6b3700",
+                      "on-secondary": "#ffffff",
+                      "on-primary-fixed": "#02201a",
+                      "on-background": "#181d1b",
+                      "on-surface-variant": "#414846",
+                      "primary-container": "#2d4a43",
+                      "surface-container-highest": "#dfe3e0",
+                      "on-primary-container": "#99b9b0",
+                      "tertiary-fixed-dim": "#ffb77d",
+                      "on-tertiary-container": "#ff993b",
+                      "on-secondary-fixed": "#0e1e1b",
+                      "primary": "#16332d",
+                      "surface": "#f6faf7",
+                      "on-primary-fixed-variant": "#2f4c45",
+                      "on-tertiary": "#ffffff",
+                      "error": "#ba1a1a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "sm": "8px",
+                      "unit": "4px",
+                      "container-max": "1280px",
+                      "md": "16px",
+                      "xl": "40px",
+                      "lg": "24px",
+                      "gutter": "20px"
+              },
+              "fontFamily": {
+                      "label-sm": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                      "headline-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                      "headline-lg": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                      "body-lg": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                      "body-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                      "label-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                      "headline-sm": ["Source Han Sans SC, Microsoft YaHei, sans-serif"]
+              },
+              "fontSize": {
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.03em", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "headline-lg": ["30px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-lg": ["16px", {"lineHeight": "26px", "fontWeight": "400"}],
+                      "body-md": ["14px", {"lineHeight": "22px", "fontWeight": "400"}],
+                      "label-md": ["13px", {"lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="flex min-h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<!-- Applying SideNavBar JSON 3: style_shell_layout, style_bg_color, style_component_shape -->
+<aside class="hidden md:flex flex-col items-center h-screen py-lg space-y-xl bg-surface border-r border-outline-variant w-20">
+<div class="mb-xl">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="hub">hub</span>
+</div>
+<nav class="flex flex-col space-y-lg flex-1 items-center">
+<!-- Mapping JSON icons/labels, set Search/Profile as logical active context -->
+<button class="text-outline hover:bg-surface-container-low transition-all duration-150 p-2 rounded-lg" title="对话">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+</button>
+<button class="text-outline hover:bg-surface-container-low transition-all duration-150 p-2 rounded-lg" title="库">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+</button>
+<button class="text-outline hover:bg-surface-container-low transition-all duration-150 p-2 rounded-lg" title="历史">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</button>
+<button class="text-primary flex flex-col items-center justify-center p-2 rounded-lg bg-secondary-container" title="个人中心">
+<span class="material-symbols-outlined" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+</button>
+</nav>
+<div class="flex flex-col space-y-lg items-center pb-md">
+<button class="text-outline hover:bg-surface-container-low p-2 rounded-lg" title="帮助">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<button class="text-outline hover:bg-surface-container-low p-2 rounded-lg" title="反馈">
+<span class="material-symbols-outlined" data-icon="feedback">feedback</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto h-screen bg-surface-bright">
+<!-- Header / Top Bar Anchor -->
+<!-- Applying TopNavBar JSON logic: style_brand_logo, style_bg_color -->
+<header class="flex justify-between items-center w-full px-lg py-sm max-w-container-max mx-auto bg-surface-bright border-b border-outline-variant">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">个人中心</h1>
+<div class="flex items-center space-x-md">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary" data-icon="settings">settings</span>
+</div>
+</header>
+<!-- Bento Content Layout -->
+<div class="max-w-container-max mx-auto p-lg grid grid-cols-12 gap-lg">
+<!-- User Info Card (Hero) -->
+<section class="col-span-12 lg:col-span-8 workspace-card rounded-xl p-lg flex items-center space-x-xl">
+<div class="relative">
+<img class="w-24 h-24 rounded-full border-4 border-secondary-container object-cover" data-alt="A professional studio portrait of a system administrator in a high-tech corporate environment. The person has a neutral, focused expression. The background is a clean, minimalist office with soft focus lighting. The overall aesthetic is grounded in professionalism, using a palette of deep greens and soft whites to match a corporate identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8y6j6VdWwI9VmDwSGQ19Z8OBkKj7QkH9olXCErG1mvlThfFxlpVzx7sKhDf-EfibqPHlFuGRR-L-EKLjOopkuQOzlCR1HApjVAOghev0MzUhq1MEsemqCbi6_5dcufAG2OgmdQiCilruIjQQUnv-WI216JmwvvVd3o-rkcv3Eu1uFP0yRvhIc3iAOUDxIHbr5S6QhR0_iIgvrXgwjNN3icVaD0YYmpRrl0Kk4m5_m4TrCe35nUSFmX03Tfn1kAPJgqYyzFlje6t5c"/>
+<div class="absolute bottom-0 right-0 bg-primary text-white p-1 rounded-full border-2 border-white">
+<span class="material-symbols-outlined text-[16px]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex items-center space-x-sm">
+<h2 class="font-headline-md text-headline-md text-on-surface">系统管理员</h2>
+<span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-label-sm font-label-sm">管理员 / 内部用户</span>
+</div>
+<div class="mt-sm space-y-xs">
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center">
+<span class="material-symbols-outlined text-[18px] mr-2" data-icon="mail">mail</span>
+                            tech_admin@lark.com
+                        </p>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center">
+<span class="material-symbols-outlined text-[18px] mr-2" data-icon="link">link</span>
+                            飞书账号：<span class="text-primary font-medium ml-1">已绑定</span>
+</p>
+</div>
+</div>
+<div class="hidden sm:block">
+<button class="bg-primary text-on-primary px-lg py-sm rounded-lg font-label-md hover:opacity-90 transition-opacity">
+                        编辑资料
+                    </button>
+</div>
+</section>
+<!-- Usage Metrics (Quick Stats) -->
+<section class="col-span-12 lg:col-span-4 grid grid-rows-2 gap-lg">
+<div class="workspace-card rounded-xl p-md flex items-center justify-between">
+<div>
+<p class="text-on-surface-variant font-label-sm text-label-sm">查询次数</p>
+<h3 class="text-headline-md font-headline-md text-primary mt-1">1,284</h3>
+</div>
+<div class="bg-surface-container p-3 rounded-lg">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="search">search</span>
+</div>
+</div>
+<div class="workspace-card rounded-xl p-md flex items-center justify-between">
+<div>
+<p class="text-on-surface-variant font-label-sm text-label-sm">问答次数</p>
+<h3 class="text-headline-md font-headline-md text-primary mt-1">456</h3>
+</div>
+<div class="bg-surface-container p-3 rounded-lg">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="forum">forum</span>
+</div>
+</div>
+</section>
+<!-- Identity Info Details -->
+<section class="col-span-12 lg:col-span-6 workspace-card rounded-xl overflow-hidden">
+<div class="px-lg py-md border-b border-outline-variant bg-surface-container-low">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">身份与权限</h3>
+</div>
+<div class="divide-y divide-outline-variant">
+<div class="px-lg py-md flex justify-between items-center zebra-row">
+<span class="text-on-surface-variant font-body-md">身份类型</span>
+<span class="text-on-surface font-medium">管理员</span>
+</div>
+<div class="px-lg py-md flex justify-between items-center zebra-row">
+<span class="text-on-surface-variant font-body-md">当前访问范围</span>
+<span class="text-on-surface font-medium">公开及敏感知识</span>
+</div>
+<div class="px-lg py-md flex justify-between items-center zebra-row">
+<span class="text-on-surface-variant font-body-md">知识库关联</span>
+<span class="text-on-surface font-medium">Enterprise_Core_01</span>
+</div>
+<div class="px-lg py-md flex justify-between items-center zebra-row">
+<span class="text-on-surface-variant font-body-md">最近登录时间</span>
+<span class="text-on-surface font-medium">2023-10-27 14:32:01</span>
+</div>
+</div>
+</section>
+<!-- Settings Actions -->
+<section class="col-span-12 lg:col-span-6 workspace-card rounded-xl overflow-hidden">
+<div class="px-lg py-md border-b border-outline-variant bg-surface-container-low">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">系统设置</h3>
+</div>
+<div class="p-lg space-y-md">
+<!-- Nav List Style -->
+<a class="flex items-center justify-between p-md rounded-lg hover:bg-surface-container transition-colors group" href="#">
+<div class="flex items-center space-x-md">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="privacy_tip">privacy_tip</span>
+<span class="font-body-lg text-body-lg">隐私说明</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</span>
+</a>
+<div class="h-[1px] bg-outline-variant mx-md"></div>
+<div class="space-y-sm px-md">
+<button class="w-full text-left flex items-center space-x-md p-2 rounded-md border border-secondary text-secondary hover:bg-secondary-container transition-colors font-label-md text-label-md">
+<span class="material-symbols-outlined" data-icon="link_off">link_off</span>
+<span>解绑飞书</span>
+</button>
+<button class="w-full text-left flex items-center space-x-md p-2 rounded-md border border-error text-error hover:bg-error-container transition-colors font-label-md text-label-md">
+<span class="material-symbols-outlined" data-icon="delete_sweep">delete_sweep</span>
+<span>删除本地匿名历史</span>
+</button>
+<button class="w-full text-left flex items-center space-x-md p-2 rounded-md bg-inverse-surface text-inverse-on-surface hover:opacity-90 transition-opacity font-label-md text-label-md mt-lg">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>退出登录</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Bottom Note / Visual Element -->
+<footer class="col-span-12 text-center py-xl opacity-40">
+<p class="font-label-sm text-label-sm text-on-surface-variant">KnowledgeEngine Enterprise v4.2.0 • 安全合规工作空间</p>
+</footer>
+</div>
+</main>
+<!-- Micro-interaction Script -->
+<script>
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('mousedown', () => {
+                el.style.transform = 'scale(0.98)';
+            });
+            el.addEventListener('mouseup', () => {
+                el.style.transform = 'scale(1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'scale(1)';
+            });
+        });
+
+        // Simple Fade-in Animation for the Workspace area
+        window.addEventListener('DOMContentLoaded', () => {
+            const main = document.querySelector('main');
+            main.style.opacity = '0';
+            main.style.transition = 'opacity 0.6s ease-out';
+            setTimeout(() => {
+                main.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body></html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html><html class="light" lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed": "#02201a",
+                        "surface-container": "#ebefec",
+                        "tertiary-fixed-dim": "#ffb77d",
+                        "surface-variant": "#dfe3e0",
+                        "on-tertiary-fixed-variant": "#6e3900",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#ff993b",
+                        "surface-container-high": "#e5e9e6",
+                        "tertiary-fixed": "#ffdcc3",
+                        "primary-fixed": "#c9e9e0",
+                        "tertiary-container": "#6b3700",
+                        "secondary-fixed": "#d4e7e1",
+                        "surface": "#f6faf7",
+                        "inverse-surface": "#2c312f",
+                        "outline": "#727976",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#dfe3e0",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d7dbd8",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#99b9b0",
+                        "on-secondary-fixed": "#0e1e1b",
+                        "tertiary": "#4a2500",
+                        "on-secondary-fixed-variant": "#394a46",
+                        "inverse-primary": "#adcdc4",
+                        "on-primary-fixed-variant": "#2f4c45",
+                        "inverse-on-surface": "#edf2ee",
+                        "surface-tint": "#47645d",
+                        "on-secondary-container": "#576863",
+                        "primary-container": "#2d4a43",
+                        "on-tertiary-fixed": "#2f1500",
+                        "primary-fixed-dim": "#adcdc4",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#b8cbc5",
+                        "on-surface-variant": "#414846",
+                        "on-background": "#181d1b",
+                        "secondary-container": "#d4e7e1",
+                        "surface-container-low": "#f0f5f1",
+                        "secondary": "#51625d",
+                        "outline-variant": "#c1c8c5",
+                        "surface-bright": "#f6faf7",
+                        "primary": "#16332d",
+                        "on-surface": "#181d1b",
+                        "background": "#f6faf7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "container-max": "1280px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "gutter": "20px",
+                        "unit": "4px",
+                        "xl": "40px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "headline-lg": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "headline-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "body-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "label-sm": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "headline-sm": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "label-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 1;
+        }
+        body {
+            background-color: #f6faf7;
+            color: #181d1b;
+            font-family: "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+        }
+        .sidebar-active {
+            background-color: #d4e7e1;
+            color: #576863;
+            font-weight: 700;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c1c8c5;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+<!-- SideNavBar (Shared Component Identity) -->
+<aside class="flex flex-col h-screen py-md px-sm bg-surface border-r border-outline-variant w-64 shrink-0 transition-colors duration-200">
+<div class="mb-xl px-md">
+<h1 class="font-headline-sm text-headline-sm font-semibold text-primary">Enterprise Admin</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">知识核心</p>
+</div>
+<nav class="flex-1 space-y-xs overflow-y-auto custom-scrollbar"><a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#"><span class="material-symbols-outlined">dashboard</span><span class="font-body-md text-body-md">管理首页</span></a><a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#"><span class="material-symbols-outlined">database</span><span class="font-body-md text-body-md">知识库</span></a><a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#"><span class="material-symbols-outlined">settings_input_component</span><span class="font-body-md text-body-md">模型配置</span></a><a class="flex items-center gap-md px-md py-sm rounded-lg bg-secondary-container text-on-secondary-container font-bold" href="#"><span class="material-symbols-outlined">shield_person</span><span class="font-body-md text-body-md">用户管理</span></a><a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#"><span class="material-symbols-outlined">receipt_long</span><span class="font-body-md text-body-md">全局记录</span></a><a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#"><span class="material-symbols-outlined">analytics</span><span class="font-body-md text-body-md">数据分析</span></a><a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#"><span class="material-symbols-outlined">bolt</span><span class="font-body-md text-body-md">快捷入口</span></a><a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#"><span class="material-symbols-outlined">hub</span><span class="font-body-md text-body-md">飞书接入</span></a><a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#"><span class="material-symbols-outlined">history_edu</span><span class="font-body-md text-body-md">审计日志</span></a><a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200" href="#"><span class="material-symbols-outlined">science</span><span class="font-body-md text-body-md">检索实验室</span></a></nav>
+<div class="mt-auto px-md pt-md border-t border-outline-variant">
+<button class="w-full flex items-center justify-center gap-sm bg-primary-container text-white py-md rounded-xl hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">add</span>
+<span class="font-label-md text-label-md">添加新数据源</span>
+</button>
+<div class="flex items-center gap-md mt-lg p-sm">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional studio portrait of a system administrator with a focused and calm expression, wearing modern business attire. The lighting is soft and directional, against a clean, neutral architectural background consistent with a high-end corporate environment. The overall aesthetic is minimalist, professional, and trustworthy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMoacmgyu89tuEzKIo2vaCp3QmEsH_npcCWWj-KWkLaJcWLnKEQwLksDyDfmG-kc70rko07j0iyY_88-u-x_bwrQlexeVIyGJlEniFKQ6a9eJoUME6fxKMCCHir3sBdS1EHO-zsZlgrBdvcGb0rkU9BdSfOioJzsvSPzUKualYS4BtPf-v4_F1KU99h655LmWJWAZwehicPtkGPjEpuDBXNrF0rxKJ7YURS6uREYRh3bZ7gq-4Fxr1RHv9EKRHzck5qpNW7-Rpg_Lt">
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-label-md text-label-md truncate text-on-surface">Admin User</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">超级管理员</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full px-lg py-sm bg-surface-bright border-b border-outline-variant">
+<div class="flex items-center gap-xl">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">知识引擎</span>
+<div class="hidden md:flex items-center bg-surface-container-low px-md py-xs rounded-full border border-outline-variant w-80">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-full ml-xs" placeholder="搜索用户、角色或日志..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<nav class="hidden lg:flex items-center gap-md"><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary" href="#">最近</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary" href="#">收藏</a><a class="font-label-md text-label-md text-primary font-bold border-b-2 border-primary" href="#">共享</a></nav>
+<div class="flex items-center gap-sm border-l border-outline-variant pl-lg">
+<button class="p-xs hover:bg-surface-container rounded-full"><span class="material-symbols-outlined">notifications</span></button>
+<button class="p-xs hover:bg-surface-container rounded-full"><span class="material-symbols-outlined">settings</span></button>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<section class="flex-1 overflow-y-auto p-lg max-w-container-max mx-auto w-full">
+<!-- Page Header & Stats Summary -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-md mb-xl">
+<div>
+<nav class="flex items-center text-label-sm text-outline mb-xs">
+<span class="">管理</span>
+<span class="material-symbols-outlined text-[14px] mx-xs">chevron_right</span>
+<span class="text-on-surface">User Management</span>
+</nav>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">用户管理</h2>
+</div>
+<!-- Quick Bento Stats -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-sm">
+<div class="bg-surface p-md rounded-xl border border-outline-variant flex flex-col min-w-[120px]">
+<span class="text-label-sm text-outline">总用户</span>
+<span class="font-headline-sm text-headline-sm text-primary">2,840</span>
+</div>
+<div class="bg-surface p-md rounded-xl border border-outline-variant flex flex-col min-w-[120px]">
+<span class="text-label-sm text-outline">今日活跃</span>
+<span class="font-headline-sm text-headline-sm text-primary">412</span>
+</div>
+<div class="bg-surface p-md rounded-xl border border-outline-variant flex flex-col min-w-[120px]">
+<span class="text-label-sm text-outline">飞书绑定</span>
+<span class="font-headline-sm text-headline-sm text-primary">98%</span>
+</div>
+<div class="bg-surface p-md rounded-xl border border-outline-variant flex flex-col min-w-[120px]">
+<span class="text-label-sm text-outline">待审核</span>
+<span class="font-headline-sm text-headline-sm text-error">12</span>
+</div>
+</div>
+</div>
+<!-- Table Actions -->
+<div class="flex flex-wrap items-center justify-between gap-md mb-md bg-surface p-md rounded-t-xl border-x border-t border-outline-variant">
+<div class="flex items-center gap-sm">
+<div class="relative group">
+<button class="flex items-center gap-xs px-md py-sm rounded-lg border border-outline-variant bg-surface-container-lowest font-label-md text-label-md hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[18px]">filter_alt</span>
+                            筛选身份
+                        </button>
+</div>
+<button class="flex items-center gap-xs px-md py-sm rounded-lg border border-outline-variant bg-surface-container-lowest font-label-md text-label-md hover:bg-surface-container-low transition-colors">
+                        排序: 最后访问
+                    </button>
+</div>
+<div class="flex items-center gap-sm">
+<span class="text-label-sm text-outline mr-sm">选中 0 项</span>
+<button class="px-md py-sm rounded-lg bg-surface-container-high text-on-surface-variant font-label-md text-label-md disabled:opacity-50" disabled="">
+                        批量提权
+                    </button>
+<button class="px-md py-sm rounded-lg bg-surface-container-high text-on-surface-variant font-label-md text-label-md disabled:opacity-50" disabled="">
+                        批量降级
+                    </button>
+<button class="px-md py-sm rounded-lg bg-primary text-on-primary font-label-md text-label-md flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+                        手动邀请
+                    </button>
+</div>
+</div>
+<!-- User Table -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-b-xl overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="py-md px-lg w-12"><input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"></th>
+<th class="py-md px-lg font-label-md text-label-md text-on-surface-variant">姓名</th>
+<th class="py-md px-lg font-label-md text-label-md text-on-surface-variant">飞书账号</th>
+<th class="py-md px-lg font-label-md text-label-md text-on-surface-variant">绑定状态</th>
+<th class="py-md px-lg font-label-md text-label-md text-on-surface-variant">当前身份</th>
+<th class="py-md px-lg font-label-md text-label-md text-on-surface-variant">活跃统计</th>
+<th class="py-md px-lg font-label-md text-label-md text-on-surface-variant text-right">操作</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- User Row 1 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="py-md px-lg"><input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"></td>
+<td class="py-md px-lg">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed font-bold text-xs">张</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">张伟</p>
+<p class="text-[10px] text-outline">ID: 928374</p>
+</div>
+</div>
+</td>
+<td class="py-md px-lg font-body-md text-body-md text-on-surface-variant">zhangwei_tech@feishu.com</td>
+<td class="py-md px-lg">
+<span class="inline-flex items-center gap-xs px-sm py-xs rounded bg-surface-container-high text-primary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                        已绑定
+                                    </span>
+</td>
+<td class="py-md px-lg">
+<span class="px-sm py-xs rounded border border-primary text-primary bg-primary/5 font-label-sm text-label-sm">管理员</span>
+</td>
+<td class="py-md px-lg">
+<div class="flex flex-col gap-xs">
+<div class="flex justify-between text-[11px] text-outline">
+<span class="">查询: 1,248</span>
+<span class="">Q&amp;A: 423</span>
+</div>
+<p class="text-[11px] text-on-surface-variant italic">最后访问: 2分钟前</p>
+</div>
+</td>
+<td class="py-md px-lg text-right">
+<div class="flex justify-end gap-sm opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-xs hover:bg-error/10 hover:text-error text-outline rounded transition-colors" title="降级为外部用户"><span class="material-symbols-outlined">arrow_downward</span></button>
+<button class="p-xs hover:bg-surface-container text-outline rounded transition-colors" title="编辑权限"><span class="material-symbols-outlined">edit</span></button>
+</div>
+</td>
+</tr>
+<!-- User Row 2 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="py-md px-lg"><input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"></td>
+<td class="py-md px-lg">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed font-bold text-xs">L</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Li Ming</p>
+<p class="text-[10px] text-outline">ID: 928375</p>
+</div>
+</div>
+</td>
+<td class="py-md px-lg font-body-md text-body-md text-on-surface-variant">liming_pm@feishu.com</td>
+<td class="py-md px-lg">
+<span class="inline-flex items-center gap-xs px-sm py-xs rounded bg-surface-container-high text-primary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                        已绑定
+                                    </span>
+</td>
+<td class="py-md px-lg">
+<span class="px-sm py-xs rounded border border-outline-variant text-on-surface-variant bg-surface-container font-label-sm text-label-sm">内部用户</span>
+</td>
+<td class="py-md px-lg">
+<div class="flex flex-col gap-xs">
+<div class="flex justify-between text-[11px] text-outline">
+<span class="">查询: 562</span>
+<span class="">Q&amp;A: 110</span>
+</div>
+<p class="text-[11px] text-on-surface-variant italic">最后访问: 3小时前</p>
+</div>
+</td>
+<td class="py-md px-lg text-right">
+<div class="flex justify-end gap-sm">
+<button class="px-sm py-xs bg-surface-container text-on-surface-variant rounded-md font-label-sm text-label-sm hover:bg-error-container hover:text-on-error-container transition-colors">降级</button>
+<button class="p-xs hover:bg-surface-container text-outline rounded transition-colors"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+</td>
+</tr>
+<!-- User Row 3 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="py-md px-lg"><input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"></td>
+<td class="py-md px-lg">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-outline font-bold text-xs">C</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Chen Wei</p>
+<p class="text-[10px] text-outline">ID: 928410</p>
+</div>
+</div>
+</td>
+<td class="py-md px-lg font-body-md text-body-md text-on-surface-variant">chen.wei_external@gmail.com</td>
+<td class="py-md px-lg">
+<span class="inline-flex items-center gap-xs px-sm py-xs rounded bg-surface-container-low text-outline font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                                        未绑定
+                                    </span>
+</td>
+<td class="py-md px-lg">
+<span class="px-sm py-xs rounded border border-tertiary-container text-on-tertiary-container bg-tertiary-fixed font-label-sm text-label-sm">外部用户</span>
+</td>
+<td class="py-md px-lg">
+<div class="flex flex-col gap-xs">
+<div class="flex justify-between text-[11px] text-outline">
+<span class="">查询: 12</span>
+<span class="">Q&amp;A: 2</span>
+</div>
+<p class="text-[11px] text-on-surface-variant italic">最后访问: 昨天</p>
+</div>
+</td>
+<td class="py-md px-lg text-right">
+<div class="flex justify-end gap-sm">
+<button class="px-sm py-xs bg-primary text-on-primary rounded-md font-label-sm text-label-sm hover:opacity-90 transition-opacity">一键提权</button>
+<button class="p-xs hover:bg-surface-container text-outline rounded transition-colors"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+</td>
+</tr>
+<!-- User Row 4 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="py-md px-lg"><input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"></td>
+<td class="py-md px-lg">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-outline font-bold text-xs"><span class="material-symbols-outlined text-[14px]">visibility_off</span></div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Guest_8831</p>
+<p class="text-[10px] text-outline">IP: 210.12.8.21</p>
+</div>
+</div>
+</td>
+<td class="py-md px-lg font-body-md text-body-md text-outline">--</td>
+<td class="py-md px-lg">
+<span class="inline-flex items-center gap-xs px-sm py-xs rounded bg-surface-container-low text-outline font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                                        未绑定
+                                    </span>
+</td>
+<td class="py-md px-lg">
+<span class="px-sm py-xs rounded border border-outline-variant text-outline font-label-sm text-label-sm italic">匿名</span>
+</td>
+<td class="py-md px-lg">
+<div class="flex flex-col gap-xs">
+<div class="flex justify-between text-[11px] text-outline">
+<span class="">查询: 1</span>
+<span class="">Q&amp;A: 0</span>
+</div>
+<p class="text-[11px] text-on-surface-variant italic">最后访问: 刚刚</p>
+</div>
+</td>
+<td class="py-md px-lg text-right">
+<div class="flex justify-end gap-sm opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-xs hover:bg-error/10 hover:text-error text-outline rounded transition-colors" title="禁止访问"><span class="material-symbols-outlined">block</span></button>
+<button class="p-xs hover:bg-surface-container text-outline rounded transition-colors" title="查看详情"><span class="material-symbols-outlined">open_in_new</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="flex items-center justify-between px-lg py-md bg-surface-container-low border-t border-outline-variant">
+<span class="text-label-sm text-on-surface-variant">显示 1-10 条，共 2,840 条</span>
+<div class="flex items-center gap-xs">
+<button class="p-xs rounded hover:bg-surface-container-high transition-colors disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-md bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center">1</button>
+<button class="w-8 h-8 rounded-md hover:bg-surface-container-high font-label-md text-label-md flex items-center justify-center text-on-surface-variant">2</button>
+<button class="w-8 h-8 rounded-md hover:bg-surface-container-high font-label-md text-label-md flex items-center justify-center text-on-surface-variant">3</button>
+<span class="px-xs text-outline">...</span>
+<button class="w-8 h-8 rounded-md hover:bg-surface-container-high font-label-md text-label-md flex items-center justify-center text-on-surface-variant">284</button>
+<button class="p-xs rounded hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Contextual Insight (Bento Bottom) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg mt-xl">
+<div class="md:col-span-2 bg-surface border border-outline-variant rounded-xl p-lg">
+<div class="flex items-center justify-between mb-md">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">最近权限变动记录</h3>
+<button class="text-primary font-label-md text-label-md hover:underline">查看完整审计日志</button>
+</div>
+<div class="space-y-md">
+<div class="flex items-center gap-md py-sm">
+<div class="w-8 h-8 rounded bg-primary-container/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+</div>
+<div class="flex-1">
+<p class="text-body-md font-medium">王小明 被提权为 <span class="text-primary font-bold">内部用户</span></p>
+<p class="text-label-sm text-outline">操作人: 系统管理员 • 10分钟前</p>
+</div>
+</div>
+<div class="flex items-center gap-md py-sm">
+<div class="w-8 h-8 rounded bg-tertiary-container/10 flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined text-[18px]">person_off</span>
+</div>
+<div class="flex-1">
+<p class="text-body-md font-medium">李四 被降级为 <span class="text-on-tertiary-container font-bold">外部用户</span></p>
+<p class="text-label-sm text-outline">操作人: Zhang Wei • 1小时前</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-primary text-on-primary rounded-xl p-lg flex flex-col justify-between relative overflow-hidden">
+<!-- Subtle pattern -->
+<div class="absolute top-0 right-0 p-lg opacity-10">
+<span class="material-symbols-outlined text-[80px]">security</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm mb-xs">安全提示</h3>
+<p class="text-body-md opacity-80">检测到 12 个匿名用户在过去一小时内有高频查询行为，建议及时审查并进行飞书账户绑定。</p>
+</div>
+<button class="mt-lg w-full py-md bg-on-primary text-primary font-bold rounded-lg hover:bg-opacity-90 transition-all">
+                        立即审查
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<script>
+        // Micro-interactions for table selection
+        const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+        const headerCheckbox = document.querySelector('thead input[type="checkbox"]');
+        const bulkActions = document.querySelectorAll('button[disabled]');
+        const selectionText = document.querySelector('.text-label-sm.text-outline.mr-sm');
+
+        function updateUI() {
+            const checkedCount = Array.from(checkboxes).filter(c => c.checked).length;
+            selectionText.textContent = `选中 ${checkedCount} 项`;
+            bulkActions.forEach(btn => {
+                btn.disabled = checkedCount === 0;
+                if (checkedCount > 0) {
+                    btn.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
+                    btn.classList.add('bg-primary-container', 'text-white');
+                } else {
+                    btn.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+                    btn.classList.remove('bg-primary-container', 'text-white');
+                }
+            });
+        }
+
+        headerCheckbox?.addEventListener('change', (e) => {
+            checkboxes.forEach(c => c.checked = e.target.checked);
+            updateUI();
+        });
+
+        checkboxes.forEach(c => {
+            c.addEventListener('change', updateUI);
+        });
+    </script>
+
+
+
+</body></html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html><html class="light" lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>KnowledgeEngine - AI Chat</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom Scrollbar for a "Library" feel */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #E5E3DB; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #727976; }
+
+        .ai-border-accent {
+            border-left: 3px solid #47645d;
+            background-color: rgba(71, 100, 93, 0.02);
+        }
+
+        .glass-panel {
+            background: rgba(252, 252, 250, 0.8);
+            backdrop-filter: blur(8px);
+        }
+
+        .citation-tag {
+            font-size: 10px;
+            vertical-align: super;
+            color: #47645d;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0 2px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed": "#02201a",
+                        "surface-container": "#ebefec",
+                        "tertiary-fixed-dim": "#ffb77d",
+                        "surface-variant": "#dfe3e0",
+                        "on-tertiary-fixed-variant": "#6e3900",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#ff993b",
+                        "surface-container-high": "#e5e9e6",
+                        "tertiary-fixed": "#ffdcc3",
+                        "primary-fixed": "#c9e9e0",
+                        "tertiary-container": "#6b3700",
+                        "secondary-fixed": "#d4e7e1",
+                        "surface": "#f6faf7",
+                        "inverse-surface": "#2c312f",
+                        "outline": "#727976",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#dfe3e0",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d7dbd8",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#99b9b0",
+                        "on-secondary-fixed": "#0e1e1b",
+                        "tertiary": "#4a2500",
+                        "on-secondary-fixed-variant": "#394a46",
+                        "inverse-primary": "#adcdc4",
+                        "on-primary-fixed-variant": "#2f4c45",
+                        "inverse-on-surface": "#edf2ee",
+                        "surface-tint": "#47645d",
+                        "on-secondary-container": "#576863",
+                        "primary-container": "#2d4a43",
+                        "on-tertiary-fixed": "#2f1500",
+                        "primary-fixed-dim": "#adcdc4",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#b8cbc5",
+                        "on-surface-variant": "#414846",
+                        "on-background": "#181d1b",
+                        "secondary-container": "#d4e7e1",
+                        "surface-container-low": "#f0f5f1",
+                        "secondary": "#51625d",
+                        "outline-variant": "#c1c8c5",
+                        "surface-bright": "#f6faf7",
+                        "primary": "#16332d",
+                        "on-surface": "#181d1b",
+                        "background": "#f6faf7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "container-max": "1280px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "gutter": "20px",
+                        "unit": "4px",
+                        "xl": "40px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                        "headline-lg": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                        "headline-md": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                        "body-md": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                        "label-sm": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                        "headline-sm": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                        "label-md": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", {"lineHeight": "26px", "fontWeight": "400"}],
+                        "headline-lg": ["30px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "22px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.03em", "fontWeight": "500"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-md": ["13px", {"lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden flex h-screen">
+<!-- Sidebar: SideNavBar Navigation Hub (Shared Component 3) -->
+<aside class="flex flex-col items-center h-screen py-lg space-y-xl bg-surface border-r border-outline-variant w-20 flex-shrink-0 z-20">
+<div class="mb-xl">
+<span class="material-symbols-outlined text-primary text-[32px]">hub</span>
+</div>
+<nav class="flex flex-col gap-lg items-center flex-1"><button class="text-primary flex flex-col items-center justify-center transition-all duration-150 ease-in-out group" title="首页"><span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">home</span><span class="font-label-sm text-label-sm mt-xs">首页</span></button><button class="text-outline hover:bg-surface-container-low flex flex-col items-center justify-center transition-all duration-150 ease-in-out p-2 rounded-lg" title="原文查询"><span class="material-symbols-outlined text-[28px]">find_in_page</span><span class="font-label-sm text-label-sm mt-xs">原文查询</span></button><button class="text-outline hover:bg-surface-container-low flex flex-col items-center justify-center transition-all duration-150 ease-in-out p-2 rounded-lg" title="知识问答"><span class="material-symbols-outlined text-[28px]">chat</span><span class="font-label-sm text-label-sm mt-xs">知识问答</span></button><button class="text-outline hover:bg-surface-container-low flex flex-col items-center justify-center transition-all duration-150 ease-in-out p-2 rounded-lg" title="快捷入口"><span class="material-symbols-outlined text-[28px]">bolt</span><span class="font-label-sm text-label-sm mt-xs">快捷入口</span></button><button class="text-outline hover:bg-surface-container-low flex flex-col items-center justify-center transition-all duration-150 ease-in-out p-2 rounded-lg" title="历史记录"><span class="material-symbols-outlined text-[28px]">history</span><span class="font-label-sm text-label-sm mt-xs">历史记录</span></button><button class="text-outline hover:bg-surface-container-low flex flex-col items-center justify-center transition-all duration-150 ease-in-out p-2 rounded-lg" title="文档中心"><span class="material-symbols-outlined text-[28px]">folder_open</span><span class="font-label-sm text-label-sm mt-xs">文档中心</span></button><button class="text-outline hover:bg-surface-container-low flex flex-col items-center justify-center transition-all duration-150 ease-in-out p-2 rounded-lg" title="飞书绑定"><span class="material-symbols-outlined text-[28px]">link</span><span class="font-label-sm text-label-sm mt-xs">飞书绑定</span></button><button class="text-outline hover:bg-surface-container-low flex flex-col items-center justify-center transition-all duration-150 ease-in-out p-2 rounded-lg" title="个人中心"><span class="material-symbols-outlined text-[28px]">person</span><span class="font-label-sm text-label-sm mt-xs">个人中心</span></button></nav>
+<div class="flex flex-col gap-lg items-center mt-auto">
+<button class="text-outline hover:bg-surface-container-low p-2 rounded-lg">
+<span class="material-symbols-outlined">help</span>
+</button>
+<button class="text-outline hover:bg-surface-container-low p-2 rounded-lg">
+<span class="material-symbols-outlined">feedback</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a user for a corporate software profile. The person is smiling warmly, dressed in professional business attire. The lighting is soft and corporate-appropriate, with a clean, neutral gray background that emphasizes focus and reliability, matching a minimalist and institutional design style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBA0vEBWwIPlanLdzxBqKzbnE0yUUzI-BZJ-pZbMXn6kFLL2zYE-gJ0Q2nO91yy4BwtRFLNzTbwOl1yTw0zOdtnmuOWqhBDMLp6ci4JWvAi6OUpYe2kDHmZl1NBLb-LufNM2DVAWjIRvtfkUpszWkMVefh063gkOayjsKzvxtOx4MTApifq1lyuoDgSxqyiHV1xPpF05_2TOae3Noe-Xt_kX_YZnVOXRIJ-h6P4ufWD75o0e3pt73arMWVEsmlvRPprIYqvcAsRWJT">
+</div>
+</div>
+</aside>
+<!-- Chat History Sidebar (Custom Section) -->
+<section class="w-72 bg-surface-container-low border-r border-outline-variant h-full flex flex-col hidden lg:flex">
+<div class="p-md border-b border-outline-variant">
+<h2 class="font-headline-sm text-headline-sm text-primary">历史记录</h2>
+<p class="text-label-sm text-outline">工作区：深度专注</p>
+</div>
+<div class="flex-1 overflow-y-auto p-sm space-y-xs">
+<!-- Active Session -->
+<div class="bg-secondary-container rounded-lg p-md cursor-pointer transition-colors">
+<p class="font-label-md text-label-md text-on-secondary-container truncate font-bold">2024年Q3财报分析报告</p>
+<p class="text-label-sm text-on-surface-variant">刚刚</p>
+</div>
+<!-- Session List -->
+<div class="hover:bg-surface-container-high rounded-lg p-md cursor-pointer transition-colors group">
+<p class="font-label-md text-label-md text-on-surface-variant truncate">专利检索：大规模预训练模型</p>
+<p class="text-label-sm text-outline">2小时前</p>
+</div>
+<div class="hover:bg-surface-container-high rounded-lg p-md cursor-pointer transition-colors">
+<p class="font-label-md text-label-md text-on-surface-variant truncate">合规性审查规范 - Ver 2.1</p>
+<p class="text-label-sm text-outline">昨天</p>
+</div>
+<div class="hover:bg-surface-container-high rounded-lg p-md cursor-pointer transition-colors">
+<p class="font-label-md text-label-md text-on-surface-variant truncate">关于数据安全法(DSL)的技术解读</p>
+<p class="text-label-sm text-outline">3天前</p>
+</div>
+</div>
+<div class="p-md border-t border-outline-variant">
+<button class="w-full py-sm bg-primary text-on-primary rounded-lg font-label-md flex items-center justify-center gap-sm"><span class="material-symbols-outlined text-[20px]">add</span>新建工作区</button>
+</div>
+</section>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col relative bg-surface h-full">
+<!-- TopAppBar (Shared Component 2) -->
+<header class="flex justify-between items-center w-full px-lg py-sm border-b border-outline-variant bg-surface-bright z-10">
+<div class="flex items-center gap-md">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">KnowledgeEngine</h1>
+<div class="h-4 w-px bg-outline-variant"></div>
+<nav class="flex gap-md"><a class="font-label-md text-label-md text-primary font-bold border-b-2 border-primary" href="#">最近</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary" href="#">收藏</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary" href="#">共享</a></nav>
+</div>
+<div class="flex items-center gap-md">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-outline text-[20px]">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-surface-container rounded-full border-none text-body-md w-64 focus:ring-1 focus:ring-primary" placeholder="搜索知识库..." type="text">
+</div>
+<button class="material-symbols-outlined text-on-surface-variant">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant">settings</button>
+</div>
+</header>
+<!-- Chat Stream -->
+<div class="flex-1 overflow-y-auto p-lg md:p-xl space-y-xl max-w-container-max mx-auto w-full">
+<!-- User Message -->
+<div class="flex justify-end">
+<div class="max-w-[80%] bg-secondary-container text-on-secondary-container px-md py-sm rounded-xl rounded-tr-none">
+<p class="font-body-md">请基于公司Q3财报，总结关于研发投入的变化，并标注引用来源。</p>
+</div>
+</div>
+<!-- AI Message -->
+<div class="flex flex-col gap-md">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[20px]">cognition</span>
+</div>
+<span class="font-label-md text-primary font-bold">KnowledgeEngine AI</span>
+<span class="bg-primary/5 text-primary text-[10px] px-1.5 py-0.5 rounded border border-primary/20">DEEPSEEK-V3</span>
+</div>
+<div class="ai-border-accent p-md rounded-lg space-y-md">
+<div class="font-body-lg text-on-surface space-y-4">
+<p class="">根据2024年第三季度财报分析，公司在本季度的研发支出（R&amp;D Expenditure）呈现出显著的增长趋势。总投入达到 12.4 亿元人民币，较去年同期增长 18.5% <span class="citation-tag">[1]</span>。</p>
+<p class="">这一增长主要集中在“知识引擎”相关底层架构的研发以及边缘计算设施的部署上 <span class="citation-tag">[2]</span>。报告指出，研发人员占总员工数的比例已提升至 42% <span class="citation-tag">[3]</span>，这反映了公司从传统的系统集成向核心AI能力自研的战略转型。</p>
+<div class="bg-tertiary-container/5 border-l-2 border-tertiary p-3 flex items-center gap-sm">
+<span class="material-symbols-outlined text-tertiary">security</span>
+<span class="text-label-sm text-tertiary">包含敏感知识，已在本地模型 (Edge-Node-A1) 处执行检索并加密处理。</span>
+</div>
+</div>
+<!-- Citations Area -->
+<div class="mt-lg border-t border-outline-variant pt-md">
+<div class="flex items-center justify-between mb-sm">
+<span class="text-label-md text-outline flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">list_alt</span>
+                                引用来源 (3)
+                            </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-sm">
+<div class="p-sm border border-outline-variant rounded-lg bg-surface-container-lowest hover:bg-surface-container-low transition-colors group cursor-pointer">
+<div class="flex justify-between items-start">
+<span class="text-[10px] bg-secondary-container px-1.5 py-0.5 rounded text-on-secondary-container font-bold mb-xs inline-block">[1]</span>
+<span class="material-symbols-outlined text-outline text-[16px] opacity-0 group-hover:opacity-100">open_in_new</span>
+</div>
+<p class="text-label-sm font-bold text-primary truncate">2024_Q3_Financial_Final.pdf</p>
+<p class="text-[11px] text-outline italic">Page 14: “...R&amp;D spending increased by 18.5% YoY reaching 1.24B...”</p>
+</div>
+<div class="p-sm border border-outline-variant rounded-lg bg-surface-container-lowest hover:bg-surface-container-low transition-colors group cursor-pointer">
+<div class="flex justify-between items-start">
+<span class="text-[10px] bg-secondary-container px-1.5 py-0.5 rounded text-on-secondary-container font-bold mb-xs inline-block">[2]</span>
+<span class="material-symbols-outlined text-outline text-[16px] opacity-0 group-hover:opacity-100">open_in_new</span>
+</div>
+<p class="text-label-sm font-bold text-primary truncate">Strategic_Review_Cloud.docx</p>
+<p class="text-[11px] text-outline italic">Page 03: “Focus shifts toward knowledge-centric architecture...”</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty spacer for scrolling -->
+<div class="h-32"></div>
+</div>
+<!-- Floating Input Container -->
+<div class="absolute bottom-0 left-0 w-full p-lg glass-panel border-t border-outline-variant">
+<div class="max-w-3xl mx-auto space-y-md">
+<!-- Prompt Builder Toolbar -->
+<div class="flex items-center justify-between px-xs">
+<div class="flex items-center gap-md">
+<!-- Model Selection -->
+<button class="flex items-center gap-sm px-sm py-1 bg-surface-container rounded-full border border-outline-variant hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-primary text-[18px]">neurology</span>
+<span class="text-label-sm font-bold text-on-surface-variant">DeepSeek-V3</span>
+<span class="material-symbols-outlined text-outline text-[16px]">expand_more</span>
+</button>
+<div class="flex items-center gap-xs text-outline">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span class="text-[11px] tracking-wide">隐私保护：企业加密模式</span>
+</div>
+</div>
+<div class="flex gap-sm">
+<button class="p-1.5 text-outline hover:text-primary hover:bg-surface-container-high rounded transition-colors" title="Attach Document">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<button class="p-1.5 text-outline hover:text-primary hover:bg-surface-container-high rounded transition-colors" title="Knowledge Base">
+<span class="material-symbols-outlined">database</span>
+</button>
+</div>
+</div>
+<!-- Text Area -->
+<div class="relative bg-surface rounded-xl border border-outline shadow-sm focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+<textarea class="w-full bg-transparent border-none focus:ring-0 py-md px-md text-body-lg resize-none min-h-[56px]" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" placeholder="询问任何关于公司知识的问题..." rows="1"></textarea>
+<div class="flex items-center justify-between px-md pb-sm">
+<div class="flex gap-sm">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-surface-container text-outline border border-outline-variant">SHIFT + ENTER 换行</span>
+</div>
+<button class="bg-primary-container text-on-primary p-2 rounded-lg flex items-center justify-center hover:bg-primary transition-transform active:scale-95 shadow-sm">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+<p class="text-center text-[10px] text-outline uppercase tracking-widest">企业级 AI 助手 • 系统版本 v4.2.0 • 知识库更新至：2024年12月</p>
+</div>
+</div>
+</main>
+<!-- Side Decoration (Atmospheric) -->
+<div class="fixed top-0 right-0 w-1/4 h-full pointer-events-none opacity-[0.03] z-0">
+
+</div>
+<script>
+        // Micro-interactions for citation highlighting
+        document.querySelectorAll('.citation-tag').forEach(tag => {
+            tag.addEventListener('mouseenter', () => {
+                const id = tag.textContent.match(/\d+/)[0];
+                // Visual feedback logic here
+                console.log('Hovered citation:', id);
+            });
+        });
+
+        // Simple tab switching simulation
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('nav a').forEach(l => {
+                    l.classList.remove('text-primary', 'font-bold', 'border-b-2', 'border-primary');
+                    l.classList.add('text-on-surface-variant');
+                });
+                link.classList.add('text-primary', 'font-bold', 'border-b-2', 'border-primary');
+                link.classList.remove('text-on-surface-variant');
+            });
+        });
+    </script>
+
+
+
+</body></html>

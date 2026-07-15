@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>快捷入口 - KnowledgeEngine</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Han+Sans+SC,+Microsoft+YaHei,+sans-serif:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-card {
+            background: rgba(252, 252, 250, 0.8);
+            backdrop-filter: blur(8px);
+        }
+        /* Custom Scrollbar for Enterprise Feel */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f6faf7; }
+        ::-webkit-scrollbar-thumb { background: #dfe3e0; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #c1c8c5; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-container": "#576863",
+                      "inverse-surface": "#2c312f",
+                      "on-primary": "#ffffff",
+                      "secondary": "#51625d",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed": "#d4e7e1",
+                      "primary-fixed": "#c9e9e0",
+                      "primary-fixed-dim": "#adcdc4",
+                      "error-container": "#ffdad6",
+                      "surface-container": "#ebefec",
+                      "outline-variant": "#c1c8c5",
+                      "outline": "#727976",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-high": "#e5e9e6",
+                      "surface-dim": "#d7dbd8",
+                      "surface-container-low": "#f0f5f1",
+                      "on-surface": "#181d1b",
+                      "inverse-on-surface": "#edf2ee",
+                      "surface-variant": "#dfe3e0",
+                      "on-tertiary-fixed": "#2f1500",
+                      "secondary-fixed-dim": "#b8cbc5",
+                      "on-error": "#ffffff",
+                      "inverse-primary": "#adcdc4",
+                      "on-tertiary-fixed-variant": "#6e3900",
+                      "tertiary-fixed": "#ffdcc3",
+                      "tertiary": "#4a2500",
+                      "surface-bright": "#f6faf7",
+                      "surface-dim": "#d7dbd8",
+                      "surface-tint": "#47645d",
+                      "secondary-container": "#d4e7e1",
+                      "background": "#f6faf7",
+                      "on-secondary-fixed-variant": "#394a46",
+                      "tertiary-container": "#6b3700",
+                      "on-secondary": "#ffffff",
+                      "on-primary-fixed": "#02201a",
+                      "on-background": "#181d1b",
+                      "on-surface-variant": "#414846",
+                      "primary-container": "#2d4a43",
+                      "surface-container-highest": "#dfe3e0",
+                      "on-primary-container": "#99b9b0",
+                      "tertiary-fixed-dim": "#ffb77d",
+                      "on-tertiary-container": "#ff993b",
+                      "on-secondary-fixed": "#0e1e1b",
+                      "primary": "#16332d",
+                      "surface": "#f6faf7",
+                      "on-primary-fixed-variant": "#2f4c45",
+                      "on-tertiary": "#ffffff",
+                      "error": "#ba1a1a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "sm": "8px",
+                      "unit": "4px",
+                      "container-max": "1280px",
+                      "md": "16px",
+                      "xl": "40px",
+                      "lg": "24px",
+                      "gutter": "20px"
+              },
+              "fontFamily": {
+                      "label-sm": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                      "headline-md": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                      "headline-lg": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                      "body-lg": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                      "body-md": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                      "label-md": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                      "headline-sm": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden flex h-screen">
+<!-- Sidebar Navigation (Mandated Logic) -->
+<aside class="flex flex-col h-screen py-lg space-y-xl bg-surface border-r border-outline-variant w-20 flex-shrink-0">
+<div class="flex flex-col items-center gap-sm mb-xl">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">deployed_code</span>
+</div>
+<nav class="flex-1 flex flex-col items-center space-y-lg">
+<!-- Labels mapped from requirement: 首页, 原文查询, 知识问答, 快捷入口, 文档中心, 历史记录 -->
+<a class="text-outline flex flex-col items-center justify-center hover:bg-surface-container-low transition-all duration-150 p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-label-sm text-label-sm">首页</span>
+</a>
+<a class="text-outline flex flex-col items-center justify-center hover:bg-surface-container-low transition-all duration-150 p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">find_in_page</span>
+<span class="font-label-sm text-label-sm">原文查询</span>
+</a>
+<a class="text-outline flex flex-col items-center justify-center hover:bg-surface-container-low transition-all duration-150 p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">chat</span>
+<span class="font-label-sm text-label-sm">知识问答</span>
+</a>
+<!-- Active State: Shortcuts Page -->
+<a class="text-primary flex flex-col items-center justify-center bg-secondary-container p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="font-label-sm text-label-sm font-bold">快捷入口</span>
+</a>
+<a class="text-outline flex flex-col items-center justify-center hover:bg-surface-container-low transition-all duration-150 p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">description</span>
+<span class="font-label-sm text-label-sm">文档中心</span>
+</a>
+<a class="text-outline flex flex-col items-center justify-center hover:bg-surface-container-low transition-all duration-150 p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">history</span>
+<span class="font-label-sm text-label-sm">历史记录</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col items-center space-y-md">
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="w-10 h-10 rounded-full border border-outline-variant bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional corporate headshot of a middle-aged Asian businessman in a charcoal suit, set against a blurred minimalist office background with soft teal accents. The lighting is bright and even, conveying trust and institutional authority. The style is clean, modern, and aligned with a premium enterprise user profile aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1404M6P_FLG-88KnARzhHzfqOTTUW5_2CyfUtGAxNVT5Sj5ic01KxEhJf1lm1Mc2_cKOqkJ97QWESp-keVi1pbeke21i5whB0tUo3ettT9Jh97aNl_zDvVPuNjF_7L4z8BhBkPt3XQ0ZHhieLjc75boADt-LK2AY6-l_QTvIf7G3w18CBDdbmIGNsN1YVV15hLAuT9_znMygXXkMSo-fncEK449LLEly5w565GubsyTjFIBc-nudiy0fr2-R1TEh2amXuApDchkfO"/>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col min-w-0 bg-background relative">
+<!-- Top App Bar -->
+<header class="h-16 flex items-center justify-between px-lg bg-surface-bright border-b border-outline-variant z-10">
+<div class="flex items-center gap-md">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">快捷入口</h1>
+<div class="bg-secondary-container/50 px-3 py-1 rounded-full flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-on-secondary-container">info</span>
+<span class="text-label-sm text-on-secondary-container">点击后将启动全新会话，不调取历史缓存</span>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<div class="relative w-72">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-full py-2 pl-10 pr-4 text-body-md focus:outline-none focus:border-primary transition-colors" placeholder="搜索快捷入口..." type="text"/>
+</div>
+<div class="flex items-center gap-md text-outline">
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined">settings</span></button>
+</div>
+</div>
+</header>
+<!-- Scrollable Content Area -->
+<section class="flex-1 overflow-y-auto p-lg space-y-xl max-w-container-max mx-auto w-full">
+<!-- Section: 我的常用 (Bento Style Intro) -->
+<div class="space-y-md">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">auto_awesome</span>
+                        我的常用
+                    </h2>
+<button class="text-primary text-label-md font-bold flex items-center gap-1 hover:underline">
+                        管理常用 <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<!-- Shortcut Card 1 -->
+<div class="glass-card border border-outline-variant rounded-xl p-lg group hover:border-primary transition-all duration-300 relative overflow-hidden">
+<div class="flex justify-between items-start mb-md">
+<div class="flex items-center gap-2 text-on-secondary-container bg-secondary-container px-2 py-0.5 rounded text-label-sm">
+<span class="material-symbols-outlined text-sm">chat</span>
+                                知识问答
+                            </div>
+<button class="text-tertiary-fixed-dim hover:text-tertiary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-sm">季度财报深度分析</h3>
+<p class="text-on-surface-variant text-body-md line-clamp-2 mb-lg">“请对比本季度与去年同期的营收增长情况，并指出三个核心驱动因素。”</p>
+<div class="flex items-center justify-between pt-md border-t border-outline-variant/30 text-label-sm text-outline">
+<div class="flex items-center gap-3">
+<span>使用 128 次</span>
+<span>上次 2小时前</span>
+</div>
+<span class="text-primary font-bold opacity-0 group-hover:opacity-100 transition-opacity">立即执行</span>
+</div>
+</div>
+<!-- Shortcut Card 2 -->
+<div class="glass-card border border-outline-variant rounded-xl p-lg group hover:border-primary transition-all duration-300 relative overflow-hidden">
+<div class="flex justify-between items-start mb-md">
+<div class="flex items-center gap-2 text-on-secondary-container bg-secondary-container px-2 py-0.5 rounded text-label-sm">
+<span class="material-symbols-outlined text-sm">find_in_page</span>
+                                原文查询
+                            </div>
+<button class="text-tertiary-fixed-dim hover:text-tertiary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-sm">合规政策溯源</h3>
+<p class="text-on-surface-variant text-body-md line-clamp-2 mb-lg">“定位关于数据出境安全评估的相关条款原文，包含生效日期。”</p>
+<div class="flex items-center justify-between pt-md border-t border-outline-variant/30 text-label-sm text-outline">
+<div class="flex items-center gap-3">
+<span>使用 84 次</span>
+<span>上次 昨天</span>
+</div>
+<span class="text-primary font-bold opacity-0 group-hover:opacity-100 transition-opacity">立即执行</span>
+</div>
+</div>
+<!-- Add New Placeholder -->
+<button class="border-2 border-dashed border-outline-variant rounded-xl p-lg flex flex-col items-center justify-center text-outline hover:text-primary hover:border-primary transition-all bg-surface-container-lowest/30">
+<span class="material-symbols-outlined text-4xl mb-2">add_circle</span>
+<span class="font-label-md">添加自定义快捷方式</span>
+</button>
+</div>
+</div>
+<!-- Section: 我的收藏 -->
+<div class="space-y-md">
+<h2 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">bookmark</span>
+                    我的收藏
+                </h2>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-md">
+<!-- Small Card Pattern -->
+<div class="bg-surface border border-outline-variant rounded-lg p-md hover:shadow-sm transition-shadow cursor-pointer">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[12px] px-1.5 py-0.5 bg-surface-variant rounded text-on-surface-variant">问答</span>
+<span class="material-symbols-outlined text-sm text-primary">public</span>
+</div>
+<div class="font-label-md text-on-surface font-bold truncate mb-1">年度宏观经济预测汇总</div>
+<div class="text-label-sm text-outline">使用 42 次</div>
+</div>
+<div class="bg-surface border border-outline-variant rounded-lg p-md hover:shadow-sm transition-shadow cursor-pointer">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[12px] px-1.5 py-0.5 bg-surface-variant rounded text-on-surface-variant">查询</span>
+<span class="material-symbols-outlined text-sm text-secondary">lock</span>
+</div>
+<div class="font-label-md text-on-surface font-bold truncate mb-1">核心算法文档调取</div>
+<div class="text-label-sm text-outline">使用 19 次</div>
+</div>
+<!-- Repeated small cards for visual density -->
+<div class="bg-surface border border-outline-variant rounded-lg p-md hover:shadow-sm transition-shadow cursor-pointer">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[12px] px-1.5 py-0.5 bg-surface-variant rounded text-on-surface-variant">问答</span>
+<span class="material-symbols-outlined text-sm text-primary">group</span>
+</div>
+<div class="font-label-md text-on-surface font-bold truncate mb-1">竞品专利分析模版</div>
+<div class="text-label-sm text-outline">使用 31 次</div>
+</div>
+<div class="bg-surface border border-outline-variant rounded-lg p-md hover:shadow-sm transition-shadow cursor-pointer opacity-70">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[12px] px-1.5 py-0.5 bg-surface-variant rounded text-on-surface-variant">问答</span>
+<span class="material-symbols-outlined text-sm text-outline">history</span>
+</div>
+<div class="font-label-md text-on-surface font-bold truncate mb-1">查看更多收藏...</div>
+</div>
+</div>
+</div>
+<!-- Section: 公共快捷入口 (Admin Configured) -->
+<div class="space-y-md">
+<h2 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">verified</span>
+                    公共快捷入口
+                </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<div class="flex gap-md bg-surface border border-outline-variant rounded-xl p-lg items-center hover:bg-surface-container-low transition-colors">
+<div class="w-16 h-16 rounded-lg bg-primary-container flex items-center justify-center text-on-primary-container shrink-0">
+<span class="material-symbols-outlined text-3xl">policy</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-headline-sm text-headline-sm text-on-surface">全行政策大模型</span>
+<span class="text-[10px] px-1.5 py-0.5 border border-primary text-primary rounded-full uppercase tracking-tighter">Official</span>
+</div>
+<p class="text-body-md text-on-surface-variant truncate">针对银行最新规章制度、操作手册的权威解答助手</p>
+<div class="flex items-center gap-4 mt-2 text-label-sm text-outline">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">visibility</span> 全行可见</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">person</span> 管理员发布</span>
+</div>
+</div>
+<button class="material-symbols-outlined text-outline hover:text-tertiary-fixed-dim">star_outline</button>
+</div>
+<div class="flex gap-md bg-surface border border-outline-variant rounded-xl p-lg items-center hover:bg-surface-container-low transition-colors">
+<div class="w-16 h-16 rounded-lg bg-secondary-container flex items-center justify-center text-on-secondary-container shrink-0">
+<span class="material-symbols-outlined text-3xl">analytics</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-headline-sm text-headline-sm text-on-surface">研报数据提取器</span>
+</div>
+<p class="text-body-md text-on-surface-variant truncate">自动化提取研报中的表格数据并转化为标准化JSON/Excel</p>
+<div class="flex items-center gap-4 mt-2 text-label-sm text-outline">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">visibility</span> 投资部可见</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">person</span> 系统推荐</span>
+</div>
+</div>
+<button class="material-symbols-outlined text-outline hover:text-tertiary-fixed-dim">star_outline</button>
+</div>
+</div>
+</div>
+<!-- Section: 内部专属入口 (High-end Asymmetric Layout) -->
+<div class="space-y-md">
+<h2 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">security</span>
+                    内部专属入口
+                </h2>
+<div class="flex flex-col md:flex-row gap-lg">
+<!-- Feature focus card -->
+<div class="flex-2 bg-primary-container text-on-primary-container rounded-2xl p-xl flex flex-col justify-between min-h-[240px] relative overflow-hidden">
+<div class="absolute right-[-20px] top-[-20px] opacity-10">
+<span class="material-symbols-outlined text-[180px]">shield</span>
+</div>
+<div>
+<div class="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full text-label-sm mb-lg backdrop-blur-sm">
+<span class="material-symbols-outlined text-sm">key</span> 密级：机密
+                            </div>
+<h3 class="font-headline-lg text-headline-lg mb-md">核心源代码知识库</h3>
+<p class="text-on-primary-container/80 max-w-md text-body-lg">针对架构组内部权限开放，支持跨工程、跨版本的逻辑链路追溯与查询。</p>
+</div>
+<div class="flex items-center justify-between mt-xl">
+<div class="flex -space-x-3">
+<div class="w-8 h-8 rounded-full border-2 border-primary-container bg-white flex items-center justify-center text-primary text-[10px] font-bold">JD</div>
+<div class="w-8 h-8 rounded-full border-2 border-primary-container bg-white flex items-center justify-center text-primary text-[10px] font-bold">AM</div>
+<div class="w-8 h-8 rounded-full border-2 border-primary-container bg-white flex items-center justify-center text-primary text-[10px] font-bold">+5</div>
+</div>
+<button class="bg-surface-bright text-primary px-6 py-2 rounded-lg font-bold hover:bg-white transition-colors">
+                                访问入口
+                            </button>
+</div>
+</div>
+<!-- Side support card -->
+<div class="flex-1 bg-surface border border-outline-variant rounded-2xl p-lg flex flex-col justify-center gap-md border-l-4 border-l-primary">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">权限申请通道</h4>
+<p class="text-body-md text-on-surface-variant">如需访问受限的专属入口，请提交业务申请流程。当前您有 2 个可申请的建议入口。</p>
+<button class="text-primary font-bold flex items-center gap-2 border border-primary/20 w-fit px-4 py-2 rounded hover:bg-primary-fixed/30 transition-colors">
+<span class="material-symbols-outlined text-sm">assignment_ind</span> 立即申请
+                        </button>
+</div>
+</div>
+</div>
+<div class="h-12"></div><!-- Spacer -->
+</section>
+<!-- Floating Feedback Logic Notification (Micro-interaction layer) -->
+<div class="fixed bottom-lg right-lg bg-inverse-surface text-inverse-on-surface px-lg py-md rounded-xl shadow-lg flex items-center gap-md transform translate-y-24 transition-transform duration-500 z-50" id="toast-notify">
+<span class="material-symbols-outlined text-primary-fixed">check_circle</span>
+<div class="text-label-md">
+<p class="font-bold">提示：快捷入口执行中</p>
+<p class="opacity-80">系统正在创建全新独立会话，确保回答即时准确。</p>
+</div>
+<button class="ml-4 opacity-50 hover:opacity-100" onclick="closeToast()">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+</main>
+<script>
+        // Simulate execution toast
+        document.querySelectorAll('.group').forEach(card => {
+            card.addEventListener('click', () => {
+                const toast = document.getElementById('toast-notify');
+                toast.classList.remove('translate-y-24');
+                toast.classList.add('translate-y-0');
+
+                setTimeout(() => {
+                    closeToast();
+                }, 4000);
+            });
+        });
+
+        function closeToast() {
+            const toast = document.getElementById('toast-notify');
+            toast.classList.remove('translate-y-0');
+            toast.classList.add('translate-y-24');
+        }
+
+        // Vanilla micro-interaction for sidebar hover
+        const navLinks = document.querySelectorAll('nav a');
+        navLinks.forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                if(!link.classList.contains('text-primary')) {
+                    link.style.transform = 'translateX(4px)';
+                }
+            });
+            link.addEventListener('mouseleave', () => {
+                link.style.transform = 'translateX(0)';
+            });
+        });
+    </script>
+</body></html>

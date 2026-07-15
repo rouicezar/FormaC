@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>绑定飞书 - KnowledgeEngine</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .workspace-shadow {
+            box-shadow: 0px 2px 8px rgba(45, 74, 67, 0.05);
+        }
+        .ai-border {
+            border-left: 3px solid #2D4A43;
+            background-color: rgba(45, 74, 67, 0.02);
+        }
+        body {
+            background-color: #f6faf7;
+            font-family: "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#576863",
+                        "inverse-surface": "#2c312f",
+                        "on-primary": "#ffffff",
+                        "secondary": "#51625d",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#d4e7e1",
+                        "primary-fixed": "#c9e9e0",
+                        "primary-fixed-dim": "#adcdc4",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#ebefec",
+                        "outline-variant": "#c1c8c5",
+                        "outline": "#727976",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#e5e9e6",
+                        "surface-dim": "#d7dbd8",
+                        "surface-container-low": "#f0f5f1",
+                        "on-surface": "#181d1b",
+                        "inverse-on-surface": "#edf2ee",
+                        "surface-variant": "#dfe3e0",
+                        "on-tertiary-fixed": "#2f1500",
+                        "secondary-fixed-dim": "#b8cbc5",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#adcdc4",
+                        "on-tertiary-fixed-variant": "#6e3900",
+                        "tertiary-fixed": "#ffdcc3",
+                        "tertiary": "#4a2500",
+                        "surface-bright": "#f6faf7",
+                        "surface-tint": "#47645d",
+                        "secondary-container": "#d4e7e1",
+                        "background": "#f6faf7",
+                        "on-secondary-fixed-variant": "#394a46",
+                        "tertiary-container": "#6b3700",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed": "#02201a",
+                        "on-background": "#181d1b",
+                        "on-surface-variant": "#414846",
+                        "primary-container": "#2d4a43",
+                        "surface-container-highest": "#dfe3e0",
+                        "on-primary-container": "#99b9b0",
+                        "tertiary-fixed-dim": "#ffb77d",
+                        "on-tertiary-container": "#ff993b",
+                        "on-secondary-fixed": "#0e1e1b",
+                        "primary": "#16332d",
+                        "surface": "#f6faf7",
+                        "on-primary-fixed-variant": "#2f4c45",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "4px",
+                        "lg": "8px",
+                        "xl": "12px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "sm": "8px",
+                        "unit": "4px",
+                        "container-max": "1280px",
+                        "md": "16px",
+                        "xl": "40px",
+                        "lg": "24px",
+                        "gutter": "20px"
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- Top Navigation (Shell Implementation) -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-surface-bright border-b border-outline-variant">
+<div class="flex justify-between items-center w-full px-lg py-sm max-w-container-max mx-auto h-16">
+<div class="flex items-center gap-md">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">KnowledgeEngine</span>
+<nav class="hidden md:flex ml-lg gap-lg">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Recent</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Favorites</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Shared</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-sm hover:bg-surface-container transition-colors rounded-full">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<button class="p-sm hover:bg-surface-container transition-colors rounded-full">
+<span class="material-symbols-outlined text-on-surface-variant">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant bg-surface-container ml-sm">
+<img class="w-full h-full object-cover" data-alt="A professional studio portrait of a corporate administrator in a high-end office setting. The lighting is soft and natural, emphasizing clarity and focus. The style is minimalist with a neutral background, conveying institutional trust and professional authority in a modern light-mode environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgeKDEFDXI1-ukcs4r2Gq3rT1sd3yihaBosQLcRc9O4czj-M37JxGMMhiT88d3_ldlNv4UAW6ZM_XAI6FRxU9DdJyRgXSB_mVYcv_7XMtUTpeZu4pROfMi7MvXkonIC9kYwxa0ErTmzsoB9FnOprztPuPuEVPD4k5oIiJqBOaK6iRVnwvuVc5C4jPFPaWyDWiIzhg9JO3TbwQ8PTw3A0e-dVSeh9bmWrGJzOycQAOtI8tH9GDmyH6etqAJZG1IOvZWDscFmHeN4t_H"/>
+</div>
+</div>
+</div>
+</header>
+<main class="min-h-screen pt-32 pb-xl px-md flex justify-center">
+<div class="w-full max-w-2xl flex flex-col gap-lg">
+<!-- Page Header Section -->
+<div class="text-center mb-md">
+<h1 class="font-headline-lg text-headline-lg text-primary mb-sm">绑定飞书账号</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">扫码绑定后，您的 Web 端历史将与飞书实时同步。</p>
+</div>
+<!-- Focused Workspace Area -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg workspace-shadow overflow-hidden">
+<!-- Main Action: QR Code -->
+<div class="p-xl flex flex-col items-center border-b border-outline-variant bg-white">
+<div class="relative group">
+<div class="absolute -inset-1 bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+<div class="relative w-48 h-48 bg-white border border-outline-variant rounded-lg p-md flex items-center justify-center">
+<!-- Placeholder for QR Code -->
+<img class="w-full h-full" data-alt="A crisp, high-contrast QR code centered on a clean white background. The frame is a minimalist professional UI component with soft-rounded corners. The aesthetic is professional and functional, utilizing a dark green primary color for the code patterns, set within a bright light-mode studio environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDrJAz-ZQmEVEHqrtkpwAzH6p7xATkI7_jpjvUNqSuwW16giN4WyOg8ltYhfjwa5M239xcWRO1jTdwhl-f9LUpHu72r6dkWgAFQQ4S7dGk21qI3fq9CIWhFlKXni3RRZOwQRVmmCaNN_wlCM26V9qA0D988fEd5Vp8NSa6Fvq5X1uT_6-7c5mfYuSet_0a_S8NdMiQwVZdE-TNipNq1Oo6Xl-d3aUdgdAy9EydnwS_nJYoD4xCcGSUfJ87qRRaf7i4_tgVG7pzWSFV"/>
+</div>
+</div>
+<div class="mt-lg flex items-center gap-sm text-primary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[20px]">qr_code_scanner</span>
+<span>请打开飞书扫一扫</span>
+</div>
+</div>
+<!-- Mandatory Notice Section -->
+<div class="p-lg bg-surface-container-low ai-border mx-lg my-lg rounded-sm">
+<div class="flex gap-md">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">info</span>
+<div>
+<p class="font-body-md text-body-md text-on-surface">
+                                绑定后您的身份默认为<span class="font-bold">外部用户</span>，可以立即使用公开知识。只有管理员明确授权后才会成为内部用户。
+                            </p>
+</div>
+</div>
+</div>
+<!-- Merge History Step -->
+<div class="px-xl py-lg bg-surface-container-high border-t border-outline-variant">
+<div class="flex flex-col gap-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary">history</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">是否将当前浏览器中的匿名历史记录合并到飞书账号？</h2>
+</div>
+<p class="text-on-surface-variant font-body-md text-body-md">合并后，您在当前设备上的所有对话记录将永久保存至您的飞书个人知识库中，实现跨端同步。</p>
+<div class="flex gap-md mt-sm">
+<button class="flex-1 py-md px-lg bg-primary-container text-on-primary-container font-bold rounded-lg hover:bg-primary transition-all active:scale-[0.98] flex items-center justify-center gap-sm" id="btn-merge">
+<span class="material-symbols-outlined text-[20px]">merge</span>
+                                合并历史
+                            </button>
+<button class="flex-1 py-md px-lg bg-white text-primary border border-primary font-bold rounded-lg hover:bg-surface-container transition-all active:scale-[0.98] flex items-center justify-center gap-sm" id="btn-skip">
+<span class="material-symbols-outlined text-[20px]">block</span>
+                                不合并
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Secondary Support Information -->
+<div class="flex flex-col gap-sm px-md">
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+<span>安全加密连接</span>
+</div>
+<a class="hover:text-primary underline transition-colors" href="#">绑定遇到问题？联系管理员</a>
+</div>
+</div>
+</div>
+</main>
+<!-- Success Toast (Hidden by default) -->
+<div class="fixed bottom-xl left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface px-lg py-md rounded-lg shadow-xl opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-md" id="toast">
+<span class="material-symbols-outlined text-green-400">check_circle</span>
+<span class="font-label-md text-label-md" id="toast-text">操作已记录</span>
+</div>
+<script>
+        // Micro-interactions for buttons
+        const mergeBtn = document.getElementById('btn-merge');
+        const skipBtn = document.getElementById('btn-skip');
+        const toast = document.getElementById('toast');
+        const toastText = document.getElementById('toast-text');
+
+        function showToast(message) {
+            toastText.textContent = message;
+            toast.classList.remove('opacity-0', 'translate-y-4');
+            toast.classList.add('opacity-100', '-translate-y-2');
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-4');
+                toast.classList.remove('opacity-100', '-translate-y-2');
+            }, 3000);
+        }
+
+        mergeBtn.addEventListener('click', () => {
+            showToast('正在准备合并历史记录...');
+            mergeBtn.disabled = true;
+            skipBtn.disabled = true;
+            mergeBtn.classList.add('opacity-50');
+            skipBtn.classList.add('opacity-50');
+        });
+
+        skipBtn.addEventListener('click', () => {
+            showToast('已取消合并，正在跳转...');
+            mergeBtn.disabled = true;
+            skipBtn.disabled = true;
+            mergeBtn.classList.add('opacity-50');
+            skipBtn.classList.add('opacity-50');
+        });
+
+        // Simulating QR refresh logic or interaction
+        document.querySelector('img[data-alt*="QR"]').addEventListener('click', function() {
+            this.style.opacity = '0.5';
+            setTimeout(() => {
+                this.style.opacity = '1';
+                showToast('二维码已刷新');
+            }, 500);
+        });
+    </script>
+</body></html>

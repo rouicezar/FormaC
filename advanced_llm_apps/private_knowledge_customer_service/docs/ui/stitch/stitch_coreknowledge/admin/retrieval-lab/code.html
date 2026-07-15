@@ -1,0 +1,385 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">try{
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f0f5f1",
+                    "secondary-fixed-dim": "#b8cbc5",
+                    "on-error": "#ffffff",
+                    "on-primary-container": "#99b9b0",
+                    "primary-fixed-dim": "#adcdc4",
+                    "surface-container-high": "#e5e9e6",
+                    "on-tertiary": "#ffffff",
+                    "primary-container": "#2d4a43",
+                    "on-secondary-fixed-variant": "#394a46",
+                    "inverse-primary": "#adcdc4",
+                    "on-tertiary-container": "#ff993b",
+                    "on-tertiary-fixed": "#2f1500",
+                    "tertiary-fixed-dim": "#ffb77d",
+                    "background": "#f6faf7",
+                    "on-secondary-container": "#576863",
+                    "surface": "#f6faf7",
+                    "inverse-on-surface": "#edf2ee",
+                    "surface-bright": "#f6faf7",
+                    "inverse-surface": "#2c312f",
+                    "on-primary-fixed-variant": "#2f4c45",
+                    "on-background": "#181d1b",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed": "#ffdcc3",
+                    "surface-tint": "#47645d",
+                    "tertiary-container": "#6b3700",
+                    "secondary": "#51625d",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed": "#d4e7e1",
+                    "on-secondary-fixed": "#0e1e1b",
+                    "primary": "#16332d",
+                    "surface-container": "#ebefec",
+                    "on-primary-fixed": "#02201a",
+                    "on-error-container": "#93000a",
+                    "surface-variant": "#dfe3e0",
+                    "on-primary": "#ffffff",
+                    "outline-variant": "#c1c8c5",
+                    "error": "#ba1a1a",
+                    "primary-fixed": "#c9e9e0",
+                    "surface-dim": "#d7dbd8",
+                    "on-tertiary-fixed-variant": "#6e3900",
+                    "surface-container-highest": "#dfe3e0",
+                    "tertiary": "#4a2500",
+                    "on-surface": "#181d1b",
+                    "secondary-container": "#d4e7e1",
+                    "outline": "#727976",
+                    "on-surface-variant": "#414846"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "40px",
+                    "container-max": "1280px",
+                    "lg": "24px",
+                    "gutter": "20px",
+                    "unit": "4px",
+                    "sm": "8px",
+                    "xs": "4px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "body-md": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                    "label-md": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                    "body-lg": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                    "headline-lg": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                    "label-sm": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                    "headline-sm": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                    "headline-md": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""]
+            }
+          }
+        }
+      }
+    }catch(_e){}</script><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Source+Han+Sans+SC,+Microsoft+YaHei,+sans-serif:wght@100..900&amp;display=swap" rel="stylesheet"></head><body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopNavBar (Shared Component Identity) -->
+<header class="bg-surface-bright border-b border-outline-variant z-30">
+<div class="flex justify-between items-center w-full px-lg py-sm max-w-container-max mx-auto h-16">
+<div class="flex items-center gap-md">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">KnowledgeEngine</span>
+<span class="text-outline text-body-md">/</span>
+<span class="text-on-surface font-body-md font-semibold">/admin/retrieval-lab</span>
+</div>
+<div class="flex-1 max-w-md mx-lg">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input type="text" placeholder="搜索实验记录..." class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg pl-10 pr-4 py-2 font-body-md focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all">
+</div>
+</div>
+<nav class="hidden md:flex items-center gap-lg">
+<a href="#" class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors">近期记录</a>
+<a href="#" class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors">收藏预设</a>
+<a href="#" class="text-primary font-label-md text-label-md font-bold border-b-2 border-primary py-1">实验室</a>
+<div class="flex items-center gap-md ml-md">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="notifications" data-original-icon="notifications">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-bold text-xs border border-outline-variant">AD</div>
+</div>
+</nav>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar (Shared Component Identity) -->
+<aside class="hidden md:flex flex-col h-full w-64 bg-surface border-r border-outline-variant py-md px-sm">
+<div class="px-md mb-lg">
+<p class="font-headline-sm text-headline-sm font-semibold text-primary">管理后台</p>
+
+</div>
+<div class="flex-1 space-y-1"><a class="flex items-center gap-md px-md py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#"><span class="material-symbols-outlined">home</span><span class="font-body-md text-body-md">管理首页</span></a><a class="flex items-center gap-md px-md py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#"><span class="material-symbols-outlined">database</span><span class="font-body-md text-body-md">知识库</span></a><a class="flex items-center gap-md px-md py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#"><span class="material-symbols-outlined">settings_input_component</span><span class="font-body-md text-body-md">模型配置</span></a><a class="flex items-center gap-md px-md py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#"><span class="material-symbols-outlined">group</span><span class="font-body-md text-body-md">用户管理</span></a><a class="flex items-center gap-md px-md py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#"><span class="material-symbols-outlined">history</span><span class="font-body-md text-body-md">全局记录</span></a><a class="flex items-center gap-md px-md py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#"><span class="material-symbols-outlined">analytics</span><span class="font-body-md text-body-md">数据分析</span></a><a class="flex items-center gap-md px-md py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#"><span class="material-symbols-outlined">bolt</span><span class="font-body-md text-body-md">快捷入口</span></a><a class="flex items-center gap-md px-md py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#"><span class="material-symbols-outlined">chat</span><span class="font-body-md text-body-md">飞书接入</span></a><a class="flex items-center gap-md px-md py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#"><span class="material-symbols-outlined">receipt_long</span><span class="font-body-md text-body-md">审计日志</span></a><a class="flex items-center gap-md px-md py-3 rounded-lg bg-secondary-container text-on-secondary-container font-bold group transition-colors" href="#"><span class="material-symbols-outlined text-primary">science</span><span class="font-body-md text-body-md">检索实验室</span></a></div>
+<div class="pt-md border-t border-outline-variant">
+<button class="w-full flex items-center justify-center gap-sm bg-primary text-on-primary py-3 rounded-lg font-label-md text-label-md hover:bg-opacity-90 transition-all">
+<span class="material-symbols-outlined text-sm">add</span>
+                    新建测试集
+                </button>
+</div>
+</aside>
+<!-- Main Workspace -->
+<main class="flex-1 overflow-y-auto custom-scrollbar p-lg bg-surface-container-low">
+<div class="max-w-container-max mx-auto space-y-lg">
+<!-- Page Header -->
+<div class="flex items-end justify-between">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary">检索实验室：多维调试</h1>
+<p class="text-on-surface-variant font-body-md mt-1">模拟生产环境下的检索链路，验证权重分配与权限过滤机制。</p>
+</div>
+<div class="flex items-center gap-sm">
+<span class="bg-tertiary-container text-on-tertiary-fixed font-label-sm text-xs px-2 py-1 rounded">管理员模式</span>
+<span class="text-outline font-label-sm text-xs">上次成功检索: 2分钟前</span>
+</div>
+</div>
+<!-- Input & Controls (Bento Layout) -->
+<div class="grid grid-cols-12 gap-lg">
+<!-- Inquiry Section -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl p-lg">
+<label class="font-label-md text-label-md text-on-surface-variant block mb-md">测试问题 (Prompt)</label>
+<div class="relative">
+<textarea rows="3" class="w-full bg-surface border border-outline-variant rounded-lg p-md font-body-md focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-outline-variant" placeholder="输入你想测试的检索词，例如：'关于2024年Q3财报的合规性要求'"></textarea>
+<button class="absolute bottom-4 right-4 bg-primary text-on-primary px-lg py-2 rounded-lg flex items-center gap-sm font-label-md text-label-md hover:brightness-110 shadow-sm transition-all active:scale-95">
+<span class="material-symbols-outlined text-lg">science</span>
+                                开始诊断
+                            </button>
+</div>
+<div class="flex items-center gap-lg mt-lg">
+<div class="flex-1">
+<label class="font-label-md text-label-md text-on-surface-variant block mb-sm">模拟身份</label>
+<div class="flex bg-surface rounded-lg p-1 border border-outline-variant">
+<button class="flex-1 py-1.5 px-3 rounded-md bg-secondary-container text-on-secondary-container font-bold text-label-md">
+                                        内部员工
+                                    </button>
+<button class="flex-1 py-1.5 px-3 rounded-md text-on-surface-variant hover:bg-surface-container-high transition-colors text-label-md">
+                                        匿名访客
+                                    </button>
+<button class="flex-1 py-1.5 px-3 rounded-md text-on-surface-variant hover:bg-surface-container-high transition-colors text-label-md">
+                                        外部供应商
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Parameter Section -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col justify-between">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-md">检索参数控制</h3>
+<div class="space-y-md">
+<div>
+<div class="flex justify-between mb-2">
+<label class="text-label-md font-label-md text-on-surface-variant">召回数量 (Top K)</label>
+<span class="text-primary font-bold">15</span>
+</div>
+<input type="range" class="w-full h-1.5 bg-outline-variant rounded-lg appearance-none cursor-pointer accent-primary">
+</div>
+<div>
+<div class="flex justify-between mb-2">
+<label class="text-label-md font-label-md text-on-surface-variant">向量权重 (Vector Weight)</label>
+<span class="text-primary font-bold">0.75</span>
+</div>
+<input type="range" class="w-full h-1.5 bg-outline-variant rounded-lg appearance-none cursor-pointer accent-primary">
+</div>
+<div class="flex items-center justify-between pt-sm">
+<label class="text-label-md font-label-md text-on-surface-variant">开启深度重排 (Rerank)</label>
+<div class="relative inline-flex items-center cursor-pointer">
+<input type="checkbox" checked="" class="sr-only peer">
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-lg pt-md border-t border-outline-variant flex items-center justify-between">
+<span class="text-label-sm font-label-sm text-outline">模型: GPT-4o-Turbo-检索增强版</span>
+<button class="text-primary hover:underline text-label-md font-label-md">重置参数</button>
+</div>
+</div>
+</div>
+<!-- Pipeline Visualization -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Phase 1: Recall -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col h-[500px]">
+<div class="bg-surface-container p-md border-b border-outline-variant flex justify-between items-center">
+<div class="flex items-center gap-sm">
+<span class="w-6 h-6 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold">1</span>
+<span class="font-label-md text-label-md font-bold text-primary">向量召回阶段</span>
+</div>
+<span class="text-[10px] bg-secondary-fixed text-on-secondary-fixed px-1.5 py-0.5 rounded">命中: 15条</span>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar p-md space-y-md">
+<div class="p-sm bg-surface border border-outline-variant rounded-lg text-body-md text-xs space-y-1 relative">
+<div class="flex justify-between items-start">
+<span class="font-bold text-primary">Doc_#8291</span>
+<span class="text-outline">得分: 0.942</span>
+</div>
+<p class="text-on-surface-variant line-clamp-2">关于2024财年第三季度的合规审查要点，包含了所有子公司的数据...</p>
+<div class="flex gap-2">
+<span class="bg-surface-variant px-1 rounded text-[10px]">财务</span>
+<span class="bg-surface-variant px-1 rounded text-[10px]">高密</span>
+</div>
+</div>
+<div class="p-sm bg-surface border border-outline-variant rounded-lg text-body-md text-xs space-y-1 opacity-80">
+<div class="flex justify-between items-start">
+<span class="font-bold text-primary">Doc_#7102</span>
+<span class="text-outline">得分: 0.942</span>
+</div>
+<p class="text-on-surface-variant line-clamp-2">子公司A在Q3的税务申报细则，包含员工社保缴纳记录...</p>
+<div class="flex gap-2">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-1 rounded text-[10px]">绝密</span>
+</div>
+</div>
+<!-- More items -->
+<div class="p-sm bg-surface border border-outline-variant rounded-lg text-body-md text-xs space-y-1 opacity-70">
+<div class="flex justify-between items-start">
+<span class="font-bold text-primary">Doc_#6654</span>
+<span class="text-outline">得分: 0.942</span>
+</div>
+<p class="text-on-surface-variant line-clamp-2">市场部门Q4推广计划草案，预计投入金额为...</p>
+</div>
+</div>
+</div>
+<!-- Phase 2: Privacy Filter -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col h-[500px] relative">
+<div class="bg-surface-container p-md border-b border-outline-variant flex justify-between items-center">
+<div class="flex items-center gap-sm">
+<span class="w-6 h-6 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold">2</span>
+<span class="font-label-md text-label-md font-bold text-primary">隐私策略过滤</span>
+</div>
+<span class="text-[10px] bg-error-container text-on-error-container px-1.5 py-0.5 rounded">拦截: 6条</span>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar p-md space-y-md">
+<div class="p-sm border border-primary-fixed bg-primary-fixed/10 rounded-lg text-body-md text-xs space-y-1">
+<div class="flex justify-between items-center">
+<span class="font-bold text-primary">Doc_#8291</span>
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+</div>
+<p class="text-on-surface-variant">允许访问。匹配规则：[ROLE_INTERNAL]</p>
+</div>
+<!-- Filtered Diagnostic Item -->
+<div class="p-sm border border-error bg-error/5 rounded-lg text-body-md text-xs space-y-2 relative overflow-hidden">
+<div class="flex justify-between items-center">
+<span class="font-bold text-error">Doc_#7102 (已过滤)</span>
+<span class="material-symbols-outlined text-error text-sm">cancel</span>
+</div>
+<p class="text-on-surface-variant line-through opacity-50">子公司A在Q3的税务申报细则，包含员工社保缴纳记录...</p>
+<div class="p-1.5 bg-error-container rounded flex items-start gap-2">
+<span class="material-symbols-outlined text-error text-xs mt-0.5">report</span>
+<div>
+<p class="font-bold text-on-error-container text-[10px]">诊断：由于敏感信息 [PII_SOCIAL_SECURITY] 被拦截。</p>
+<p class="text-on-error-container text-[9px]">当前身份: "内部员工" 不具备 "FINANCE_DEPT" 访问权。</p>
+</div>
+</div>
+</div>
+<div class="p-sm border border-primary-fixed bg-primary-fixed/10 rounded-lg text-body-md text-xs space-y-1 opacity-50">
+<div class="flex justify-between items-center">
+<span class="font-bold text-primary">Doc_#6654</span>
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+</div>
+<p class="text-on-surface-variant">允许访问。匹配规则：[PUBLIC_VIEW]</p>
+</div>
+</div>
+</div>
+<!-- Phase 3: Rerank -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col h-[500px]">
+<div class="bg-surface-container p-md border-b border-outline-variant flex justify-between items-center">
+<div class="flex items-center gap-sm">
+<span class="w-6 h-6 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold">相关度: 0.988</span>
+<span class="font-label-md text-label-md font-bold text-primary">多维重排结果</span>
+</div>
+<span class="text-[10px] bg-secondary-fixed text-on-secondary-fixed px-1.5 py-0.5 rounded">最终交付: 5条</span>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar p-md space-y-md">
+<!-- Winner Card -->
+<div class="ai-border p-md rounded-r-lg border border-outline-variant text-body-md text-sm space-y-2">
+<div class="flex justify-between items-center">
+<span class="font-bold text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                                        最优推荐 (Top 1)
+                                    </span>
+<span class="text-on-tertiary-fixed-variant font-bold text-xs bg-tertiary-fixed px-1.5 py-0.5 rounded">相关度: 0.988</span>
+</div>
+<p class="text-on-surface font-medium leading-relaxed">2024财年Q3合规审计指南：本季度重点关注海外业务合规流转与跨境数据申报完整性...</p>
+<div class="flex items-center justify-between text-[10px] text-outline border-t border-outline-variant pt-2 mt-2">
+<span class="">来源: 中央知识库/财务/合规组</span>
+<span class="">词频加权: +15%</span>
+</div>
+</div>
+<div class="p-md rounded-lg border border-outline-variant text-body-md text-sm space-y-2 opacity-80">
+<div class="flex justify-between items-center">
+<span class="font-bold text-on-surface-variant">次优参考 (Top 2)</span>
+<span class="text-outline font-bold text-xs">相关度: 0.988</span>
+</div>
+<p class="text-on-surface-variant leading-relaxed">市场部门Q4推广计划草案中的预算审批流转节点说明...</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Debugging Console (Admin Only) -->
+<div class="bg-inverse-surface text-inverse-on-surface rounded-xl p-lg shadow-xl">
+<div class="flex items-center justify-between mb-lg">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary-fixed">terminal</span>
+<h2 class="font-headline-sm text-headline-sm">后台诊断日志</h2>
+</div>
+<div class="flex items-center gap-md">
+<button class="text-label-sm font-label-sm px-3 py-1 rounded bg-white/10 hover:bg-white/20 transition-colors">导出日志</button>
+<span class="text-xs text-outline-variant font-mono">2024-05-20 14:32:11.452</span>
+</div>
+</div>
+<div class="font-mono text-sm space-y-1.5 opacity-80 h-40 overflow-y-auto custom-scrollbar">
+<p class=""><span class="text-primary-fixed-dim">[INFO]</span> Initiating multi-stage retrieval for query: "2024 Q3 Compliance Requirements"</p>
+<p class=""><span class="text-secondary-fixed-dim">[DEBUG]</span> VectorDB latency: 24ms | Clusters matched: finance, legal, audit</p>
+<p class=""><span class="text-tertiary-fixed-dim">[TRACE]</span> Context expansion applied: +history_context (1024 tokens)</p>
+<p class=""><span class="text-error">[SECURITY]</span> Security Exception: Document ID '7102' blocked by rule 'SensitiveDataScanner_v2'</p>
+<p class=""><span class="text-primary-fixed-dim">[INFO]</span> Reranking 9 candidate documents using Cross-Encoder model</p>
+<p class=""><span class="text-primary-fixed-dim">[INFO]</span> Final context built with 2840 tokens. Prepared for LLM generation.</p>
+<div class="animate-pulse">_</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Mobile Navigation Shell -->
+<nav class="md:hidden bg-surface border-t border-outline-variant flex justify-around items-center py-2">
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined">science</span>
+<span class="text-[10px] font-label-sm">实验</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">history</span>
+<span class="text-[10px] font-label-sm">记录</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-label-sm">配置</span>
+</button>
+</nav>
+<script>
+        // Micro-interactions
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const icon = btn.querySelector('.material-symbols-outlined');
+                if (icon) {
+                    icon.classList.add('scale-125');
+                    setTimeout(() => icon.classList.remove('scale-125'), 200);
+                }
+            });
+        });
+
+        // Simple Pipeline Simulation UI update
+        const diagnoseBtn = document.querySelector('button:contains("开始诊断")');
+        if(diagnoseBtn) {
+            diagnoseBtn.addEventListener('click', () => {
+                diagnoseBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">refresh</span> 诊断中...';
+                setTimeout(() => {
+                    diagnoseBtn.innerHTML = '<span class="material-symbols-outlined text-lg">science</span> 开始诊断';
+                }, 1500);
+            });
+        }
+    </script>
+</body></html>

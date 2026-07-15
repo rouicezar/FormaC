@@ -1,0 +1,289 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>扫描详情 - KnowledgeEngine</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#edf2ee",
+                    "on-secondary-fixed": "#0e1e1b",
+                    "surface-variant": "#dfe3e0",
+                    "outline": "#727976",
+                    "on-surface": "#181d1b",
+                    "surface-container-low": "#f0f5f1",
+                    "on-primary-fixed": "#02201a",
+                    "secondary-container": "#d4e7e1",
+                    "tertiary-fixed-dim": "#ffb77d",
+                    "on-secondary-fixed-variant": "#394a46",
+                    "surface": "#f6faf7",
+                    "secondary-fixed-dim": "#b8cbc5",
+                    "on-secondary-container": "#576863",
+                    "primary-fixed-dim": "#adcdc4",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-highest": "#dfe3e0",
+                    "surface-bright": "#f6faf7",
+                    "surface-container": "#ebefec",
+                    "tertiary-container": "#6b3700",
+                    "secondary": "#51625d",
+                    "on-error-container": "#93000a",
+                    "on-surface-variant": "#414846",
+                    "on-tertiary-container": "#ff993b",
+                    "background": "#f6faf7",
+                    "tertiary-fixed": "#ffdcc3",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed": "#2f1500",
+                    "on-background": "#181d1b",
+                    "tertiary": "#4a2500",
+                    "outline-variant": "#c1c8c5",
+                    "on-error": "#ffffff",
+                    "primary-fixed": "#c9e9e0",
+                    "primary-container": "#2d4a43",
+                    "surface-dim": "#d7dbd8",
+                    "surface-container-lowest": "#ffffff",
+                    "primary": "#16332d",
+                    "on-primary-fixed-variant": "#2f4c45",
+                    "error": "#ba1a1a",
+                    "on-primary-container": "#99b9b0",
+                    "surface-container-high": "#e5e9e6",
+                    "on-primary": "#ffffff",
+                    "inverse-surface": "#2c312f",
+                    "secondary-fixed": "#d4e7e1",
+                    "inverse-primary": "#adcdc4",
+                    "on-tertiary-fixed-variant": "#6e3900",
+                    "surface-tint": "#47645d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "40px",
+                    "container-max": "1280px",
+                    "sm": "8px",
+                    "md": "16px",
+                    "gutter": "20px",
+                    "xs": "4px",
+                    "unit": "4px",
+                    "lg": "24px"
+            },
+            "fontFamily": {
+                    "label-sm": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                    "headline-lg": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                    "body-lg": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                    "headline-sm": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                    "label-md": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                    "body-md": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""],
+                    "headline-md": ["\"Source Han Sans SC, Microsoft YaHei, sans-serif\""]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { background-color: #f6faf7; color: #181d1b; font-family: "Source Han Sans SC", "Microsoft YaHei", sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-panel { background: rgba(252, 252, 250, 0.8); backdrop-filter: blur(8px); border: 1px solid #e5e3db; }
+        .zebra-row:nth-child(even) { background-color: rgba(240, 245, 241, 0.5); }
+    </style>
+</head>
+<body class="flex overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="hidden md:flex flex-col h-screen py-md px-sm bg-surface border-r border-outline-variant w-64">
+<div class="px-md py-lg mb-lg">
+<h1 class="font-headline-sm text-headline-sm font-semibold text-primary">企业管理端</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">知识核心</p>
+</div>
+<nav class="flex-grow space-y-xs"><a class="flex items-center gap-md px-md py-sm rounded transition-colors duration-200 text-on-surface-variant hover:bg-surface-container-high" href="#"><span class="material-symbols-outlined">home</span><span class="font-body-md text-body-md">管理首页</span></a><a class="flex items-center gap-md px-md py-sm rounded transition-colors duration-200 text-on-surface-variant hover:bg-surface-container-high" href="#"><span class="material-symbols-outlined">database</span><span class="font-body-md text-body-md">知识库</span></a><a class="flex items-center gap-md px-md py-sm rounded transition-colors duration-200 text-on-surface-variant hover:bg-surface-container-high" href="#"><span class="material-symbols-outlined">settings_input_component</span><span class="font-body-md text-body-md">模型配置</span></a><a class="flex items-center gap-md px-md py-sm rounded transition-colors duration-200 text-on-surface-variant hover:bg-surface-container-high" href="#"><span class="material-symbols-outlined">group</span><span class="font-body-md text-body-md">用户管理</span></a><a class="flex items-center gap-md px-md py-sm rounded transition-colors duration-200 bg-secondary-container text-on-secondary-container font-bold" href="#"><span class="material-symbols-outlined">receipt_long</span><span class="font-body-md text-body-md">全局记录</span></a><a class="flex items-center gap-md px-md py-sm rounded transition-colors duration-200 text-on-surface-variant hover:bg-surface-container-high" href="#"><span class="material-symbols-outlined">analytics</span><span class="font-body-md text-body-md">数据分析</span></a><a class="flex items-center gap-md px-md py-sm rounded transition-colors duration-200 text-on-surface-variant hover:bg-surface-container-high" href="#"><span class="material-symbols-outlined">bolt</span><span class="font-body-md text-body-md">快捷入口</span></a><a class="flex items-center gap-md px-md py-sm rounded transition-colors duration-200 text-on-surface-variant hover:bg-surface-container-high" href="#"><span class="material-symbols-outlined">chat</span><span class="font-body-md text-body-md">飞书接入</span></a><a class="flex items-center gap-md px-md py-sm rounded transition-colors duration-200 text-on-surface-variant hover:bg-surface-container-high" href="#"><span class="material-symbols-outlined">policy</span><span class="font-body-md text-body-md">审计日志</span></a><a class="flex items-center gap-md px-md py-sm rounded transition-colors duration-200 text-on-surface-variant hover:bg-surface-container-high" href="#"><span class="material-symbols-outlined">science</span><span class="font-body-md text-body-md">检索实验室</span></a></nav>
+<div class="mt-auto px-md">
+<button class="w-full bg-primary text-on-primary py-sm rounded font-label-md text-label-md hover:opacity-90 transition-opacity flex items-center justify-center gap-sm"><span class="material-symbols-outlined text-[18px]">add</span>添加新数据源</button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-grow h-screen overflow-y-auto">
+<!-- Top Nav Bar -->
+<header class="flex justify-between items-center w-full px-lg py-sm max-w-container-max mx-auto bg-surface-bright border-b border-outline-variant">
+<div class="flex items-center gap-xl">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">知识引擎</span>
+<nav class="hidden lg:flex gap-lg"><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">最近</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">收藏</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">共享</a></nav>
+</div>
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer" data-icon="settings">settings</span>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="Professional headshot of a female system administrator in a clean modern office, soft natural lighting, high resolution, professional demeanor, corporate photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyptHZ0ZlPCMGwK4vB1yie__9CTTL0aRbsl4GTsfE4GuUhV5SFShYBRw51ryFFSAwUnRogyYgPYfFA5dEC4Vp2Lf3ikVS2yDLbGykPGEA1BEJBXtgsC1RWotnguHxWASfOo4bKdKLcBJW8ChKNFVYOvsSLO1560GwGCD35s_Pa2kFH764JOWvmMLwofu6e74zaY4wcNEqm3PionGcqCZF5WCAueGSBCb-2iVGZ-gIj-UANGg_OIyUk-y_LV4xQXC79SHzUbbjCf9hj">
+</div>
+</div>
+</header>
+<div class="max-w-container-max mx-auto px-lg py-xl">
+<!-- Header & Alert -->
+<div class="flex flex-col gap-lg mb-xl">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-md">
+<div>
+<nav class="flex items-center text-on-surface-variant mb-xs">
+<a class="font-label-sm text-label-sm hover:text-primary transition-colors" href="#">扫描日志</a>
+<span class="material-symbols-outlined text-[14px] mx-xs" data-icon="chevron_right">chevron_right</span>
+<span class="font-label-sm text-label-sm">任务详情</span>
+</nav>
+<h2 class="font-headline-md text-headline-md text-primary">扫描任务详情</h2>
+</div>
+<button class="bg-primary text-on-primary px-lg py-sm rounded-lg flex items-center gap-sm font-label-md text-label-md hover:bg-opacity-90 transition-all active:scale-95 shadow-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="refresh">refresh</span>
+                        重试失败文件
+                    </button>
+</div>
+<!-- Alert Component: Partial Failure -->
+<div class="flex items-center gap-md bg-tertiary-fixed text-on-tertiary-fixed px-lg py-md rounded border border-on-tertiary-fixed-variant border-opacity-10">
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant" data-icon="warning">warning</span>
+<div class="flex-grow">
+<p class="font-label-md text-label-md font-bold">扫描部分失败</p>
+<p class="font-body-md text-body-md opacity-90">系统成功处理了大部分文件，但由于权限问题有 3 个文件处理异常。</p>
+</div>
+</div>
+</div>
+<!-- Dashboard Stats Grid (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-lg mb-xl">
+<!-- Task Identity Card -->
+<div class="md:col-span-2 glass-panel p-lg rounded-xl flex flex-col justify-between"><div><p class="font-label-sm text-label-sm text-on-surface-variant mb-xs">任务编号</p><p class="font-headline-sm text-headline-sm text-primary mb-md">扫描-2023-0824-001</p><div class="flex gap-lg"><div><p class="font-label-sm text-label-sm text-on-surface-variant">扫描类型</p><div class="mt-xs inline-flex items-center gap-xs px-sm py-1 bg-secondary-container text-on-secondary-container rounded font-label-sm text-label-sm"><span class="material-symbols-outlined text-[14px]">auto_mode</span>自动扫描</div></div><div><p class="font-label-sm text-label-sm text-on-surface-variant">当前状态</p><div class="mt-xs inline-flex items-center gap-xs px-sm py-1 bg-tertiary-fixed text-on-tertiary-fixed rounded font-label-sm text-label-sm">部分完成</div></div></div></div></div>
+<!-- Timeline Card -->
+<div class="md:col-span-2 glass-panel p-lg rounded-xl">
+<p class="font-label-md text-label-md font-bold text-primary mb-lg">扫描时间轴</p>
+<div class="space-y-md">
+<div class="flex items-start gap-md">
+<div class="w-2 h-2 rounded-full bg-outline-variant mt-2"></div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">开始时间</p>
+<p class="font-body-md text-body-md">2023-10-24 14:30:15</p>
+</div>
+</div>
+<div class="flex items-start gap-md">
+<div class="w-2 h-2 rounded-full bg-primary mt-2"></div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">完成时间</p>
+<p class="font-body-md text-body-md">2023-10-24 14:42:58</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Metrics Cards -->
+<div class="glass-panel p-lg rounded-xl border-l-4 border-primary">
+<p class="font-label-sm text-label-sm text-on-surface-variant">新增文件</p>
+<p class="font-headline-md text-headline-md text-primary mt-xs">12</p>
+</div>
+<div class="glass-panel p-lg rounded-xl border-l-4 border-outline">
+<p class="font-label-sm text-label-sm text-on-surface-variant">修改文件</p>
+<p class="font-headline-md text-headline-md text-primary mt-xs">2</p>
+</div>
+<div class="glass-panel p-lg rounded-xl border-l-4 border-error">
+<p class="font-label-sm text-label-sm text-on-surface-variant">失败文件</p>
+<p class="font-headline-md text-headline-md text-error mt-xs">3</p>
+</div>
+<div class="glass-panel p-lg rounded-xl bg-primary-container">
+<p class="font-label-sm text-label-sm text-on-primary-container">成功率</p>
+<p class="font-headline-md text-headline-md text-on-primary mt-xs">82.3%</p>
+</div>
+</div>
+<!-- Failed Files Section -->
+<div class="glass-panel rounded-xl overflow-hidden border-outline-variant">
+<div class="px-lg py-md border-b border-outline-variant bg-surface flex justify-between items-center">
+<h3 class="font-label-md text-label-md font-bold text-primary">扫描异常列表</h3>
+<span class="px-sm py-1 bg-error-container text-on-error-container rounded-full text-label-sm font-label-sm">3 个异常</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant bg-surface-container-low">
+<th class="px-lg py-sm font-label-md text-label-md text-on-surface-variant">文件路径</th>
+<th class="px-lg py-sm font-label-md text-label-md text-on-surface-variant">类型</th>
+<th class="px-lg py-sm font-label-md text-label-md text-on-surface-variant">状态</th>
+<th class="px-lg py-sm font-label-md text-label-md text-on-surface-variant">失败原因</th>
+<th class="px-lg py-sm font-label-md text-label-md text-on-surface-variant">操作</th>
+</tr>
+</thead>
+<tbody>
+<tr class="zebra-row transition-colors hover:bg-surface-container">
+<td class="px-lg py-md font-body-md text-body-md text-on-surface">/docs/confidential/q4_strategy.pdf</td>
+<td class="px-lg py-md">
+<span class="px-xs py-1 bg-secondary-fixed text-on-secondary-fixed text-label-sm rounded">PDF文档</span>
+</td>
+<td class="px-lg py-md">
+<span class="flex items-center gap-xs text-error font-label-sm">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+                                        失败
+                                    </span>
+</td>
+<td class="px-lg py-md font-body-md text-body-md text-on-surface-variant">本地目录无读取权限</td>
+<td class="px-lg py-md">
+<button class="text-primary font-label-sm hover:underline">详情</button>
+</td>
+</tr>
+<tr class="zebra-row transition-colors hover:bg-surface-container">
+<td class="px-lg py-md font-body-md text-body-md text-on-surface">/research/dataset_v2.csv</td>
+<td class="px-lg py-md">
+<span class="px-xs py-1 bg-secondary-fixed text-on-secondary-fixed text-label-sm rounded">CSV表格</span>
+</td>
+<td class="px-lg py-md">
+<span class="flex items-center gap-xs text-error font-label-sm">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+                                        失败
+                                    </span>
+</td>
+<td class="px-lg py-md font-body-md text-body-md text-on-surface-variant">文件已被系统进程占用</td>
+<td class="px-lg py-md">
+<button class="text-primary font-label-sm hover:underline">详情</button>
+</td>
+</tr>
+<tr class="zebra-row transition-colors hover:bg-surface-container">
+<td class="px-lg py-md font-body-md text-body-md text-on-surface">/archives/legal/license_agreement.docx</td>
+<td class="px-lg py-md">
+<span class="px-xs py-1 bg-secondary-fixed text-on-secondary-fixed text-label-sm rounded">Word文档</span>
+</td>
+<td class="px-lg py-md">
+<span class="flex items-center gap-xs text-error font-label-sm">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+                                        失败
+                                    </span>
+</td>
+<td class="px-lg py-md font-body-md text-body-md text-on-surface-variant">文件损坏，无法解析</td>
+<td class="px-lg py-md">
+<button class="text-primary font-label-sm hover:underline">详情</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-lg py-md bg-surface-container-low flex justify-center">
+<button class="flex items-center gap-sm text-primary font-label-md hover:text-opacity-80 transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="keyboard_arrow_down">keyboard_arrow_down</span>
+                        查看更多记录
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB Suppression (Hiding FAB on details page per instructions) -->
+<script>
+        // Micro-interactions for buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.style.transform = 'scale(0.98)';
+            });
+            button.addEventListener('mouseup', () => {
+                button.style.transform = 'scale(1)';
+            });
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+
+
+
+</body></html>

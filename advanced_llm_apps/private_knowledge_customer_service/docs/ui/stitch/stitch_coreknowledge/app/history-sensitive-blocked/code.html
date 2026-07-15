@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Han+Sans+SC,+Microsoft+YaHei,+sans-serif:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f0f5f1",
+                        "secondary-fixed-dim": "#b8cbc5",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#99b9b0",
+                        "primary-fixed-dim": "#adcdc4",
+                        "surface-container-high": "#e5e9e6",
+                        "on-tertiary": "#ffffff",
+                        "primary-container": "#2d4a43",
+                        "on-secondary-fixed-variant": "#394a46",
+                        "inverse-primary": "#adcdc4",
+                        "on-tertiary-container": "#ff993b",
+                        "on-tertiary-fixed": "#2f1500",
+                        "tertiary-fixed-dim": "#ffb77d",
+                        "background": "#f6faf7",
+                        "on-secondary-container": "#576863",
+                        "surface": "#f6faf7",
+                        "inverse-on-surface": "#edf2ee",
+                        "surface-bright": "#f6faf7",
+                        "inverse-surface": "#2c312f",
+                        "on-primary-fixed-variant": "#2f4c45",
+                        "on-background": "#181d1b",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffdcc3",
+                        "surface-tint": "#47645d",
+                        "tertiary-container": "#6b3700",
+                        "secondary": "#51625d",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#d4e7e1",
+                        "on-secondary-fixed": "#0e1e1b",
+                        "primary": "#16332d",
+                        "surface-container": "#ebefec",
+                        "on-primary-fixed": "#02201a",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#dfe3e0",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#c1c8c5",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#c9e9e0",
+                        "surface-dim": "#d7dbd8",
+                        "on-tertiary-fixed-variant": "#6e3900",
+                        "surface-container-highest": "#dfe3e0",
+                        "tertiary": "#4a2500",
+                        "on-surface": "#181d1b",
+                        "secondary-container": "#d4e7e1",
+                        "outline": "#727976",
+                        "on-surface-variant": "#414846"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "40px",
+                        "container-max": "1280px",
+                        "lg": "24px",
+                        "gutter": "20px",
+                        "unit": "4px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "label-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "body-lg": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "headline-lg": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "label-sm": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "headline-sm": ["Source Han Sans SC, Microsoft YaHei, sans-serif"],
+                        "headline-md": ["Source Han Sans SC, Microsoft YaHei, sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #f6faf7;
+            color: #181d1b;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .workspace-card {
+            background-color: #ffffff;
+            border: 1px solid #e5e3db;
+            box-shadow: 0px 2px 8px rgba(45, 74, 67, 0.05);
+        }
+        .ai-border {
+            border-left: 3px solid #16332d;
+            background-color: rgba(22, 51, 45, 0.02);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md min-h-screen flex flex-row">
+<!-- Sidebar Navigation (Mapped from SideNavBar JSON) -->
+<aside class="docked left-0 h-full w-20 flex flex-col items-center py-lg space-y-xl bg-surface border-r border-outline-variant transition-all duration-150 ease-in-out">
+<div class="mb-xl">
+<span class="material-symbols-outlined text-primary text-headline-sm font-bold">menu_book</span>
+</div>
+<nav class="flex flex-col items-center space-y-lg flex-1">
+<a class="text-outline flex flex-col items-center justify-center hover:bg-surface-container-low p-2 rounded transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+<span class="font-label-sm text-label-sm mt-1">对话</span>
+</a>
+<a class="text-outline flex flex-col items-center justify-center hover:bg-surface-container-low p-2 rounded transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-label-sm text-label-sm mt-1">库</span>
+</a>
+<a class="text-primary flex flex-col items-center justify-center bg-secondary-container p-2 rounded-lg font-bold" href="#">
+<span class="material-symbols-outlined" data-icon="history" style="font-variation-settings: 'FILL' 1;">history</span>
+<span class="font-label-sm text-label-sm mt-1">历史</span>
+</a>
+<a class="text-outline flex flex-col items-center justify-center hover:bg-surface-container-low p-2 rounded transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-sm text-label-sm mt-1">搜索</span>
+</a>
+</nav>
+<div class="flex flex-col items-center space-y-lg mt-auto">
+<a class="text-outline hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</a>
+<a class="text-outline hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden">
+<!-- Top Navigation (Mapped from TopNavBar JSON) -->
+<header class="flex justify-between items-center w-full px-lg py-sm border-b border-outline-variant bg-surface-bright">
+<div class="flex items-center space-x-md">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">KnowledgeEngine</span>
+<div class="h-4 w-px bg-outline-variant mx-sm"></div>
+<h1 class="font-headline-sm text-headline-sm text-on-surface">历史记录详情</h1>
+</div>
+<div class="flex items-center space-x-lg">
+<div class="flex space-x-md">
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="settings">settings</span></button>
+</div>
+<div class="flex items-center space-x-sm bg-surface-container-low px-sm py-1 rounded-full border border-outline-variant">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]" data-icon="person">person</span>
+</div>
+<span class="font-label-md text-label-md">外部协作人员</span>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="flex-1 overflow-y-auto p-lg max-w-container-max mx-auto w-full">
+<div class="bento-grid">
+<!-- Access Blocked Warning Section -->
+<section class="col-span-12 md:col-span-8 space-y-lg">
+<div class="workspace-card rounded-xl p-xl flex flex-col items-center text-center py-20 relative overflow-hidden">
+<!-- Decorative Background Element -->
+<div class="absolute top-0 right-0 p-lg opacity-5 pointer-events-none">
+<span class="material-symbols-outlined text-[120px]" data-icon="shield_lock">shield_lock</span>
+</div>
+<div class="w-16 h-16 bg-error-container text-error rounded-full flex items-center justify-center mb-lg">
+<span class="material-symbols-outlined text-[32px]" data-icon="lock_person">lock_person</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-background mb-md">访问受阻</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-xl leading-relaxed">
+                            由于您的身份权限已变更（当前身份：<span class="font-bold text-primary">外部协作人员</span>），该敏感记录的内容（回答、原文及引用）已根据合规政策自动隐藏。
+                        </p>
+<div class="flex flex-col sm:flex-row gap-md">
+<button class="bg-primary text-on-primary px-xl py-md rounded-lg font-bold flex items-center justify-center space-x-sm hover:bg-opacity-90 transition-all active:scale-95 shadow-sm">
+<span class="material-symbols-outlined" data-icon="request_quote">request_quote</span>
+<span>发起授权申请</span>
+</button>
+<button class="border border-outline text-on-surface px-xl py-md rounded-lg font-bold flex items-center justify-center space-x-sm hover:bg-surface-container-low transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+<span>返回列表</span>
+</button>
+</div>
+</div>
+<!-- Sensitive Content Placeholder (Disabled State) -->
+<div class="workspace-card rounded-xl p-lg opacity-50 select-none grayscale pointer-events-none">
+<div class="flex items-center space-x-sm mb-md text-outline">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+<span class="font-label-md text-label-md">原始交互记录摘要</span>
+</div>
+<div class="space-y-sm">
+<div class="h-4 bg-surface-container-highest rounded w-3/4"></div>
+<div class="h-4 bg-surface-container-highest rounded w-full"></div>
+<div class="h-4 bg-surface-container-highest rounded w-1/2"></div>
+</div>
+</div>
+</section>
+<!-- Audit Trail & Sidebar Metadata -->
+<aside class="col-span-12 md:col-span-4 space-y-lg">
+<!-- Audit Information Card -->
+<div class="workspace-card rounded-xl p-lg">
+<div class="flex items-center justify-between mb-lg border-b border-outline-variant pb-sm">
+<h3 class="font-headline-sm text-headline-sm text-on-surface flex items-center space-x-xs">
+<span class="material-symbols-outlined" data-icon="policy">policy</span>
+<span>审计跟踪</span>
+</h3>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed text-[10px] px-2 py-0.5 rounded uppercase font-bold tracking-wider">机密</span>
+</div>
+<div class="space-y-lg relative">
+<!-- Timeline Connector -->
+<div class="absolute left-3.5 top-2 bottom-2 w-px bg-outline-variant"></div>
+<!-- Audit Entry 1 -->
+<div class="relative pl-10">
+<div class="absolute left-1.5 top-1 w-4 h-4 rounded-full bg-primary border-4 border-surface ring-2 ring-primary-container"></div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-outline">2023-10-24 14:30</span>
+<span class="font-body-md text-body-md text-on-surface font-bold">身份策略变更：员工 -> 外部协作人员</span>
+<p class="text-on-surface-variant mt-1 text-xs">执行者：系统安全中心 (IAM_SYS)</p>
+</div>
+</div>
+<!-- Audit Entry 2 -->
+<div class="relative pl-10">
+<div class="absolute left-1.5 top-1 w-4 h-4 rounded-full bg-outline-variant border-4 border-surface"></div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-outline">2023-10-20 09:15</span>
+<span class="font-body-md text-body-md text-on-surface">创建查询记录</span>
+<p class="text-on-surface-variant mt-1 text-xs">执行者：王明 (研发中心)</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Compliance info -->
+<div class="workspace-card rounded-xl p-lg ai-border">
+<h4 class="font-label-md text-label-md font-bold mb-sm text-primary flex items-center space-x-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="info">info</span>
+<span>合规说明</span>
+</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                            根据《企业数据资产分类分级保护规定》，凡涉及“核心代码架构”及“财务敏感预测”的历史记录，仅对内部全职员工开放。权限降级后，系统将自动对相关会话执行脱敏与锁定。
+                        </p>
+</div>
+<!-- Location Marker Image -->
+<div class="workspace-card rounded-xl overflow-hidden h-48 relative">
+<div class="w-full h-full bg-cover bg-center" data-alt="A professional high-resolution aerial view of a futuristic tech campus at dusk. The architecture is minimalist with clean lines, large glass facades, and soft green ambient lighting. The atmosphere is quiet, intelligent, and secure, reflecting a premium corporate research environment. Cinematic lighting creates long shadows and a sense of institutional stability." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD5hGI-w-cOlXkFD9MYeXNt8-3RgCqC7BRQ5zxpaPYp6oetMG-GR7sq1WhL2pB_k1OLAjlGj5vI7QC3TPwfbU6IWtp9boMaTdZFoOifYyKdrA7OvOFZGbytNjOp8Gx7LA0y30__Hweu2IiEdBbjWeP6YkIWUkPbQAIvEQEj4QhtP4WPGkA0d_pnaXu_6KUwRMzrO_4O83gKGZ_3C8xt-zxmyyntIQiYBzn1NVgVId2GHu-kaevCUtDEi75EWrUPKPp9FpLdyQ0fh0B6')"></div>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-md">
+<p class="text-white text-xs font-bold flex items-center space-x-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="location_on">location_on</span>
+<span>记录生成位置：北京总部 A1 实验室</span>
+</p>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interaction for the Apply Button
+        document.querySelector('button.bg-primary').addEventListener('mouseenter', function() {
+            this.classList.add('shadow-lg');
+        });
+        document.querySelector('button.bg-primary').addEventListener('mouseleave', function() {
+            this.classList.remove('shadow-lg');
+        });
+
+        // Simulating a "shimmer" effect for the blocked content to indicate hidden data
+        const blockedContent = document.querySelector('.workspace-card.opacity-50');
+        if(blockedContent) {
+            blockedContent.addEventListener('mousemove', (e) => {
+                const rect = blockedContent.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                blockedContent.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.8) 0%, #ffffff 60%)`;
+            });
+            blockedContent.addEventListener('mouseleave', () => {
+                blockedContent.style.background = '#ffffff';
+            });
+        }
+    </script>
+</body></html>
