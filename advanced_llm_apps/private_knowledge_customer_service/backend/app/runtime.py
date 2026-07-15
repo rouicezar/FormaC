@@ -15,6 +15,7 @@ from app.model_providers.base import ModelLocation, ModelProvider, UnavailablePr
 from app.model_providers.deepseek import DeepSeekProvider
 from app.model_providers.ollama import OllamaProvider
 from app.retrieval.raglite_adapter import RagLiteHybridRetriever, RetrievalStore
+from app.retrieval.search_service import OriginalSearchService
 
 
 @dataclass(slots=True)
@@ -22,6 +23,7 @@ class ApplicationRuntime:
     engine: Engine
     session: Session
     scan_service: ScanService
+    search_service: OriginalSearchService
     ask_service: AskService
 
     def close(self) -> None:
@@ -91,6 +93,7 @@ def build_runtime(settings: Settings) -> ApplicationRuntime:
             SqlAlchemyScanRepository(session),
             writer,
         ),
+        search_service=OriginalSearchService(retriever=retriever),
         ask_service=AskService(
             retriever=retriever,
             providers=ProviderRegistry(providers),

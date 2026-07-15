@@ -7,9 +7,11 @@ from pydantic import BaseModel
 
 from app.api.ask import router as ask_router
 from app.api.scans import router as scans_router
+from app.api.search import router as search_router
 from app.config import get_settings
 from app.customer_service.answers import AskService
 from app.ingestion.service import ScanService
+from app.retrieval.search_service import OriginalSearchService
 from app.runtime import ApplicationRuntime, build_runtime
 
 
@@ -27,6 +29,7 @@ class HealthResponse(BaseModel):
 
 def create_app(
     scan_service: ScanService | None = None,
+    search_service: OriginalSearchService | None = None,
     ask_service: AskService | None = None,
     *,
     auto_configure: bool = False,
@@ -38,6 +41,7 @@ def create_app(
             runtime = build_runtime(get_settings())
             app.state.runtime = runtime
             app.state.scan_service = runtime.scan_service
+            app.state.search_service = runtime.search_service
             app.state.ask_service = runtime.ask_service
         try:
             yield
@@ -58,8 +62,10 @@ def create_app(
         allow_headers=["Content-Type"],
     )
     app.state.scan_service = scan_service
+    app.state.search_service = search_service
     app.state.ask_service = ask_service
     app.include_router(scans_router)
+    app.include_router(search_router)
     app.include_router(ask_router)
 
     @app.get("/health", response_model=HealthResponse)

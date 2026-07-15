@@ -1,8 +1,10 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AdminLayout, UserLayout } from "./components/Layouts";
 import { DashboardPage } from "./pages/DashboardPage";
+import { ChatPage } from "./pages/ChatPage";
 import { HomePage } from "./pages/HomePage";
 import { PlaceholderPage } from "./pages/PlaceholderPage";
+import { SearchPage } from "./pages/SearchPage";
 import RetrievalLab from "./RetrievalLab";
 
 export default function App() {
@@ -12,7 +14,9 @@ export default function App() {
       <Route path="/app" element={<UserLayout />}>
         <Route index element={<Navigate to="home" replace />} />
         <Route path="home" element={<HomePage />} />
-        {['search', 'chat', 'shortcuts', 'history', 'documents', 'bind-feishu', 'profile'].map((path) => <Route key={path} path={path} element={<PlaceholderPage />} />)}
+        <Route path="search" element={<SearchPage />} />
+        <Route path="chat" element={<ChatPage />} />
+        {['shortcuts', 'history', 'documents', 'bind-feishu', 'profile'].map((path) => <Route key={path} path={path} element={<PlaceholderPage />} />)}
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Navigate to="dashboard" replace />} />

@@ -33,6 +33,7 @@ def test_runtime_assembles_reused_providers_without_connecting(tmp_path: Path) -
     runtime = build_runtime(settings)
     try:
         assert runtime.scan_service.knowledge_root == root
+        assert runtime.search_service.retriever is runtime.ask_service.retriever
         assert runtime.ask_service.providers.get("ollama").model == "qwen3:latest"
         deepseek = runtime.ask_service.providers.get("deepseek")
         with pytest.raises(ValueError, match="密钥尚未配置"):

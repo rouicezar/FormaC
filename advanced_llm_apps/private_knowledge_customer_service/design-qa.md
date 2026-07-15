@@ -1,6 +1,6 @@
 # 第一阶段 UI 设计对照验收
 
-最终结果：`passed`
+final result: passed
 
 ## 对照依据
 
@@ -52,3 +52,35 @@
 ## 对照历史
 
 首轮对照未发现 P0、P1 或 P2 问题，因此没有阻断性修复循环。动态身份、真实空状态和待接入指标均在实现前由产品铁律明确要求，已作为有意差异验收。
+
+## 第二阶段：原文查询与知识问答
+
+### 对照依据
+
+- 原文查询设计源：`docs/ui/stitch/stitch_coreknowledge/app/search-results/screen.png`
+- 原文查询实现截图：`docs/ui/implementation-app-search.png`
+- 原文查询移动截图：`docs/ui/implementation-app-search-mobile.png`
+- 原文查询组合对照：`docs/ui/qa-app-search-comparison.png`
+- 知识问答设计源：`docs/ui/stitch/stitch_coreknowledge/app/chat-answer/screen.png`
+- 知识问答实现截图：`docs/ui/implementation-app-chat.png`
+- 知识问答移动截图：`docs/ui/implementation-app-chat-mobile.png`
+- 知识问答组合对照：`docs/ui/qa-app-chat-comparison.png`
+- 桌面实现视口：1513 × 862；设计源经过等宽归一化后并排对照。
+- 移动实现视口：390 × 844。
+
+### 验收结论
+
+- 原文查询保留冻结稿的隐私承诺、搜索框、结果列表与原文预览双栏结构，明确显示“未调用模型”。
+- 知识问答保留问题、回答、引用侧栏和底部输入区，真实展示 Ollama 生成结果与三条知识库引用。
+- 查询、问答加载状态、查询默认态、查询无结果态、问答错误态、证据不足态和敏感云端降级态均有独立组件逻辑。
+- 390 × 844 下两页 `scrollWidth` 与 `clientWidth` 均为 390px；导航固定在底部，页面纵向滚动，不存在水平裁切。
+- 真实交互验证了查询输入、提交、结果选择、原文预览、问答输入、模型选择、回答生成和引用展示。
+- 浏览器控制台没有错误或警告。
+
+### 有意差异
+
+- Stitch 查询稿包含全局筛选与虚构文件；本阶段只实现真实后端支持的查询词和权限范围，不制作无 API 的静态筛选器。
+- Stitch 问答稿包含英文工作区、收藏和附件功能，均不属于当前冻结范围，正式实现使用统一中文用户导航。
+- 模型选择只展示当前已接入的 Ollama 与 DeepSeek；敏感云端选择框仅对内部身份和云端模型出现，且默认关闭。
+
+第二阶段对照未发现 P0、P1 或 P2 问题；上述差异均来自已冻结业务规则和真实 API 边界。残余 P3 为桌面宽屏上的内容留白，后续接入多轮历史后自然填充，不阻断当前验收。
