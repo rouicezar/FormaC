@@ -1,0 +1,2 @@
+"""Database-backed domain entities."""
+
