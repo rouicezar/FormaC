@@ -41,7 +41,7 @@ def get_scan_service(request: Request) -> ScanService:
     if service is None:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="scan service is not configured",
+            detail="扫描服务尚未配置",
         )
     return service
 
@@ -62,6 +62,5 @@ def start_manual_scan(service: ScanServiceDependency) -> ScanReportResponse:
 def get_scan(run_id: UUID, service: ScanServiceDependency) -> ScanReportResponse:
     report = service.get_report(run_id)
     if report is None:
-        raise HTTPException(status_code=404, detail="scan run not found")
+        raise HTTPException(status_code=404, detail="未找到扫描记录")
     return ScanReportResponse.from_report(report)
-
