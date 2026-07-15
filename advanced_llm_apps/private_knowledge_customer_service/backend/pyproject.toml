@@ -15,6 +15,11 @@ dependencies = [
     "openpyxl>=3.1,<4",
     "sqlalchemy>=2.0,<3",
     "uvicorn>=0.34,<1",
+    "raglite[pandoc]==0.2.1",
+    "numba>=0.59,<1",
+    "llvmlite>=0.42,<1",
+    "numpy>=1.26.4,<2",
+    "xx-sent-ud-sm",
 ]
 
 [dependency-groups]
@@ -27,3 +32,6 @@ dev = [
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
+
+[tool.uv.sources]
+xx-sent-ud-sm = { url = "https://github.com/explosion/spacy-models/releases/download/xx_sent_ud_sm-3.7.0/xx_sent_ud_sm-3.7.0-py3-none-any.whl" }

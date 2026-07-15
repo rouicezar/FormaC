@@ -44,11 +44,20 @@
 - 引用响应复用 `citation/source/similarity/evidence`，并增加分区和页码/工作表/幻灯片定位。
 - 当前后端测试：29 项通过、2 项需要真实 PostgreSQL 环境的集成测试按条件跳过。
 
+## 2026-07-15 RAGLite 真实运行验证
+
+- 已安装仓库模板固定使用的 `raglite==0.2.1`；为兼容当前 Python 3.12，明确约束 NumPy、Numba 与 llvmlite 的兼容版本，并补齐 RAGLite 官方 pandoc 扩展和 spaCy 多语言分句模型。
+- 已复用 `agentic_rag_embedding_gemma` 指定的 Ollama `embeddinggemma:latest`，模型已在本机安装；索引和查询均未把文档发送到云端。
+- 已在现有 pgvector 测试容器中建立 `pkcs_public_rag` 与 `pkcs_sensitive_rag` 两个物理隔离数据库。
+- 已把中文公开样本真实写入 `pkcs_public_rag`，并用“客户几天内可以退款？”执行 RAGLite `hybrid_search`、`retrieve_chunks` 与 `rerank_chunks` 调用链，成功召回“七个自然日”原文。
+- 本机代理会影响 LiteLLM 访问 Ollama；本地运行配置必须包含 `NO_PROXY=localhost,127.0.0.1`。
+- 扫描事务尚未与 RAGLite 写入器连接；目前真实检索验证不等于完整扫描到问答闭环。
+
 ## 2026-07-15 执行检查点
 
 - 已建立 FastAPI 后端和不暴露秘密的健康检查。
 - 已建立 9 张核心表、pgvector 字段与 Alembic 初始迁移。
-- Alembic 离线 SQL 验证通过；真实 pgvector 实例因镜像下载不完整待补验证，不能视为真实迁移完成。
+- Alembic 离线 SQL 验证通过；随后已完成真实 pgvector 迁移与持久化验证，见下方记录。
 - 已完成授权根目录校验、`public/` / `sensitive/` 分区、六类扩展名过滤、SHA-256 文件指纹和符号链接越界防护。
 - 当前后端测试：12 项通过。
 - 当前分支：`feature/private-knowledge-phase-1`。
@@ -83,4 +92,4 @@
 
 ## 下一步
 
-按复用矩阵适配 RAGLite 检索与现有引用契约，然后把已迁入的 `multimodal_agentic_rag/frontend` 改造成全简体中文的最小网页问答闭环。
+实现 RAGLite 索引写入器并接入扫描事务，让六类标准片段按 public/sensitive 分区真实进入两个检索库；随后接入隐私策略与 `/ask`。
