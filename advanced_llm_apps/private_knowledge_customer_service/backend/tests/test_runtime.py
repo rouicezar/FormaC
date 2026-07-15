@@ -8,7 +8,14 @@ from app.runtime import build_runtime
 
 def test_runtime_requires_all_local_knowledge_storage_settings() -> None:
     with pytest.raises(RuntimeError, match="PKCS_DATABASE_URL.*PKCS_KNOWLEDGE_ROOT"):
-        build_runtime(Settings())
+        build_runtime(
+            Settings(
+                database_url=None,
+                knowledge_root=None,
+                public_rag_url=None,
+                sensitive_rag_url=None,
+            )
+        )
 
 
 def test_runtime_assembles_reused_providers_without_connecting(tmp_path: Path) -> None:
@@ -27,7 +34,8 @@ def test_runtime_assembles_reused_providers_without_connecting(tmp_path: Path) -
     try:
         assert runtime.scan_service.knowledge_root == root
         assert runtime.ask_service.providers.get("ollama").model == "qwen3:latest"
-        with pytest.raises(ValueError, match="deepseek"):
-            runtime.ask_service.providers.get("deepseek")
+        deepseek = runtime.ask_service.providers.get("deepseek")
+        with pytest.raises(ValueError, match="密钥尚未配置"):
+            deepseek.generate(None)  # type: ignore[arg-type]
     finally:
         runtime.close()

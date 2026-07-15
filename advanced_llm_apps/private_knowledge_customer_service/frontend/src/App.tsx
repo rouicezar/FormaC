@@ -64,9 +64,10 @@ function locationText(locator: Record<string, unknown>) {
 
 function AnswerContent({ answer }: { answer: string }) {
   if (!answer) return <p>完成扫描后输入问题，回答会显示在这里。</p>;
+  const cleaned = answer.replace(/\*\*/g, "");
   return (
     <div className="answer-content">
-      {answer.split(/\n\s*\n/).filter(Boolean).map((block, index) => (
+      {cleaned.split(/\n\s*\n/).filter(Boolean).map((block, index) => (
         <p key={index}>{block}</p>
       ))}
     </div>

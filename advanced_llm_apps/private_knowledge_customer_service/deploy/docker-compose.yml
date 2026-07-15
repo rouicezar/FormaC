@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    container_name: pkcs-postgres
+    environment:
+      POSTGRES_USER: pkcs
+      POSTGRES_PASSWORD: pkcs_local
+      POSTGRES_DB: private_knowledge
+    ports:
+      - "55433:5432"
+    volumes:
+      - pkcs_postgres_data:/var/lib/postgresql/data
+      - ./init-databases.sql:/docker-entrypoint-initdb.d/01-init-databases.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pkcs -d private_knowledge"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    restart: unless-stopped
+
+volumes:
+  pkcs_postgres_data:

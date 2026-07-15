@@ -11,7 +11,7 @@ from app.customer_service.answers import AskService, ProviderRegistry
 from app.domain.models import KnowledgePartition
 from app.indexing.raglite_writer import RagLiteIndexWriter, RagLiteStore
 from app.ingestion.service import ScanService, SqlAlchemyScanRepository
-from app.model_providers.base import ModelProvider
+from app.model_providers.base import ModelLocation, ModelProvider, UnavailableProvider
 from app.model_providers.deepseek import DeepSeekProvider
 from app.model_providers.ollama import OllamaProvider
 from app.retrieval.raglite_adapter import RagLiteHybridRetriever, RetrievalStore
@@ -75,6 +75,12 @@ def build_runtime(settings: Settings) -> ApplicationRuntime:
         providers["deepseek"] = DeepSeekProvider(
             api_key=settings.deepseek_api_key,
             model=settings.deepseek_model,
+        )
+    else:
+        providers["deepseek"] = UnavailableProvider(
+            name="deepseek",
+            location=ModelLocation.CLOUD,
+            reason="DeepSeek API 密钥尚未配置",
         )
 
     return ApplicationRuntime(

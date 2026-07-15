@@ -19,3 +19,13 @@ class ModelProvider(Protocol):
     location: ModelLocation
 
     def generate(self, request: ModelRequest) -> str: ...
+
+
+@dataclass(frozen=True, slots=True)
+class UnavailableProvider:
+    name: str
+    location: ModelLocation
+    reason: str
+
+    def generate(self, request: ModelRequest) -> str:
+        raise ValueError(self.reason)

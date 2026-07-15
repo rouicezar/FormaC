@@ -1,0 +1,2 @@
+CREATE DATABASE private_knowledge_public;
+CREATE DATABASE private_knowledge_sensitive;

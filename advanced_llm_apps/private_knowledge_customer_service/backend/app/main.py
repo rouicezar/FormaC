@@ -64,12 +64,14 @@ def create_app(
 
     @app.get("/health", response_model=HealthResponse)
     def health() -> HealthResponse:
+        knowledge_ready = app.state.scan_service is not None
+        answer_ready = app.state.ask_service is not None
         return HealthResponse(
             service="ok",
-            database="not_configured",
+            database="ok" if knowledge_ready else "not_configured",
             scheduler="not_started",
-            embedding="not_configured",
-            model="not_configured",
+            embedding="ok" if knowledge_ready else "not_configured",
+            model="ok" if answer_ready else "not_configured",
             feishu="not_configured",
         )
 

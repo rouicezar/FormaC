@@ -6,6 +6,7 @@ from app.customer_service.answers import AskService, ProviderRegistry
 from app.domain.models import KnowledgePartition
 from app.main import create_app
 from app.model_providers.base import ModelLocation, ModelRequest
+from app.model_providers.base import UnavailableProvider
 from app.retrieval.evidence import EvidenceMatch, EvidencePacket
 from app.retrieval.raglite_adapter import IdentityKind
 
@@ -107,3 +108,32 @@ def test_unconfigured_provider_returns_chinese_error() -> None:
 
     assert response.status_code == 400
     assert response.json()["detail"] == "模型提供商未配置：deepseek"
+
+
+def test_sensitive_excerpt_does_not_require_cloud_api_key() -> None:
+    retriever = FakeRetriever(evidence(KnowledgePartition.SENSITIVE, "内部折扣底价为八折"))
+    service = AskService(
+        retriever=retriever,
+        providers=ProviderRegistry(
+            {
+                "deepseek": UnavailableProvider(
+                    name="deepseek",
+                    location=ModelLocation.CLOUD,
+                    reason="DeepSeek API 密钥尚未配置",
+                )
+            }
+        ),
+    )
+
+    response = TestClient(create_app(ask_service=service)).post(
+        "/ask",
+        json={
+            "question": "内部底价是多少？",
+            "identity": "internal",
+            "provider": "deepseek",
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.json()["mode"] == "excerpt_only"
+    assert "内部折扣底价为八折" in response.json()["answer"]

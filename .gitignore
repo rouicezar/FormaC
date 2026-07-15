@@ -19,3 +19,6 @@ dist/
 
 # Local model caches
 .flashrank_cache/
+
+# Private knowledge local runtime
+advanced_llm_apps/private_knowledge_customer_service/.runtime/
