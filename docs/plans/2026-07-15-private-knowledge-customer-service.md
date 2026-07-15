@@ -232,8 +232,10 @@
 3. Run `npm test -- auth.test.tsx`; expect failure.
 4. Adapt the existing source panel to local-folder scan status and adapt `/ask` without rebuilding the page shell.
 5. Implement only the missing typed API client, auth state, login page, and route guards.
-6. Rerun focused tests and `npm test`; expect PASS.
-7. Commit: `feat: adapt multimodal RAG web shell`.
+6. Translate every user-visible label, button, status, empty/error state, confirmation, and accessibility label to Simplified Chinese; set the document language to `zh-CN`.
+7. Add a regression test that rejects English template copy in user-visible frontend strings, while allowing model names, filenames, and protocol identifiers.
+8. Rerun focused tests and `npm test`; expect PASS.
+9. Commit: `feat: adapt multimodal RAG web shell`.
 
 ### Task 13: Admin console
 

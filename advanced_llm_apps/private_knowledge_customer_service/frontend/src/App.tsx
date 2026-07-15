@@ -84,7 +84,7 @@ const modalityIcon: Record<Modality, React.ElementType> = {
   query: Search,
 };
 
-const sampleText = `Gemini Embedding 2 maps text, images, audio, video, and PDFs into one shared semantic vector space. In agentic RAG, the agent first embeds source chunks with a retrieval-document task prefix, then embeds user questions with a question-answering query prefix, retrieves nearest evidence, and synthesizes an answer with citations. Dimensional truncation can reduce storage cost while preserving useful semantic neighborhoods.`;
+const sampleText = `Gemini Embedding 2 可以将文本、图片、音频、视频和 PDF 映射到统一的语义向量空间。智能检索增强生成会先为知识片段生成向量，再检索与用户问题最相关的证据，并根据引用内容组织回答。`;
 
 function scorePct(score: number) {
   return `${Math.round(Math.max(0, Math.min(1, score)) * 100)}%`;
@@ -120,7 +120,7 @@ function AnswerContent({ answer }: { answer: string }) {
   const cleaned = cleanAnswerText(answer);
 
   if (!cleaned) {
-    return <p>The answer will appear here after the ADK coordinator retrieves evidence from your sources.</p>;
+    return <p>检索到知识库证据后，回答会显示在这里。</p>;
   }
 
   const blocks = cleaned.split(/\n\s*\n/).filter(Boolean);
@@ -419,7 +419,7 @@ function SourceRow({
         {embeddingPath && <div className="source-meta">{embeddingPath.replace("gemini-", "Gemini ")}</div>}
       </div>
       <div className="source-actions">
-        <button className="delete-source" onClick={() => onRemove(source)} disabled={isRemoving} aria-label={`Remove ${source.title}`}>
+        <button className="delete-source" onClick={() => onRemove(source)} disabled={isRemoving} aria-label={`移除 ${source.title}`}>
           {isRemoving ? <Loader2 className="spin" size={13} /> : <Trash2 size={13} />}
         </button>
       </div>
@@ -430,11 +430,11 @@ function SourceRow({
 export default function App() {
   const [space, setSpace] = useState<SpaceSnapshot | null>(null);
   const [tab, setTab] = useState<"text" | "url" | "file">("text");
-  const [title, setTitle] = useState("Gemini Embedding 2 field note");
+  const [title, setTitle] = useState("知识库示例说明");
   const [text, setText] = useState(sampleText);
   const [url, setUrl] = useState("https://developers.googleblog.com/building-with-gemini-embedding-2/");
-  const [notes, setNotes] = useState("Uploaded multimodal source for the agentic RAG workspace.");
-  const [question, setQuestion] = useState("How does Gemini Embedding 2 help agentic RAG across modalities?");
+  const [notes, setNotes] = useState("知识来源补充说明");
+  const [question, setQuestion] = useState("知识库如何基于文档回答问题？");
   const [answer, setAnswer] = useState("");
   const [matches, setMatches] = useState<Match[]>([]);
   const [trace, setTrace] = useState<AskResponse["trace"]>([]);
@@ -453,7 +453,7 @@ export default function App() {
   const points = useMemo(() => space?.points ?? [], [space]);
   const sourceCount = space?.sources.length ?? 0;
   const pointCount = space?.points.length ?? 0;
-  const provider = space?.provider ?? "loading";
+  const provider = space?.provider ?? "正在连接";
   const projection = space?.projection?.method?.replace("_", " ").toUpperCase() ?? "PCA 3D";
 
   async function refreshSpace() {
@@ -468,7 +468,7 @@ export default function App() {
   async function addSource() {
     setIsAddingSource(true);
     setSourceError("");
-    setSourceStatus(tab === "file" ? "Uploading and embedding media..." : "Embedding source...");
+    setSourceStatus(tab === "file" ? "正在处理文件并建立索引……" : "正在建立知识索引……");
     try {
       let res: Response;
       if (tab === "text") {
@@ -486,7 +486,7 @@ export default function App() {
       } else {
         const file = fileRef.current?.files?.[0];
         if (!file) {
-          setSourceError("Choose a file first.");
+          setSourceError("请先选择文件。");
           return;
         }
         const form = new FormData();
@@ -497,33 +497,33 @@ export default function App() {
       }
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || "Source ingestion failed.");
+      if (!res.ok) throw new Error(data.detail || "知识来源处理失败。");
       setSpace(data.space);
-      setSourceStatus(`${data.source?.title || "Source"} embedded into the map.`);
+      setSourceStatus(`${data.source?.title || "知识来源"} 已建立索引。`);
     } catch (error) {
-      setSourceError(error instanceof Error ? error.message : "Source ingestion failed.");
+      setSourceError(error instanceof Error ? error.message : "知识来源处理失败。");
     } finally {
       setIsAddingSource(false);
     }
   }
 
   async function removeSource(source: RackSource) {
-    const confirmed = window.confirm(`Remove "${source.title}" from this local vector space?`);
+    const confirmed = window.confirm(`确认从本地知识库中移除“${source.title}”吗？`);
     if (!confirmed) return;
 
     setRemovingSourceId(source.id);
     setSourceError("");
     try {
       const res = await fetch(`${API}/sources/${source.id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Delete failed");
+      if (!res.ok) throw new Error("删除失败");
       const data = await res.json();
       setSpace(data.space);
       setMatches((current) => current.filter((match) => match.source_id !== source.id));
       if (selectedPoint?.source_id === source.id) setSelectedPoint(null);
       if (queryPoint) setQueryPoint(null);
-      setSourceStatus(`${source.title} removed.`);
+      setSourceStatus(`${source.title} 已移除。`);
     } catch (error) {
-      setSourceError(error instanceof Error ? error.message : "Delete failed.");
+      setSourceError(error instanceof Error ? error.message : "删除失败。" );
     } finally {
       setRemovingSourceId(null);
     }
@@ -533,7 +533,7 @@ export default function App() {
     if (!question.trim()) return;
     setIsAsking(true);
     setQaError("");
-    setQaStatus("Retrieving evidence and asking the ADK coordinator...");
+    setQaStatus("正在检索知识证据并组织回答……");
     setAnswer("");
     try {
       const res = await fetch(`${API}/ask`, {
@@ -542,15 +542,15 @@ export default function App() {
         body: JSON.stringify({ question, top_k: 6 }),
       });
       const data: AskResponse = await res.json();
-      if (!res.ok) throw new Error((data as unknown as { detail?: string }).detail || "Question failed.");
+      if (!res.ok) throw new Error((data as unknown as { detail?: string }).detail || "提问失败。" );
       setAnswer(data.answer);
       setMatches(data.matches);
       setTrace(data.trace);
       setQueryPoint(data.query_point);
       setSpace(data.space);
-      setQaStatus(`Retrieved ${data.matches.length} citation${data.matches.length === 1 ? "" : "s"}.`);
+      setQaStatus(`已检索到 ${data.matches.length} 条引用。`);
     } catch (error) {
-      setQaError(error instanceof Error ? error.message : "Something went wrong.");
+      setQaError(error instanceof Error ? error.message : "处理问题时发生错误。" );
     } finally {
       setIsAsking(false);
     }
@@ -564,14 +564,14 @@ export default function App() {
             <BrainCircuit size={22} />
           </div>
           <div>
-            <h1>Multi-modal Agentic RAG</h1>
-            <p>Gemini Embedding 2 · Google ADK</p>
+            <h1>私有知识库问答</h1>
+            <p>本地知识索引 · 可核查引用</p>
           </div>
         </div>
         <div className="status-strip">
           <span><RadioTower size={14} /> {provider}</span>
-          <span><Box size={14} /> {pointCount} points</span>
-          <span><Activity size={14} /> {sourceCount} sources</span>
+          <span><Box size={14} /> {pointCount} 个索引点</span>
+          <span><Activity size={14} /> {sourceCount} 个知识来源</span>
         </div>
       </header>
 
@@ -580,8 +580,8 @@ export default function App() {
           <section className="panel source-list">
             <div className="panel-heading source-list-heading">
               <div>
-                <h2>Indexed sources</h2>
-                <p>Remove sources when they should leave the vector space.</p>
+                <h2>已索引知识来源</h2>
+                <p>查看当前进入知识库的内容。</p>
               </div>
             </div>
             {space?.sources.map((source) => (
@@ -597,40 +597,40 @@ export default function App() {
           <section className="panel source-panel">
             <div className="panel-heading">
               <div>
-                <h2>Add source</h2>
-                <p>Embed new evidence into the shared vector space.</p>
+                <h2>知识来源</h2>
+                <p>当前为复用模板预览，后续改为本地目录扫描。</p>
               </div>
-              <button className="icon-button" onClick={refreshSpace} aria-label="Refresh embedding space">
+              <button className="icon-button" onClick={refreshSpace} aria-label="刷新知识索引状态">
                 <Activity size={16} />
               </button>
             </div>
 
             <div className="tabs" role="tablist">
-              <button className={tab === "text" ? "active" : ""} onClick={() => setTab("text")}><FileText size={14} /> Text</button>
-              <button className={tab === "url" ? "active" : ""} onClick={() => setTab("url")}><Link size={14} /> URL</button>
-              <button className={tab === "file" ? "active" : ""} onClick={() => setTab("file")}><Upload size={14} /> File</button>
+              <button className={tab === "text" ? "active" : ""} onClick={() => setTab("text")}><FileText size={14} /> 文本</button>
+              <button className={tab === "url" ? "active" : ""} onClick={() => setTab("url")}><Link size={14} /> 网页地址</button>
+              <button className={tab === "file" ? "active" : ""} onClick={() => setTab("file")}><Upload size={14} /> 文件</button>
             </div>
 
-            <label className="field-label">Title</label>
-            <input value={title} onChange={(event) => setTitle(event.target.value)} aria-label="Source title" />
+            <label className="field-label">标题</label>
+            <input value={title} onChange={(event) => setTitle(event.target.value)} aria-label="知识来源标题" />
 
             {tab === "text" && (
               <>
-                <label className="field-label">Source text</label>
-                <textarea value={text} onChange={(event) => setText(event.target.value)} aria-label="Source text" />
+                <label className="field-label">知识原文</label>
+                <textarea value={text} onChange={(event) => setText(event.target.value)} aria-label="知识原文" />
               </>
             )}
 
             {tab === "url" && (
               <>
-                <label className="field-label">URL</label>
-                <input value={url} onChange={(event) => setUrl(event.target.value)} aria-label="URL source" />
+                <label className="field-label">网页地址</label>
+                <input value={url} onChange={(event) => setUrl(event.target.value)} aria-label="知识来源网页地址" />
               </>
             )}
 
             {tab === "file" && (
               <>
-                <label className="field-label">File</label>
+                <label className="field-label">文件</label>
                 <input
                   ref={fileRef}
                   type="file"
@@ -638,23 +638,23 @@ export default function App() {
                   onChange={(event) => {
                     const file = event.target.files?.[0] ?? null;
                     setSelectedFile(file);
-                    if (file && title === "Gemini Embedding 2 field note") setTitle(file.name);
+                    if (file && title === "知识库示例说明") setTitle(file.name);
                   }}
                 />
                 {selectedFile && (
                   <div className="file-preview">
                     <Video size={15} />
                     <span>{selectedFile.name}</span>
-                    <strong>{selectedFile.type || "file"} · {formatBytes(selectedFile.size)}</strong>
+                    <strong>{selectedFile.type || "文件"} · {formatBytes(selectedFile.size)}</strong>
                   </div>
                 )}
-                <label className="field-label">Notes</label>
-                <textarea value={notes} onChange={(event) => setNotes(event.target.value)} aria-label="File notes" />
+                <label className="field-label">补充说明</label>
+                <textarea value={notes} onChange={(event) => setNotes(event.target.value)} aria-label="文件补充说明" />
               </>
             )}
 
             <button className="primary-button" onClick={addSource} disabled={isAddingSource}>
-              {isAddingSource ? <Loader2 className="spin" size={16} /> : <Plus size={16} />} Add source
+              {isAddingSource ? <Loader2 className="spin" size={16} /> : <Plus size={16} />} 添加知识来源
             </button>
             {(sourceStatus || sourceError) && (
               <div className={`inline-status ${sourceError ? "error" : "success"}`} role="status">
@@ -667,18 +667,18 @@ export default function App() {
         <section className="space-stage">
           <div className="stage-header">
             <div>
-              <h2>Embedding Space</h2>
-              <p>{space?.dimensions ?? 768}D embeddings · {projection} · one point per source</p>
+              <h2>知识索引空间</h2>
+              <p>{space?.dimensions ?? 768} 维向量 · {projection} · 每个知识来源对应一个索引点</p>
             </div>
             <div className="stage-tools">
-              <div className="modality-key" aria-label="Modality legend">
-                {(["Text", "Image", "Audio", "Video", "PDF", "Query"] as const).map((item) => (
-                  <span key={item} className={`modality-key-item key-${item.toLowerCase()}`}>{item}</span>
+              <div className="modality-key" aria-label="知识类型图例">
+                {([['Text', '文本'], ['Image', '图片'], ['Audio', '音频'], ['Video', '视频'], ['PDF', 'PDF'], ['Query', '问题']] as const).map(([key, label]) => (
+                  <span key={key} className={`modality-key-item key-${key.toLowerCase()}`}>{label}</span>
                 ))}
               </div>
-              <div className="space-readout" aria-label="Embedding space status">
-                <span>{sourceCount} sources</span>
-                <span>{matches.length ? `${matches.length} matched` : "ready"}</span>
+              <div className="space-readout" aria-label="知识索引状态">
+                <span>{sourceCount} 个来源</span>
+                <span>{matches.length ? `匹配 ${matches.length} 条` : "就绪"}</span>
               </div>
             </div>
           </div>
@@ -703,15 +703,15 @@ export default function App() {
           <section className="panel qa-panel">
             <div className="panel-heading">
               <div>
-                <h2>Q&A</h2>
-                <p>Ask a question and read the grounded answer here.</p>
+                <h2>知识问答</h2>
+                <p>用自然语言提问，查看基于知识库的回答。</p>
               </div>
               <Bot size={18} />
             </div>
-            <label className="field-label">Question</label>
-            <textarea className="question-box" value={question} onChange={(event) => setQuestion(event.target.value)} aria-label="Question" />
+            <label className="field-label">问题</label>
+            <textarea className="question-box" value={question} onChange={(event) => setQuestion(event.target.value)} aria-label="请输入问题" />
             <button className="primary-button" onClick={askQuestion} disabled={isAsking}>
-              {isAsking ? <Loader2 className="spin" size={16} /> : <Send size={16} />} Ask question
+              {isAsking ? <Loader2 className="spin" size={16} /> : <Send size={16} />} 开始提问
             </button>
             {(qaStatus || qaError) && (
               <div className={`inline-status ${qaError ? "error" : "success"}`} role="status">
@@ -727,16 +727,16 @@ export default function App() {
           <section className="panel trace-panel">
             <div className="panel-heading">
               <div>
-                <h2>Agent Trace</h2>
-                <p>Google ADK tool path</p>
+                <h2>处理过程</h2>
+                <p>知识检索与回答步骤</p>
               </div>
               <Sparkles size={18} />
             </div>
             <div className="trace-list">
               {(trace.length ? trace : [
-                { agent: "source_ingestor", status: "ready", detail: "Waiting for a question" },
-                { agent: "retrieval_tool", status: "ready", detail: "Nearest-neighbor evidence will appear here" },
-                { agent: "answer_synthesizer", status: "ready", detail: "Cited answer stream target" },
+                { agent: "知识来源", status: "ready", detail: "等待用户提问" },
+                { agent: "知识检索", status: "ready", detail: "检索到的相关证据会显示在这里" },
+                { agent: "回答生成", status: "ready", detail: "根据引用证据组织回答" },
               ]).map((step) => (
                 <div className="trace-row" key={step.agent}>
                   <span>{step.agent}</span>
@@ -749,12 +749,12 @@ export default function App() {
           <section className="panel citations-panel">
             <div className="panel-heading">
               <div>
-                <h2>Citations</h2>
-                <p>Sources used for this answer</p>
+                <h2>引用来源</h2>
+                <p>本次回答使用的知识证据</p>
               </div>
             </div>
             <div className="citation-list">
-              {matches.length === 0 && <div className="empty-state">No query yet. Add a source, then ask a question.</div>}
+              {matches.length === 0 && <div className="empty-state">还没有检索记录。完成知识扫描后即可开始提问。</div>}
               {matches.map((match) => {
                 const Icon = modalityIcon[match.modality] || FileText;
                 return (
