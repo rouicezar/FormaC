@@ -29,7 +29,7 @@ def test_deepseek_reuses_openai_compatible_endpoint() -> None:
         "api_key": "secret",
         "base_url": "https://api.deepseek.com",
     }
-    assert captured["request"]["model"] == "deepseek-chat"
+    assert captured["request"]["model"] == "deepseek-v4-flash"
     assert answer == "云端答案"
 
 

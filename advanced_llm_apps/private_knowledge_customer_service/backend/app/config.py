@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     sensitive_rag_url: str | None = None
     embedding_model: str = "ollama/embeddinggemma:latest"
     deepseek_api_key: str | None = None
-    deepseek_model: str = "deepseek-chat"
+    deepseek_model: str = "deepseek-v4-flash"
     ollama_model: str = "qwen3:0.6b"
     ollama_host: str = "http://localhost:11434"
     active_provider: str = "ollama"

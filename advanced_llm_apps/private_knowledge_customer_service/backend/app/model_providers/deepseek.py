@@ -13,7 +13,7 @@ class DeepSeekProvider:
         self,
         *,
         api_key: str,
-        model: str = "deepseek-chat",
+        model: str = "deepseek-v4-flash",
         client_factory: Callable[..., Any] | None = None,
     ) -> None:
         if not api_key.strip():

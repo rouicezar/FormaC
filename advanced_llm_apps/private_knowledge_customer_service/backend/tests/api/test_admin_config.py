@@ -14,7 +14,7 @@ def make_store(tmp_path: Path) -> ConfigurationStore:
         Settings(
             knowledge_root="/data/knowledge",
             deepseek_api_key="initial-secret",
-            deepseek_model="deepseek-chat",
+            deepseek_model="deepseek-v4-flash",
             ollama_model="qwen3:0.6b",
             ollama_host="http://localhost:11434",
         ),
