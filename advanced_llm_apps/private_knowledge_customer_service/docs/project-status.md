@@ -286,6 +286,7 @@
 - 内部敏感访问通过：内部身份检索 `AI` 时可返回 `sensitive/内部折扣规则.md`，证明敏感分区只对内部身份开放。
 - 敏感云端策略复验通过：管理员策略 `allow_sensitive_cloud=false` 时，内部身份命中敏感引用后问答返回 `mode=excerpt_only` 和本地原文，未把敏感内容交给 DeepSeek 生成。
 - 外部降级边界通过：外部身份查询“内部折扣规则 八五折”时，检索结果和 DeepSeek 问答引用均只包含 `public/...`，未返回 `sensitive/...`，回答明确未找到内部折扣规则。
+- 模型选择持久化已修复：管理员端保存的 `active_provider` 继续作为默认回答模型；用户端 `/app/chat` 选择 DeepSeek 或 Ollama 后会写入本地持久状态，刷新或离开页面再回来不会自动切回 Ollama。真实浏览器验收通过：选择 DeepSeek 后刷新页面，回答模型仍为 `deepseek`，控制台无 error。
 
 ## 2026-07-16 普通用户端快捷入口阶段
 

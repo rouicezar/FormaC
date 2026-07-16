@@ -1,18 +1,45 @@
 import { Bot, Copy, FileText, Loader2, LockKeyhole, MessageSquareText, Send, ShieldAlert, Sparkles } from "lucide-react";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { askKnowledge, locationText, type AskResponse, type Provider } from "../api";
+import { askKnowledge, getAdminConfig, locationText, type AskResponse, type Provider } from "../api";
 import { PageHeader } from "../components/Layouts";
 import { useIdentity } from "../identity";
+
+const PROVIDER_STORAGE_KEY = "coreknowledge.chat_provider";
+
+function storedProvider(): Provider | null {
+  try {
+    const value = window.localStorage.getItem(PROVIDER_STORAGE_KEY);
+    return value === "deepseek" || value === "ollama" ? value : null;
+  } catch {
+    return null;
+  }
+}
 
 export function ChatPage() {
   const identity = useIdentity();
   const [params] = useSearchParams();
   const [question, setQuestion] = useState(() => params.get("q") || "");
-  const [provider, setProvider] = useState<Provider>("ollama");
+  const [provider, setProvider] = useState<Provider>(() => storedProvider() || "ollama");
   const [response, setResponse] = useState<AskResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (storedProvider()) return;
+    void getAdminConfig()
+      .then((config) => setProvider(config.models.active_provider))
+      .catch(() => undefined);
+  }, []);
+
+  function chooseProvider(value: Provider) {
+    setProvider(value);
+    try {
+      window.localStorage.setItem(PROVIDER_STORAGE_KEY, value);
+    } catch {
+      // localStorage may be unavailable in restricted browser contexts.
+    }
+  }
 
   async function submit(event: FormEvent) {
     event.preventDefault();
@@ -43,7 +70,7 @@ export function ChatPage() {
         </div>
         <aside className="chat-evidence-panel"><div className="evidence-title"><div><span className="eyebrow">回答依据</span><h2>引用来源</h2></div><span>{response?.citations.length || 0} 条</span></div>{!response?.citations.length ? <div className="evidence-empty"><FileText size={27} /><p>{response ? "本次回答没有可用引用。" : "完成问答后，引用会显示在这里。"}</p></div> : <div className="evidence-list">{response.citations.map((citation, index) => <article key={citation.citation}><div><span>[{index + 1}] {citation.source}</span><strong>{citation.partition === "sensitive" ? "敏感" : "公开"}</strong></div><small>{locationText(citation.locator)}</small><p>{citation.evidence}</p></article>)}</div>}</aside>
       </section>
-      <form className="chat-composer" onSubmit={submit}><textarea value={question} onChange={(event) => setQuestion(event.target.value)} placeholder="输入需要基于知识库回答的问题……" aria-label="知识问答内容" rows={3} /><div className="composer-controls"><div className="model-control"><label htmlFor="chat-provider">回答模型</label><select id="chat-provider" value={provider} onChange={(event) => setProvider(event.target.value as Provider)}><option value="ollama">Ollama 本地模型</option><option value="deepseek">DeepSeek 云端模型</option></select></div><button disabled={loading || !question.trim()}>{loading ? <Loader2 className="spin" size={17} /> : <Send size={17} />}{loading ? "回答中" : "发送问题"}</button></div></form>
+      <form className="chat-composer" onSubmit={submit}><textarea value={question} onChange={(event) => setQuestion(event.target.value)} placeholder="输入需要基于知识库回答的问题……" aria-label="知识问答内容" rows={3} /><div className="composer-controls"><div className="model-control"><label htmlFor="chat-provider">回答模型</label><select id="chat-provider" value={provider} onChange={(event) => chooseProvider(event.target.value as Provider)}><option value="ollama">Ollama 本地模型</option><option value="deepseek">DeepSeek 云端模型</option></select></div><button disabled={loading || !question.trim()}>{loading ? <Loader2 className="spin" size={17} /> : <Send size={17} />}{loading ? "回答中" : "发送问题"}</button></div></form>
     </main>
   );
 }
