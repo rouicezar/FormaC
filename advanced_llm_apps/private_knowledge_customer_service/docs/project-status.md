@@ -296,6 +296,17 @@
 - 移动端验收通过：390 × 844 下 `/app/shortcuts` 的 `scrollWidth` 与 `clientWidth` 均为 390px，无页面级横向溢出；控制台无 error。
 - 提交前复核通过：前端 TypeScript 与 Vite 生产构建通过；后端记录、profile 和 ask 相关测试 12 项通过。
 
+## 2026-07-16 普通用户端最终收口审计
+
+- `/app/history` 已有当前证据：`GET /app/records` 返回个人记录、原文查询数、知识问答数、网页/飞书来源数和引用统计；页面仅展示当前身份的个人历史，不展示全局记录。
+- `/app/profile` 已有当前证据：`GET /app/profile` 可返回浏览器 requester、飞书 open_id、外部/内部角色、可访问范围和个人记录统计；飞书绑定默认外部用户，管理员授权才可成为内部用户。
+- Web/飞书身份映射已有当前证据：同一请求可同时传入浏览器 requester 与飞书 open_id，`/app/records` 合并返回个人历史，`/app/shortcuts` 也复用同一合并规则生成个人高频入口。
+- DeepSeek 真实问答已有当前证据：当前配置 `active_provider=deepseek`、`api_key_configured=true`、模型 `deepseek-v4-flash`；真实 `POST /ask` 返回 `mode=generate` 和公开知识引用。
+- 敏感云端策略已有当前证据：当前配置 `allow_sensitive_cloud=false`；内部身份命中 `sensitive/内部折扣规则.md` 时，即使请求体携带 `allow_sensitive_cloud=true`，服务端仍返回 `mode=excerpt_only` 和本地原文。
+- 向量库当前运行时证据已复查：业务库 `private_knowledge`、公开向量库 `private_knowledge_public`、敏感向量库 `private_knowledge_sensitive` 均存在；公开向量库当前为 `documents=2155`、`chunks=2154`、`embeddings=6668`，敏感向量库当前为 `documents=3`、`chunks=3`、`embeddings=7`。
+- 业务元数据当前运行时证据已复查：`private_knowledge` 中 `knowledge_sources=16`、`document_chunks=1820`；扫描后的业务元数据与 RAGLite/pgvector 向量索引均已落库。
+- 仍保留的外部限制：飞书群聊 `@机器人` 因当前测试账号没有企业内部群权限暂缓，不阻塞本目标要求的普通用户端 Web/飞书身份合并、私聊记录和用户侧闭环。
+
 ## 下一步
 
-继续做普通用户端最终收口审计：确认 `/app/history`、`/app/profile`、`/app/shortcuts`、DeepSeek 真实问答、敏感云端策略和 Web/飞书合并记录都有当前证据；若审计通过，进入 `/app/documents` 文档中心或管理员侧快捷入口配置。
+普通用户端闭环已完成当前目标范围内的收口审计；下一步进入 `/app/documents` 文档中心，展示当前用户可访问的公开/敏感文档清单、扫描状态和引用入口。
