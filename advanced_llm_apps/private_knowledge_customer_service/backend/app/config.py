@@ -14,6 +14,9 @@ class Settings(BaseSettings):
     deepseek_model: str = "deepseek-chat"
     ollama_model: str = "qwen3:0.6b"
     ollama_host: str = "http://localhost:11434"
+    active_provider: str = "ollama"
+    allow_sensitive_cloud: bool = False
+    admin_config_path: str = ".data/admin-config.json"
     feishu_app_id: str | None = None
     feishu_app_secret: str | None = None
 

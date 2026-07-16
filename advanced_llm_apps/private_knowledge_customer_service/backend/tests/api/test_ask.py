@@ -5,6 +5,8 @@ from fastapi.testclient import TestClient
 from app.customer_service.answers import AskService, ProviderRegistry
 from app.domain.models import KnowledgePartition
 from app.main import create_app
+from app.config import Settings
+from app.configuration import ConfigurationStore
 from app.model_providers.base import ModelLocation, ModelRequest
 from app.model_providers.base import UnavailableProvider
 from app.retrieval.evidence import EvidenceMatch, EvidencePacket
@@ -137,3 +139,28 @@ def test_sensitive_excerpt_does_not_require_cloud_api_key() -> None:
     assert response.status_code == 200
     assert response.json()["mode"] == "excerpt_only"
     assert "内部折扣底价为八折" in response.json()["answer"]
+
+
+def test_client_cannot_enable_sensitive_cloud_without_admin_policy(tmp_path) -> None:
+    provider = FakeProvider(ModelLocation.CLOUD, "deepseek")
+    retriever = FakeRetriever(evidence(KnowledgePartition.SENSITIVE, "内部底价"))
+    service = AskService(
+        retriever=retriever,
+        providers=ProviderRegistry({"deepseek": provider}),
+    )
+    store = ConfigurationStore(tmp_path / "config.json", Settings())
+    client = TestClient(create_app(ask_service=service, configuration_store=store))
+
+    response = client.post(
+        "/ask",
+        json={
+            "question": "底价？",
+            "identity": "internal",
+            "provider": "deepseek",
+            "allow_sensitive_cloud": True,
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.json()["mode"] == "excerpt_only"
+    assert provider.request is None

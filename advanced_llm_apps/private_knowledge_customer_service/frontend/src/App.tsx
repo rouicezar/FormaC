@@ -6,6 +6,8 @@ import { HomePage } from "./pages/HomePage";
 import { PlaceholderPage } from "./pages/PlaceholderPage";
 import { SearchPage } from "./pages/SearchPage";
 import RetrievalLab from "./RetrievalLab";
+import { KnowledgePage } from "./pages/KnowledgePage";
+import { ModelsPage } from "./pages/ModelsPage";
 
 export default function App() {
   return (
@@ -21,7 +23,9 @@ export default function App() {
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<DashboardPage />} />
-        {['knowledge', 'models', 'users', 'records', 'analytics', 'shortcuts', 'feishu', 'audit'].map((path) => <Route key={path} path={path} element={<PlaceholderPage />} />)}
+        <Route path="knowledge" element={<KnowledgePage />} />
+        <Route path="models" element={<ModelsPage />} />
+        {['users', 'records', 'analytics', 'shortcuts', 'feishu', 'audit'].map((path) => <Route key={path} path={path} element={<PlaceholderPage />} />)}
       </Route>
       <Route path="/admin/retrieval-lab" element={<RetrievalLab />} />
       <Route path="*" element={<Navigate to="/app/home" replace />} />

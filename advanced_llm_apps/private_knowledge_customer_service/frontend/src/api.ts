@@ -24,6 +24,29 @@ export type AskResponse = {
   citations: Citation[];
 };
 
+export type AdminConfig = {
+  knowledge: { root: string | null; public_path: string | null; sensitive_path: string | null };
+  models: {
+    active_provider: Provider;
+    allow_sensitive_cloud: boolean;
+    deepseek: { model: string; endpoint: string; api_key_configured: boolean };
+    ollama: { model: string; endpoint: string };
+  };
+  audit_recorded: boolean;
+};
+
+export type ScanReport = {
+  id: string;
+  trigger: string;
+  status: string;
+  added: number;
+  updated: number;
+  deleted: number;
+  failed: number;
+  skipped: number;
+  errors: Array<{ path: string; error: string }>;
+};
+
 async function postJson<T>(path: string, body: object): Promise<T> {
   const response = await fetch(`${API}${path}`, {
     method: "POST",
@@ -35,16 +58,38 @@ async function postJson<T>(path: string, body: object): Promise<T> {
   return data as T;
 }
 
+async function requestJson<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(`${API}${path}`, init);
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.detail || "请求失败，请稍后重试。");
+  return data as T;
+}
+
+export function getAdminConfig() {
+  return requestJson<AdminConfig>("/admin/config");
+}
+
+export function saveAdminConfig(body: Record<string, unknown>) {
+  return requestJson<AdminConfig>("/admin/config", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+}
+
+export function startManualScan() {
+  return requestJson<ScanReport>("/admin/scans", { method: "POST" });
+}
+
 export function searchOriginals(query: string, identity: ApiIdentity) {
   return postJson<SearchResponse>("/search", { query, identity, limit: 10 });
 }
 
-export function askKnowledge(question: string, identity: ApiIdentity, provider: Provider, allowSensitiveCloud: boolean) {
+export function askKnowledge(question: string, identity: ApiIdentity, provider: Provider) {
   return postJson<AskResponse>("/ask", {
     question,
     identity,
     provider,
-    allow_sensitive_cloud: allowSensitiveCloud,
   });
 }
 

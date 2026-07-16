@@ -22,3 +22,4 @@ dist/
 
 # Private knowledge local runtime
 advanced_llm_apps/private_knowledge_customer_service/.runtime/
+advanced_llm_apps/private_knowledge_customer_service/backend/.data/

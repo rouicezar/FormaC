@@ -15,7 +15,7 @@ class AskRequest(BaseModel):
     question: str = Field(min_length=1)
     identity: IdentityKind = IdentityKind.EXTERNAL
     provider: str = "deepseek"
-    allow_sensitive_cloud: bool = False
+    allow_sensitive_cloud: bool = False  # compatibility only; server policy is authoritative
 
 
 class CitationResponse(BaseModel):
@@ -47,13 +47,17 @@ AskServiceDependency = Annotated[AskService, Depends(get_ask_service)]
 
 
 @router.post("/ask", response_model=AskResponse)
-def ask(payload: AskRequest, service: AskServiceDependency) -> AskResponse:
+def ask(payload: AskRequest, service: AskServiceDependency, request: Request) -> AskResponse:
+    store = request.app.state.configuration_store
+    allow_sensitive_cloud = (
+        store.snapshot().allow_sensitive_cloud if store is not None else False
+    )
     try:
         result = service.ask(
             payload.question,
             identity=payload.identity,
             provider_name=payload.provider,
-            allow_sensitive_cloud=payload.allow_sensitive_cloud,
+            allow_sensitive_cloud=allow_sensitive_cloud,
         )
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error)) from error

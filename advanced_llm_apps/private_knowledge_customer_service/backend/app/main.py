@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import Literal
 
 from fastapi import FastAPI
@@ -6,9 +7,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from app.api.ask import router as ask_router
+from app.api.configuration import router as configuration_router
 from app.api.scans import router as scans_router
 from app.api.search import router as search_router
 from app.config import get_settings
+from app.configuration import ConfigurationStore
 from app.customer_service.answers import AskService
 from app.ingestion.service import ScanService
 from app.retrieval.search_service import OriginalSearchService
@@ -31,6 +34,7 @@ def create_app(
     scan_service: ScanService | None = None,
     search_service: OriginalSearchService | None = None,
     ask_service: AskService | None = None,
+    configuration_store: ConfigurationStore | None = None,
     *,
     auto_configure: bool = False,
 ) -> FastAPI:
@@ -38,11 +42,15 @@ def create_app(
     async def lifespan(app: FastAPI):
         runtime: ApplicationRuntime | None = None
         if auto_configure:
-            runtime = build_runtime(get_settings())
+            base_settings = get_settings()
+            store = ConfigurationStore(Path(base_settings.admin_config_path), base_settings)
+            settings = store.snapshot()
+            runtime = build_runtime(settings)
             app.state.runtime = runtime
             app.state.scan_service = runtime.scan_service
             app.state.search_service = runtime.search_service
             app.state.ask_service = runtime.ask_service
+            app.state.configuration_store = store
         try:
             yield
         finally:
@@ -58,15 +66,17 @@ def create_app(
             "http://localhost:5177",
             "http://127.0.0.1:5177",
         ],
-        allow_methods=["GET", "POST", "OPTIONS"],
+        allow_methods=["GET", "POST", "PUT", "OPTIONS"],
         allow_headers=["Content-Type"],
     )
     app.state.scan_service = scan_service
     app.state.search_service = search_service
     app.state.ask_service = ask_service
+    app.state.configuration_store = configuration_store
     app.include_router(scans_router)
     app.include_router(search_router)
     app.include_router(ask_router)
+    app.include_router(configuration_router)
 
     @app.get("/health", response_model=HealthResponse)
     def health() -> HealthResponse:
