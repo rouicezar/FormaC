@@ -38,13 +38,16 @@ def test_admin_config_hides_secrets_and_exposes_fixed_partition_paths(tmp_path: 
 
 def test_admin_config_saves_non_secret_settings_and_write_only_key(tmp_path: Path) -> None:
     path = tmp_path / "config.json"
+    knowledge_root = tmp_path / "company-knowledge"
+    (knowledge_root / "public").mkdir(parents=True)
+    (knowledge_root / "sensitive").mkdir()
     store = make_store(tmp_path)
     client = TestClient(create_app(configuration_store=store))
 
     response = client.put(
         "/admin/config",
         json={
-            "knowledge_root": "/srv/company-knowledge",
+            "knowledge_root": str(knowledge_root),
             "active_provider": "ollama",
             "deepseek_model": "deepseek-reasoner",
             "deepseek_api_key": "replacement-secret",
@@ -56,7 +59,7 @@ def test_admin_config_saves_non_secret_settings_and_write_only_key(tmp_path: Pat
 
     assert response.status_code == 200
     assert response.json()["models"]["active_provider"] == "ollama"
-    assert response.json()["knowledge"]["public_path"] == "/srv/company-knowledge/public"
+    assert response.json()["knowledge"]["public_path"] == str(knowledge_root / "public")
     assert "replacement-secret" not in response.text
     assert path.stat().st_mode & 0o777 == 0o600
 
@@ -89,6 +92,21 @@ def test_unknown_provider_is_rejected(tmp_path: Path) -> None:
     response = client.put("/admin/config", json={"active_provider": "unknown"})
 
     assert response.status_code == 422
+
+
+def test_knowledge_root_must_have_fixed_public_and_sensitive_dirs(tmp_path: Path) -> None:
+    root = tmp_path / "bad-knowledge"
+    root.mkdir()
+    client = TestClient(create_app(configuration_store=make_store(tmp_path)))
+
+    missing_public = client.put("/admin/config", json={"knowledge_root": str(root)})
+    (root / "public").mkdir()
+    missing_sensitive = client.put("/admin/config", json={"knowledge_root": str(root)})
+
+    assert missing_public.status_code == 400
+    assert missing_public.json()["detail"] == "知识库根目录必须包含 public/ 子目录"
+    assert missing_sensitive.status_code == 400
+    assert missing_sensitive.json()["detail"] == "知识库根目录必须包含 sensitive/ 子目录"
 
 
 class FakeSession:

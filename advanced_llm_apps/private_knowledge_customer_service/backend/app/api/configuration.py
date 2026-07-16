@@ -85,6 +85,16 @@ def get_store(request: Request) -> ConfigurationStore:
     return store
 
 
+def validate_knowledge_root(value: str) -> None:
+    root = Path(value)
+    if not root.is_dir():
+        raise HTTPException(status_code=400, detail="知识库根目录必须是本机真实目录")
+    if not (root / "public").is_dir():
+        raise HTTPException(status_code=400, detail="知识库根目录必须包含 public/ 子目录")
+    if not (root / "sensitive").is_dir():
+        raise HTTPException(status_code=400, detail="知识库根目录必须包含 sensitive/ 子目录")
+
+
 @router.get("", response_model=AdminConfigurationResponse)
 def read_configuration(request: Request) -> AdminConfigurationResponse:
     return response_from(get_store(request).snapshot())
@@ -104,6 +114,8 @@ def save_configuration(
         raise HTTPException(status_code=400, detail="开启敏感内容云端发送前必须二次确认")
     changes = payload.model_dump(exclude_none=True)
     changes.pop("confirm_sensitive_cloud", None)
+    if "knowledge_root" in changes:
+        validate_knowledge_root(changes["knowledge_root"])
     settings = store.update(changes)
 
     audit_recorded = False
