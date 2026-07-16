@@ -266,6 +266,12 @@
 - 干净重启复验通过：清理残留进程后仅一个后端监听 `8897`、一个前端监听 `5177`；重新触发扫描后同一个 run 从 0 推进到 `skipped=4`。
 - 当前真实扫描复验通过：新 run 返回 `total=448`、`processed=5`、`current_path=public/01_RSS/horizon-2026-06-09-raw.md`，前端可展示具体进度与当前文件。
 - 自动化回归为 24 项配置、profile、记录和扫描测试通过；前端 TypeScript 与 Vite 生产构建通过。
+- 进一步排查发现：用户当前真实知识库包含大量 RSS 原文与长文档，全量扫描即使进入后台也会长时间处理前几个大文件，容易被误判为“扫描无法使用”。
+- 已新增局部扫描能力：`POST /admin/scans?prefix=<相对路径或目录>` 只扫描匹配的文件/目录，且局部扫描不会执行删除对账，避免误删未扫描来源；`limit` 扫描同样不会误删未扫描来源。
+- `/admin/knowledge` 已新增“扫描范围（可选）”输入框，可填 `public/12_长期关注/Anthropic news.md` 或 `public/09_视频口播稿/` 先验证链路，留空才执行全量扫描。
+- Prefix 不匹配任何真实文件时，扫描报告现在明确返回 `status=failed` 和 `no files matched scan prefix`，不再静默显示 0 文件成功。
+- 真实 API 验收通过：`prefix=public/missing.txt` 返回 failed；`prefix=public/12_长期关注/Anthropic news.md` 返回 `status=succeeded`、`total=1`、`processed=1`、`added=1`。
+- 当前局部扫描自动化回归为 27 项通过；前端 TypeScript 与 Vite 生产构建通过。
 
 ## 2026-07-16 普通用户端真实闭环验收
 
@@ -278,4 +284,4 @@
 
 ## 下一步
 
-继续等待真实知识库后台扫描完成并补做最终收口：确认扫描最终报告、用完成后的索引复跑普通用户端关键查询，然后进入 `/app/shortcuts` 与个人高频入口。
+先在 `/admin/knowledge` 用“扫描范围”对真实知识库的几个小目录做局部扫描验收；确认索引可用后，再决定是否让全量扫描长时间跑完，随后进入 `/app/shortcuts` 与个人高频入口。

@@ -47,6 +47,8 @@ export type ScanReport = {
   total: number;
   processed: number;
   current_path: string | null;
+  limit: number | null;
+  prefix: string | null;
   errors: Array<{ path: string; error: string }>;
 };
 
@@ -115,8 +117,11 @@ export function saveAdminConfig(body: Record<string, unknown>) {
   });
 }
 
-export function startManualScan() {
-  return requestJson<ScanReport>("/admin/scans", { method: "POST" });
+export function startManualScan(options: { prefix?: string } = {}) {
+  const params = new URLSearchParams();
+  if (options.prefix) params.set("prefix", options.prefix);
+  const suffix = params.toString() ? `?${params.toString()}` : "";
+  return requestJson<ScanReport>(`/admin/scans${suffix}`, { method: "POST" });
 }
 
 export function getManualScan(id: string) {

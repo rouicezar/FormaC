@@ -54,6 +54,8 @@ class ProgressProbeRepository(InMemoryScanRepository):
                 "total": report.total,
                 "processed": report.processed,
                 "current_path": report.current_path,
+                "limit": report.limit,
+                "prefix": report.prefix,
                 **report.counts(),
             }
         )
@@ -100,6 +102,8 @@ def test_scan_persists_running_progress(tmp_path: Path) -> None:
         "total": 2,
         "processed": 1,
         "current_path": "public/first.txt",
+        "limit": None,
+        "prefix": None,
         "added": 1,
         "updated": 0,
         "deleted": 0,
@@ -111,12 +115,75 @@ def test_scan_persists_running_progress(tmp_path: Path) -> None:
         "total": 2,
         "processed": 2,
         "current_path": None,
+        "limit": None,
+        "prefix": None,
         "added": 2,
         "updated": 0,
         "deleted": 0,
         "failed": 0,
         "skipped": 0,
     }
+
+
+def test_limited_scan_indexes_subset_and_does_not_delete_unscanned_sources(tmp_path: Path) -> None:
+    root = make_root(tmp_path)
+    (root / "public" / "a.txt").write_text("A answer", encoding="utf-8")
+    (root / "public" / "b.txt").write_text("B answer", encoding="utf-8")
+    repository = InMemoryScanRepository()
+    service = ScanService(root, repository)
+    service.scan(trigger="manual")
+
+    (root / "public" / "a.txt").write_text("A replacement", encoding="utf-8")
+    (root / "public" / "b.txt").unlink()
+    limited = service.scan(trigger="manual", limit=1)
+
+    assert limited.limit == 1
+    assert limited.total == 1
+    assert limited.processed == 1
+    assert limited.updated == 1
+    assert limited.deleted == 0
+    assert "public/b.txt" in repository.sources
+
+
+def test_prefixed_scan_indexes_matching_files_without_delete_reconciliation(tmp_path: Path) -> None:
+    root = make_root(tmp_path)
+    (root / "public" / "faq.txt").write_text("FAQ answer", encoding="utf-8")
+    (root / "public" / "other.txt").write_text("Other answer", encoding="utf-8")
+    repository = InMemoryScanRepository()
+    service = ScanService(root, repository)
+    service.scan(trigger="manual")
+
+    (root / "public" / "faq.txt").write_text("FAQ replacement", encoding="utf-8")
+    (root / "public" / "other.txt").unlink()
+    prefixed = service.scan(trigger="manual", prefix="public/faq.txt")
+
+    assert prefixed.prefix == "public/faq.txt"
+    assert prefixed.total == 1
+    assert prefixed.processed == 1
+    assert prefixed.updated == 1
+    assert prefixed.deleted == 0
+    assert "public/other.txt" in repository.sources
+
+
+def test_prefixed_scan_fails_when_no_files_match(tmp_path: Path) -> None:
+    root = make_root(tmp_path)
+    (root / "public" / "faq.txt").write_text("FAQ answer", encoding="utf-8")
+    repository = InMemoryScanRepository()
+    service = ScanService(root, repository)
+
+    prefixed = service.scan(trigger="manual", prefix="public/missing.txt")
+
+    assert prefixed.prefix == "public/missing.txt"
+    assert prefixed.status == "failed"
+    assert prefixed.total == 0
+    assert prefixed.processed == 0
+    assert prefixed.failed == 1
+    assert prefixed.errors == [
+        {
+            "path": "public/missing.txt",
+            "error": "no files matched scan prefix",
+        }
+    ]
 
 
 def test_changed_and_deleted_files_update_inventory(tmp_path: Path) -> None:

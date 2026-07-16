@@ -50,6 +50,8 @@ class ScanReport:
     total: int = 0
     processed: int = 0
     current_path: str | None = None
+    limit: int | None = None
+    prefix: str | None = None
     errors: list[dict[str, str]] = field(default_factory=list)
 
     def counts(self) -> dict[str, int]:
@@ -145,6 +147,8 @@ class InMemoryScanRepository:
             total=report.total,
             processed=report.processed,
             current_path=report.current_path,
+            limit=report.limit,
+            prefix=report.prefix,
             errors=list(report.errors),
         )
 
@@ -279,6 +283,8 @@ class SqlAlchemyScanRepository:
                 "total": report.total,
                 "processed": report.processed,
                 "current_path": report.current_path,
+                "limit": report.limit,
+                "prefix": report.prefix,
             }
             if existing is None:
                 session.add(row)
@@ -301,6 +307,8 @@ class SqlAlchemyScanRepository:
                 total=row.error_summary.get("total", 0),
                 processed=row.error_summary.get("processed", 0),
                 current_path=row.error_summary.get("current_path"),
+                limit=row.error_summary.get("limit"),
+                prefix=row.error_summary.get("prefix"),
                 errors=row.error_summary.get("errors", []),
             )
 
@@ -345,21 +353,37 @@ class ScanService:
         self._scan_lock = Lock()
         self._active_report: ScanReport | None = None
 
-    def start_scan(self, trigger: str) -> tuple[ScanReport, bool]:
+    def start_scan(
+        self,
+        trigger: str,
+        *,
+        limit: int | None = None,
+        prefix: str | None = None,
+    ) -> tuple[ScanReport, bool]:
         with self._scan_lock:
             if self._active_report and self._active_report.status == "running":
                 return self._active_report, False
-            report = ScanReport(trigger=trigger)
+            report = ScanReport(trigger=trigger, limit=limit, prefix=prefix)
             self._active_report = report
             self.repository.save_report(report)
             return report, True
 
-    def run_started_scan(self, report_id: UUID) -> None:
+    def run_started_scan(
+        self,
+        report_id: UUID,
+        limit: int | None = None,
+        prefix: str | None = None,
+    ) -> None:
         report = self.get_report(report_id)
         if report is None:
             return
         try:
-            completed = self.scan(report.trigger, report_id=report.id)
+            completed = self.scan(
+                report.trigger,
+                report_id=report.id,
+                limit=limit,
+                prefix=prefix,
+            )
         except Exception as error:
             completed = ScanReport(
                 id=report.id,
@@ -368,6 +392,8 @@ class ScanService:
                 total=report.total,
                 processed=report.processed,
                 current_path=report.current_path,
+                limit=report.limit,
+                prefix=report.prefix,
                 errors=[{"path": "<scan>", "error": f"{type(error).__name__}: {error}"}],
             )
             self.repository.save_report(completed)
@@ -375,10 +401,43 @@ class ScanService:
             if self._active_report and self._active_report.id == completed.id:
                 self._active_report = completed
 
-    def scan(self, trigger: str, *, report_id: UUID | None = None) -> ScanReport:
-        report = ScanReport(id=report_id or uuid4(), trigger=trigger)
+    def scan(
+        self,
+        trigger: str,
+        *,
+        report_id: UUID | None = None,
+        limit: int | None = None,
+        prefix: str | None = None,
+    ) -> ScanReport:
+        report = ScanReport(
+            id=report_id or uuid4(),
+            trigger=trigger,
+            limit=limit,
+            prefix=prefix,
+        )
         entries = inventory_knowledge_root(self.knowledge_root)
+        full_scan = limit is None and prefix is None
+        if prefix is not None:
+            normalized_prefix = prefix.strip("/")
+            entries = [
+                entry
+                for entry in entries
+                if entry.relative_path.as_posix().startswith(normalized_prefix)
+            ]
+        if limit is not None:
+            entries = entries[:limit]
         report.total = len(entries)
+        if prefix is not None and not entries:
+            report.failed = 1
+            report.status = "failed"
+            report.errors.append(
+                {
+                    "path": normalized_prefix,
+                    "error": "no files matched scan prefix",
+                }
+            )
+            self.repository.save_report(report)
+            return report
         self.repository.save_report(report)
         stored_sources = self.repository.list_sources(self.knowledge_root)
         current_paths = {entry.relative_path.as_posix() for entry in entries}
@@ -434,7 +493,7 @@ class ScanService:
             report.processed += 1
             self.repository.save_report(report)
 
-        for relative_path in sorted(set(stored_sources) - current_paths):
+        for relative_path in sorted(set(stored_sources) - current_paths) if full_scan else []:
             try:
                 report.current_path = relative_path
                 self.repository.save_report(report)
