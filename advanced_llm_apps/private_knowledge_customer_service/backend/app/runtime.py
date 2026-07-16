@@ -108,7 +108,7 @@ def build_runtime(settings: Settings) -> ApplicationRuntime:
         session=session,
         scan_service=ScanService(
             Path(settings.knowledge_root),
-            SqlAlchemyScanRepository(session),
+            SqlAlchemyScanRepository(engine),
             writer,
         ),
         search_service=search_service,

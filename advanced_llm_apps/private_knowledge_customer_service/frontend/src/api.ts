@@ -116,6 +116,10 @@ export function startManualScan() {
   return requestJson<ScanReport>("/admin/scans", { method: "POST" });
 }
 
+export function getManualScan(id: string) {
+  return requestJson<ScanReport>(`/admin/scans/${id}`);
+}
+
 export function getManagedIdentities() { return requestJson<IdentityList>("/admin/users"); }
 export function getIdentityAudits() { return requestJson<IdentityAudit[]>("/admin/users/audits"); }
 export function bindFeishuIdentity(feishuUserId: string, displayName: string) {

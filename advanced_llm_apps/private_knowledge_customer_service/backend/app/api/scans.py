@@ -1,7 +1,7 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, status
 from pydantic import BaseModel
 
 from app.ingestion.service import ScanReport, ScanService
@@ -49,12 +49,17 @@ def get_scan_service(request: Request) -> ScanService:
 ScanServiceDependency = Annotated[ScanService, Depends(get_scan_service)]
 
 
-@router.post("", response_model=ScanReportResponse, status_code=status.HTTP_201_CREATED)
-def start_manual_scan(service: ScanServiceDependency) -> ScanReportResponse:
+@router.post("", response_model=ScanReportResponse, status_code=status.HTTP_202_ACCEPTED)
+def start_manual_scan(
+    background_tasks: BackgroundTasks,
+    service: ScanServiceDependency,
+) -> ScanReportResponse:
     try:
-        report = service.scan(trigger="manual")
+        report, started = service.start_scan(trigger="manual")
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error)) from error
+    if started:
+        background_tasks.add_task(service.run_started_scan, report.id)
     return ScanReportResponse.from_report(report)
 
 

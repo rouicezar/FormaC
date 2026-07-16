@@ -162,7 +162,7 @@ def test_deleted_source_is_removed_from_index_before_metadata(tmp_path: Path) ->
     assert index.deleted == [("sensitive", "sensitive/policy.md")]
 
 
-def test_manual_scan_api_starts_and_returns_a_report(tmp_path: Path) -> None:
+def test_manual_scan_api_starts_in_background_and_returns_a_report(tmp_path: Path) -> None:
     root = make_root(tmp_path)
     (root / "public" / "faq.txt").write_text("API answer", encoding="utf-8")
     service = ScanService(root, InMemoryScanRepository())
@@ -171,11 +171,28 @@ def test_manual_scan_api_starts_and_returns_a_report(tmp_path: Path) -> None:
     started = client.post("/admin/scans")
     fetched = client.get(f"/admin/scans/{started.json()['id']}")
 
-    assert started.status_code == 201
+    assert started.status_code == 202
     assert started.json()["trigger"] == "manual"
-    assert started.json()["added"] == 1
+    assert started.json()["status"] == "running"
+    assert started.json()["added"] == 0
     assert fetched.status_code == 200
-    assert fetched.json() == started.json()
+    assert fetched.json()["status"] == "succeeded"
+    assert fetched.json()["added"] == 1
+
+
+def test_manual_scan_api_reuses_running_scan(tmp_path: Path) -> None:
+    root = make_root(tmp_path)
+    repository = InMemoryScanRepository()
+    service = ScanService(root, repository)
+    client = TestClient(create_app(scan_service=service))
+
+    running, started = service.start_scan(trigger="manual")
+    duplicate = client.post("/admin/scans")
+
+    assert started is True
+    assert duplicate.status_code == 202
+    assert duplicate.json()["id"] == str(running.id)
+    assert duplicate.json()["status"] == "running"
 
 
 def test_scan_api_returns_not_found_for_unknown_run(tmp_path: Path) -> None:
