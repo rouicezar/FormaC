@@ -291,7 +291,11 @@
 - 空状态提供“去查询原文”和“去知识问答”入口；已合并身份卡显示当前身份、记录来源和可访问范围。
 - 真实 API 检查通过：`GET /app/records?requester_id=web-acceptance-public&limit=3` 返回 1 条个人 Web 问答记录、5 条引用统计，可用于生成快捷入口。
 - 自动化回归为 12 项记录、profile 和 ask 测试通过；前端 TypeScript 与 Vite 生产构建通过；`/app/shortcuts` 路由由 Vite 正常返回中文 HTML。
+- 真实浏览器验收通过：`/app/shortcuts` 在当前测试身份下显示外部用户、Web/飞书合并记录来源、1 个“退款期限”高频入口和最近使用记录。
+- 快捷入口跳转验收通过：点击高频入口进入 `/app/search?q=退款期限`，原文查询输入框已预填“退款期限”，不会自动发起模型或检索请求。
+- 移动端验收通过：390 × 844 下 `/app/shortcuts` 的 `scrollWidth` 与 `clientWidth` 均为 390px，无页面级横向溢出；控制台无 error。
+- 提交前复核通过：前端 TypeScript 与 Vite 生产构建通过；后端记录、profile 和 ask 相关测试 12 项通过。
 
 ## 下一步
 
-继续做普通用户端收口：用真实浏览器检查 `/app/shortcuts` 高低数据状态、移动端宽度和从快捷入口跳转到原文查询/知识问答的完整体验；通过后再进入 `/app/documents` 文档中心或管理员侧快捷入口配置。
+继续做普通用户端最终收口审计：确认 `/app/history`、`/app/profile`、`/app/shortcuts`、DeepSeek 真实问答、敏感云端策略和 Web/飞书合并记录都有当前证据；若审计通过，进入 `/app/documents` 文档中心或管理员侧快捷入口配置。
