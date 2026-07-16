@@ -48,6 +48,7 @@ SearchServiceDependency = Annotated[OriginalSearchService, Depends(get_search_se
 def search_originals(
     payload: SearchRequest,
     service: SearchServiceDependency,
+    request: Request,
 ) -> SearchResponse:
     packet = service.search(
         payload.query,
@@ -55,4 +56,16 @@ def search_originals(
         num_results=payload.limit,
     )
     results = [SearchResultResponse(**match.as_payload()) for match in packet.matches]
+    repository = request.app.state.records_repository
+    if repository is not None:
+        repository.record(
+            channel="web",
+            kind="search",
+            requester_id="web-anonymous",
+            identity=payload.identity.value,
+            query=payload.query,
+            answer=None,
+            citations=[result.model_dump() for result in results],
+            metadata={"total": len(results)},
+        )
     return SearchResponse(query=payload.query, total=len(results), results=results)

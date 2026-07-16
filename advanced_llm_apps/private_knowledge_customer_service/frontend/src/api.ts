@@ -63,6 +63,12 @@ export type FeishuConfig = {
   verification_token_configured: boolean; encrypt_key_configured: boolean;
   callback_path: string; protocol: string[];
 };
+export type InteractionRecord = {
+  id: string; channel: "web" | "feishu"; kind: "search" | "ask";
+  requester_id: string; identity: ApiIdentity; query: string; answer: string | null;
+  citations: Citation[]; metadata: Record<string, unknown>; created_at: string;
+};
+export type InteractionRecordList = { total: number; records: InteractionRecord[] };
 
 async function postJson<T>(path: string, body: object): Promise<T> {
   const response = await fetch(`${API}${path}`, {
@@ -109,6 +115,13 @@ export function updateIdentityRole(identityId: string, role: "external" | "inter
 export function getFeishuConfig() { return requestJson<FeishuConfig>("/admin/feishu/config"); }
 export function saveFeishuConfig(body: Record<string, string>) {
   return requestJson<FeishuConfig>("/admin/feishu/config", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+}
+export function getInteractionRecords(filters: { channel?: string; kind?: string } = {}) {
+  const params = new URLSearchParams();
+  if (filters.channel) params.set("channel", filters.channel);
+  if (filters.kind) params.set("kind", filters.kind);
+  const suffix = params.toString() ? `?${params.toString()}` : "";
+  return requestJson<InteractionRecordList>(`/admin/records${suffix}`);
 }
 
 export function searchOriginals(query: string, identity: ApiIdentity) {

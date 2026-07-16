@@ -76,6 +76,7 @@
 - `scan_runs`：触发方式、统计、耗时和错误摘要。
 - `user_identities`：飞书用户 ID、绑定状态、外部/内部身份、授权操作者和变更时间。
 - `conversations` / `messages`：渠道、参与者、状态、模型和引用。
+- `interaction_records`：统一保存 Web 与飞书的原文查询、知识问答、身份、引用和渠道元数据，供 `/admin/records` 展示。
 - `handoff_tickets`：触发原因、摘要、负责人、接管状态和解决结果。
 - `model_configs`：非秘密配置和秘密引用，不保存明文 API Key。
 - `audit_events`：主体、动作、对象、结果、时间和必要的非敏感差异。
@@ -93,6 +94,10 @@
 ### 原文查询
 
 `POST /search` 直接调用与问答共用的 RAGLite 检索器，输入查询词、服务端身份和结果上限，输出原文证据包。原文查询服务不持有模型注册表、模型提供商或隐私生成网关，因此不存在调用模型的执行路径。匿名和外部身份固定映射为 `external`，只能查询 public 物理库；只有服务端确认的内部身份才能查询 public 与 sensitive。
+
+### 全局记录
+
+Web `/search`、Web `/ask` 与飞书纯文本查询/问答成功后写入 `interaction_records`。记录只保存交互摘要、身份语义、引用包和渠道元数据，不替代 `feishu_events` 的回调幂等职责。`GET /admin/records` 支持按 `web/feishu` 渠道和 `search/ask` 类型筛选，用同一数据面展示全局查询与问答记录。
 
 ### 人工接管
 

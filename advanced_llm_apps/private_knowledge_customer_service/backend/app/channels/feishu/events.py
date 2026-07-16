@@ -110,8 +110,9 @@ class SqlAlchemyFeishuEventRepository:
 
 
 class FeishuChannelService:
-    def __init__(self, *, repository, identities: IdentityService, search_service, ask_service) -> None:
+    def __init__(self, *, repository, identities: IdentityService, search_service, ask_service, records_repository=None) -> None:
         self.repository, self.identities, self.search_service, self.ask_service = repository, identities, search_service, ask_service
+        self.records_repository = records_repository
     def handle(self, event_id: str, sender_id: str, text: str) -> tuple[str, bool]:
         existing = self.repository.get(event_id)
         if existing: return existing.response_text, True
@@ -125,11 +126,33 @@ class FeishuChannelService:
             reply = "最近记录：\n" + "\n".join(f"- {item.request_text}" for item in items) if items else "暂无历史记录。"
         elif not query: reply = "请输入需要查询或问答的内容。"
         elif command is FeishuCommand.SEARCH:
-            result = self.search_service.search(query, identity=identity, limit=5)
-            reply = "未检索到相关原文。" if not result.results else "原文查询：\n" + "\n".join(f"[{i}] {item.evidence}\n来源：{item.source}" for i, item in enumerate(result.results, 1))
+            result = self.search_service.search(query, identity=identity, num_results=5)
+            reply = "未检索到相关原文。" if not result.matches else "原文查询：\n" + "\n".join(f"[{i}] {item.evidence}\n来源：{item.source}" for i, item in enumerate(result.matches, 1))
+            if self.records_repository is not None:
+                self.records_repository.record(
+                    channel="feishu",
+                    kind="search",
+                    requester_id=sender_id,
+                    identity=identity.value,
+                    query=query,
+                    answer=None,
+                    citations=[item.as_payload() for item in result.matches],
+                    metadata={"event_id": event_id},
+                )
         else:
             answer = self.ask_service.ask(query, identity=identity, provider_name="ollama", allow_sensitive_cloud=False)
             citations = "\n".join(f"[{i}] {item.source}" for i, item in enumerate(answer.citations, 1))
             reply = answer.text + (f"\n\n引用：\n{citations}" if citations else "")
+            if self.records_repository is not None:
+                self.records_repository.record(
+                    channel="feishu",
+                    kind="ask",
+                    requester_id=sender_id,
+                    identity=identity.value,
+                    query=query,
+                    answer=answer.text,
+                    citations=[item.as_payload() for item in answer.citations],
+                    metadata={"event_id": event_id, "provider": "ollama", "mode": answer.mode.value},
+                )
         self.repository.record(event_id, sender_id, command.value, text, reply)
         return reply, False

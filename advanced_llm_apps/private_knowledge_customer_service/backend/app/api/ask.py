@@ -61,8 +61,21 @@ def ask(payload: AskRequest, service: AskServiceDependency, request: Request) ->
         )
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error)) from error
+    citations = [CitationResponse(**match.as_payload()) for match in result.citations]
+    repository = request.app.state.records_repository
+    if repository is not None:
+        repository.record(
+            channel="web",
+            kind="ask",
+            requester_id="web-anonymous",
+            identity=payload.identity.value,
+            query=payload.question,
+            answer=result.text,
+            citations=[citation.model_dump() for citation in citations],
+            metadata={"provider": payload.provider, "mode": result.mode.value},
+        )
     return AskResponse(
         answer=result.text,
         mode=result.mode,
-        citations=[CitationResponse(**match.as_payload()) for match in result.citations],
+        citations=citations,
     )

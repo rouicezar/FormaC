@@ -10,6 +10,7 @@ from app.api.ask import router as ask_router
 from app.api.configuration import router as configuration_router
 from app.api.identities import router as identities_router
 from app.api.feishu import router as feishu_router
+from app.api.records import router as records_router
 from app.channels.feishu.events import FeishuChannelService, FeishuReplyClient
 from app.api.scans import router as scans_router
 from app.api.search import router as search_router
@@ -42,6 +43,7 @@ def create_app(
     identity_service: IdentityService | None = None,
     feishu_service: FeishuChannelService | None = None,
     feishu_reply_client: FeishuReplyClient | None = None,
+    records_repository=None,
     *,
     auto_configure: bool = False,
 ) -> FastAPI:
@@ -61,6 +63,7 @@ def create_app(
             app.state.identity_service = runtime.identity_service
             app.state.feishu_service = runtime.feishu_service
             app.state.feishu_reply_client = runtime.feishu_reply_client
+            app.state.records_repository = runtime.records_repository
         try:
             yield
         finally:
@@ -86,12 +89,14 @@ def create_app(
     app.state.identity_service = identity_service
     app.state.feishu_service = feishu_service
     app.state.feishu_reply_client = feishu_reply_client
+    app.state.records_repository = records_repository
     app.include_router(scans_router)
     app.include_router(search_router)
     app.include_router(ask_router)
     app.include_router(configuration_router)
     app.include_router(identities_router)
     app.include_router(feishu_router)
+    app.include_router(records_router)
 
     @app.get("/health", response_model=HealthResponse)
     def health() -> HealthResponse:

@@ -7,6 +7,7 @@ EXPECTED_TABLES = {
     "knowledge_sources",
     "document_chunks",
     "feishu_events",
+    "interaction_records",
     "scan_runs",
     "identity_whitelist",
     "conversations",

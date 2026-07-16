@@ -22,6 +22,7 @@ from app.channels.feishu.events import (
     FeishuReplyClient,
     SqlAlchemyFeishuEventRepository,
 )
+from app.records import SqlAlchemyInteractionRecordRepository
 
 
 @dataclass(slots=True)
@@ -34,6 +35,7 @@ class ApplicationRuntime:
     identity_service: IdentityService
     feishu_service: FeishuChannelService
     feishu_reply_client: FeishuReplyClient | None
+    records_repository: SqlAlchemyInteractionRecordRepository
 
     def close(self) -> None:
         self.session.close()
@@ -100,6 +102,7 @@ def build_runtime(settings: Settings) -> ApplicationRuntime:
         providers=ProviderRegistry(providers),
     )
     identity_service = IdentityService(SqlAlchemyIdentityRepository(engine))
+    records_repository = SqlAlchemyInteractionRecordRepository(engine)
     return ApplicationRuntime(
         engine=engine,
         session=session,
@@ -116,10 +119,12 @@ def build_runtime(settings: Settings) -> ApplicationRuntime:
             identities=identity_service,
             search_service=search_service,
             ask_service=ask_service,
+            records_repository=records_repository,
         ),
         feishu_reply_client=(
             FeishuReplyClient(settings.feishu_app_id, settings.feishu_app_secret)
             if settings.feishu_app_id and settings.feishu_app_secret
             else None
         ),
+        records_repository=records_repository,
     )
