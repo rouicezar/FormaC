@@ -218,6 +218,14 @@
 - 已确认管理端保存的 DeepSeek API Key 生效；首次真实请求返回 DeepSeek 400，原因是本地模型名配置为过期的 `deepseek-flash`。
 - 已将本地管理配置修正为 `deepseek-v4-flash`，并把代码默认 DeepSeek 模型从 `deepseek-chat` 更新为 `deepseek-v4-flash`，避免新环境继续使用不可用默认值。
 - 真实公开知识问答验收通过：`POST /ask` 使用外部身份与 DeepSeek 返回 200，`mode=generate`，回答“七个自然日”并引用 `public/退款政策.md`。
+
+## 2026-07-16 口播稿全文查询修复
+
+- 截图复盘确认“帮我显示 benq 显示器的口播稿”不应进入普通 RAG 总结模式；用户是在索取命中文档原文，返回 5 个片段总结没有实际意义。
+- `/ask` 已新增全文意图分流：问题包含全文、原文、完整、口播稿、稿子、文案、脚本或明确“帮我显示/展示”时，先用检索定位最相关来源，再按来源回查全部已索引分块并按原顺序拼回原文。
+- 全文模式返回 `excerpt_only`，不调用 DeepSeek/Ollama 生成，避免把用户索取原文的场景错误压缩成摘要；普通“BENQ 显示器适合剪辑吗？”不会因“显示器”误触发全文模式。
+- 真实接口复验：`POST /ask` 提问“帮我显示benq显示器的口播稿”返回 `public/09_视频口播稿/_商单视频口播稿/BENQ 280U显示器.md` 完整原文与 18 条原文引用。
+- 后端定向回归 `tests/api/test_ask.py tests/retrieval/test_search.py tests/test_runtime.py` 为 14 项通过；前端 TypeScript 与 Vite 生产构建通过。
 - 敏感云端策略复验通过：管理员策略 `allow_sensitive_cloud=false` 时，即使请求体携带 `allow_sensitive_cloud=true`，服务端仍返回 `mode=excerpt_only` 和本地原文；自动化测试证明该路径不会调用云端提供商。
 - 群聊 `@机器人` 因当前飞书账号缺少企业内部群权限，标记为外部权限阻塞，暂不阻塞普通用户端主线。
 - 针对配置、问答、模型适配器和隐私策略的自动化回归为 22 项通过。

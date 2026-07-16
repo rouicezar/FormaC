@@ -23,6 +23,16 @@ class FakeRetriever:
         return self.packet
 
 
+class FakeSourceLookup:
+    def __init__(self, matches: tuple[EvidenceMatch, ...]) -> None:
+        self.matches = matches
+        self.paths: list[str] = []
+
+    def get_source(self, relative_path: str) -> tuple[EvidenceMatch, ...]:
+        self.paths.append(relative_path)
+        return self.matches
+
+
 @dataclass
 class FakeProvider:
     location: ModelLocation
@@ -47,6 +57,23 @@ def evidence(partition: KnowledgePartition, text: str) -> EvidencePacket:
                 locator={"line_start": 2, "line_end": 3},
             ),
         ),
+    )
+
+
+def match(
+    text: str,
+    *,
+    citation: str = "c1",
+    source: str = "public/公开规则.txt",
+    partition: KnowledgePartition = KnowledgePartition.PUBLIC,
+) -> EvidenceMatch:
+    return EvidenceMatch(
+        citation=citation,
+        source=source,
+        similarity=0.9,
+        evidence=text,
+        partition=partition,
+        locator={"line_start": 1, "line_end": 1},
     )
 
 
@@ -164,3 +191,56 @@ def test_client_cannot_enable_sensitive_cloud_without_admin_policy(tmp_path) -> 
     assert response.status_code == 200
     assert response.json()["mode"] == "excerpt_only"
     assert provider.request is None
+
+
+def test_full_text_transcript_request_returns_whole_source_without_model_call() -> None:
+    source = "public/09_视频口播稿/_商单视频口播稿/BENQ 280U显示器.md"
+    retriever = FakeRetriever(
+        EvidencePacket(
+            provider="raglite-hybrid",
+            matches=(match("片段命中", source=source),),
+        )
+    )
+    source_lookup = FakeSourceLookup(
+        (
+            match("第一段口播正文", citation=f"{source}#0", source=source),
+            match("第二段口播正文", citation=f"{source}#1", source=source),
+            match("第三段口播正文", citation=f"{source}#2", source=source),
+        )
+    )
+    provider = FakeProvider(ModelLocation.CLOUD, "deepseek")
+    service = AskService(
+        retriever=retriever,
+        providers=ProviderRegistry({"deepseek": provider}),
+        source_lookup=source_lookup,
+    )
+
+    response = TestClient(create_app(ask_service=service)).post(
+        "/ask",
+        json={"question": "帮我显示benq显示器的口播稿", "provider": "deepseek"},
+    )
+
+    payload = response.json()
+    assert response.status_code == 200
+    assert payload["mode"] == "excerpt_only"
+    assert source in payload["answer"]
+    assert "第一段口播正文" in payload["answer"]
+    assert "第二段口播正文" in payload["answer"]
+    assert "第三段口播正文" in payload["answer"]
+    assert len(payload["citations"]) == 3
+    assert source_lookup.paths == [source]
+    assert provider.request is None
+
+
+def test_display_word_inside_monitor_name_does_not_force_full_text_mode() -> None:
+    provider = FakeProvider(ModelLocation.CLOUD, "deepseek")
+    app, _ = app_with(evidence(KnowledgePartition.PUBLIC, "显示器参数片段"), provider)
+
+    response = TestClient(app).post(
+        "/ask",
+        json={"question": "BENQ 显示器适合剪辑吗？", "provider": "deepseek"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["mode"] == "generate"
+    assert provider.request is not None

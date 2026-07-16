@@ -16,6 +16,7 @@ from app.model_providers.deepseek import DeepSeekProvider
 from app.model_providers.ollama import OllamaProvider
 from app.retrieval.raglite_adapter import RagLiteHybridRetriever, RetrievalStore
 from app.retrieval.search_service import OriginalSearchService
+from app.retrieval.source_lookup import SqlAlchemySourceLookup
 from app.permissions.identities import IdentityService, SqlAlchemyIdentityRepository
 from app.channels.feishu.events import (
     FeishuChannelService,
@@ -100,6 +101,7 @@ def build_runtime(settings: Settings) -> ApplicationRuntime:
     ask_service = AskService(
         retriever=retriever,
         providers=ProviderRegistry(providers),
+        source_lookup=SqlAlchemySourceLookup(engine),
     )
     identity_service = IdentityService(SqlAlchemyIdentityRepository(engine))
     records_repository = SqlAlchemyInteractionRecordRepository(engine)
