@@ -25,6 +25,18 @@ for command in docker uv npm ollama curl; do
   fi
 done
 
+if pgrep -f "$PROJECT_DIR/backend/.venv/bin/uvicorn app.main:app" >/dev/null && \
+   { [[ ! -f "$RUNTIME_DIR/backend.pid" ]] || ! kill -0 "$(cat "$RUNTIME_DIR/backend.pid")" 2>/dev/null; }; then
+  echo "检测到残留后端进程，请先运行 scripts/stop.sh 清理。" >&2
+  exit 1
+fi
+
+if pgrep -f "$PROJECT_DIR/frontend/node_modules/.bin/vite" >/dev/null && \
+   { [[ ! -f "$RUNTIME_DIR/frontend.pid" ]] || ! kill -0 "$(cat "$RUNTIME_DIR/frontend.pid")" 2>/dev/null; }; then
+  echo "检测到残留前端进程，请先运行 scripts/stop.sh 清理。" >&2
+  exit 1
+fi
+
 if [[ -f "$RUNTIME_DIR/backend.pid" ]] && kill -0 "$(cat "$RUNTIME_DIR/backend.pid")" 2>/dev/null; then
   echo "后端已经运行。"
 else

@@ -14,6 +14,14 @@ for service in backend frontend; do
   fi
 done
 
+echo "项目相关后端进程："
+pgrep -fl "$PROJECT_DIR/backend/.venv/bin/uvicorn app.main:app" || true
+echo "项目相关前端进程："
+pgrep -fl "$PROJECT_DIR/frontend/node_modules/.bin/vite" || true
+echo "监听端口："
+lsof -nP -iTCP:8897 -sTCP:LISTEN 2>/dev/null || true
+lsof -nP -iTCP:5177 -sTCP:LISTEN 2>/dev/null || true
+
 docker compose -f "$COMPOSE_FILE" ps
 
 for log in backend frontend; do

@@ -16,5 +16,17 @@ for service in frontend backend; do
   fi
 done
 
+while IFS= read -r pid; do
+  if [[ -n "$pid" ]]; then
+    kill "$pid" 2>/dev/null || true
+  fi
+done < <(pgrep -f "$PROJECT_DIR/backend/.venv/bin/uvicorn app.main:app" || true)
+
+while IFS= read -r pid; do
+  if [[ -n "$pid" ]]; then
+    kill "$pid" 2>/dev/null || true
+  fi
+done < <(pgrep -f "$PROJECT_DIR/frontend/node_modules/.bin/vite" || true)
+
 docker compose -f "$COMPOSE_FILE" down
 echo "服务已停止，PostgreSQL 数据卷已保留。"
