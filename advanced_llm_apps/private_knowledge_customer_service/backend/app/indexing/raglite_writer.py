@@ -4,7 +4,7 @@ from dataclasses import dataclass
 import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Any, Protocol
+from typing import Any, Callable, Protocol
 from uuid import uuid4
 
 from app.domain.models import KnowledgePartition
@@ -164,13 +164,14 @@ class RagLiteIndexWriter:
         self,
         entry: InventoryEntry,
         chunks: list[CanonicalChunk],
+        on_progress: Callable[[int, int], None] | None = None,
     ) -> PreparedRagLiteUpdate:
         store = self.stores[entry.partition]
         relative_path = entry.relative_path.as_posix()
         old_document_ids = self.backend.source_document_ids(store.config, relative_path)
         new_document_ids: list[str] = []
         try:
-            for chunk in chunks:
+            for index, chunk in enumerate(chunks, start=1):
                 new_document_ids.append(
                     self.backend.insert_chunk(
                         store.config,
@@ -179,6 +180,8 @@ class RagLiteIndexWriter:
                         chunk,
                     )
                 )
+                if on_progress:
+                    on_progress(index, len(chunks))
         except Exception:
             self.backend.delete_documents(store.config, new_document_ids)
             raise

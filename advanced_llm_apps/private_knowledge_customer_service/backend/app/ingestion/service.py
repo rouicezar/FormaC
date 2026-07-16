@@ -3,7 +3,7 @@ from datetime import UTC, datetime
 from threading import Lock
 from types import TracebackType
 from pathlib import Path
-from typing import Protocol
+from typing import Callable, Protocol
 from uuid import UUID, uuid4
 
 from sqlalchemy import select
@@ -52,6 +52,7 @@ class ScanReport:
     current_path: str | None = None
     limit: int | None = None
     prefix: str | None = None
+    changed_only: bool = False
     errors: list[dict[str, str]] = field(default_factory=list)
 
     def counts(self) -> dict[str, int]:
@@ -92,6 +93,7 @@ class KnowledgeIndex(Protocol):
         self,
         entry: InventoryEntry,
         chunks: list[CanonicalChunk],
+        on_progress: Callable[[int, int], None] | None = None,
     ) -> PreparedIndexUpdate: ...
 
     def delete_source(
@@ -149,6 +151,7 @@ class InMemoryScanRepository:
             current_path=report.current_path,
             limit=report.limit,
             prefix=report.prefix,
+            changed_only=report.changed_only,
             errors=list(report.errors),
         )
 
@@ -285,6 +288,7 @@ class SqlAlchemyScanRepository:
                 "current_path": report.current_path,
                 "limit": report.limit,
                 "prefix": report.prefix,
+                "changed_only": report.changed_only,
             }
             if existing is None:
                 session.add(row)
@@ -309,6 +313,7 @@ class SqlAlchemyScanRepository:
                 current_path=row.error_summary.get("current_path"),
                 limit=row.error_summary.get("limit"),
                 prefix=row.error_summary.get("prefix"),
+                changed_only=row.error_summary.get("changed_only", False),
                 errors=row.error_summary.get("errors", []),
             )
 
@@ -359,11 +364,17 @@ class ScanService:
         *,
         limit: int | None = None,
         prefix: str | None = None,
+        changed_only: bool = False,
     ) -> tuple[ScanReport, bool]:
         with self._scan_lock:
             if self._active_report and self._active_report.status == "running":
                 return self._active_report, False
-            report = ScanReport(trigger=trigger, limit=limit, prefix=prefix)
+            report = ScanReport(
+                trigger=trigger,
+                limit=limit,
+                prefix=prefix,
+                changed_only=changed_only,
+            )
             self._active_report = report
             self.repository.save_report(report)
             return report, True
@@ -373,6 +384,7 @@ class ScanService:
         report_id: UUID,
         limit: int | None = None,
         prefix: str | None = None,
+        changed_only: bool = False,
     ) -> None:
         report = self.get_report(report_id)
         if report is None:
@@ -383,6 +395,7 @@ class ScanService:
                 report_id=report.id,
                 limit=limit,
                 prefix=prefix,
+                changed_only=changed_only,
             )
         except Exception as error:
             completed = ScanReport(
@@ -394,6 +407,7 @@ class ScanService:
                 current_path=report.current_path,
                 limit=report.limit,
                 prefix=report.prefix,
+                changed_only=report.changed_only,
                 errors=[{"path": "<scan>", "error": f"{type(error).__name__}: {error}"}],
             )
             self.repository.save_report(completed)
@@ -408,21 +422,34 @@ class ScanService:
         report_id: UUID | None = None,
         limit: int | None = None,
         prefix: str | None = None,
+        changed_only: bool = False,
     ) -> ScanReport:
         report = ScanReport(
             id=report_id or uuid4(),
             trigger=trigger,
             limit=limit,
             prefix=prefix,
+            changed_only=changed_only,
         )
         entries = inventory_knowledge_root(self.knowledge_root)
-        full_scan = limit is None and prefix is None
+        stored_sources = self.repository.list_sources(self.knowledge_root)
+        full_scan = limit is None and prefix is None and not changed_only
         if prefix is not None:
             normalized_prefix = prefix.strip("/")
             entries = [
                 entry
                 for entry in entries
                 if entry.relative_path.as_posix().startswith(normalized_prefix)
+            ]
+        if changed_only:
+            entries = [
+                entry
+                for entry in entries
+                if (
+                    previous := stored_sources.get(entry.relative_path.as_posix())
+                )
+                is None
+                or previous.content_hash != entry.fingerprint.content_hash
             ]
         if limit is not None:
             entries = entries[:limit]
@@ -439,7 +466,6 @@ class ScanService:
             self.repository.save_report(report)
             return report
         self.repository.save_report(report)
-        stored_sources = self.repository.list_sources(self.knowledge_root)
         current_paths = {entry.relative_path.as_posix() for entry in entries}
 
         for entry in entries:
@@ -458,7 +484,16 @@ class ScanService:
                 if not chunks:
                     raise ValueError("document contains no indexable text")
                 prepared = (
-                    self.knowledge_index.prepare_replace(entry, chunks)
+                    self.knowledge_index.prepare_replace(
+                        entry,
+                        chunks,
+                        on_progress=lambda done, total: self._save_index_progress(
+                            report,
+                            relative_path,
+                            done,
+                            total,
+                        ),
+                    )
                     if self.knowledge_index
                     else None
                 )
@@ -528,3 +563,13 @@ class ScanService:
 
     def get_report(self, run_id: UUID) -> ScanReport | None:
         return self.repository.get_report(run_id)
+
+    def _save_index_progress(
+        self,
+        report: ScanReport,
+        relative_path: str,
+        done: int,
+        total: int,
+    ) -> None:
+        report.current_path = f"{relative_path} · 向量写入 {done}/{total}"
+        self.repository.save_report(report)

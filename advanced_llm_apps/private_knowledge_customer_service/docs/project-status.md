@@ -272,6 +272,11 @@
 - Prefix 不匹配任何真实文件时，扫描报告现在明确返回 `status=failed` 和 `no files matched scan prefix`，不再静默显示 0 文件成功。
 - 真实 API 验收通过：`prefix=public/missing.txt` 返回 failed；`prefix=public/12_长期关注/Anthropic news.md` 返回 `status=succeeded`、`total=1`、`processed=1`、`added=1`。
 - 当前局部扫描自动化回归为 27 项通过；前端 TypeScript 与 Vite 生产构建通过。
+- 针对大知识库扫描中断问题，已将 `/admin/knowledge` 的空范围扫描改为分批可恢复模式：每批默认处理最多 25 个新增或变化文件，批次完成后自动继续下一批；若服务或页面中断，再次点击会跳过已落库文件并继续剩余新增/变化文件。
+- 新增 `changed_only` 扫描模式：后端先比较当前文件指纹与已存业务元数据，只挑选未索引或内容已变化的文件进入本批扫描；局部扫描和分批扫描都不会执行删除对账，避免中断时误删未扫描来源。
+- 已补充向量写入进度心跳：RAGLite 写入每个 canonical chunk 后回写扫描报告，`current_path` 会显示类似 `public/...md · 向量写入 11/18`，避免单个长文档处理期间被误判为扫描中断。
+- 真实恢复场景验收通过：重启服务中断旧扫描后，触发 `POST /admin/scans?limit=1&changed_only=true`，报告进入 `changed_only=true`、`total=1`，处理中显示 `向量写入 11/18`，最终返回 `status=succeeded`、`processed=1`、`added=1`。
+- 当前扫描稳定性回归为 25 项通过；前端 TypeScript 与 Vite 生产构建通过。
 
 ## 2026-07-16 普通用户端真实闭环验收
 

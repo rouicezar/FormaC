@@ -24,6 +24,7 @@ class ScanReportResponse(BaseModel):
     current_path: str | None
     limit: int | None
     prefix: str | None
+    changed_only: bool
     errors: list[dict[str, str]]
 
     @classmethod
@@ -42,6 +43,7 @@ class ScanReportResponse(BaseModel):
             current_path=report.current_path,
             limit=report.limit,
             prefix=report.prefix,
+            changed_only=report.changed_only,
             errors=report.errors,
         )
 
@@ -65,13 +67,25 @@ def start_manual_scan(
     service: ScanServiceDependency,
     limit: Annotated[int | None, Query(ge=1, le=1000)] = None,
     prefix: Annotated[str | None, Query(min_length=1)] = None,
+    changed_only: bool = Query(default=False),
 ) -> ScanReportResponse:
     try:
-        report, started = service.start_scan(trigger="manual", limit=limit, prefix=prefix)
+        report, started = service.start_scan(
+            trigger="manual",
+            limit=limit,
+            prefix=prefix,
+            changed_only=changed_only,
+        )
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error)) from error
     if started:
-        background_tasks.add_task(service.run_started_scan, report.id, limit, prefix)
+        background_tasks.add_task(
+            service.run_started_scan,
+            report.id,
+            limit,
+            prefix,
+            changed_only,
+        )
     return ScanReportResponse.from_report(report)
 
 

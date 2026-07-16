@@ -32,9 +32,11 @@ class FakeKnowledgeIndex:
         self.prepared: list[FakePreparedUpdate] = []
         self.deleted: list[tuple[str, str]] = []
 
-    def prepare_replace(self, entry, chunks):
+    def prepare_replace(self, entry, chunks, on_progress=None):
         update = FakePreparedUpdate(entry.relative_path.as_posix())
         self.prepared.append(update)
+        if on_progress:
+            on_progress(len(chunks), len(chunks))
         return update
 
     def delete_source(self, partition, relative_path: str) -> None:
@@ -56,6 +58,7 @@ class ProgressProbeRepository(InMemoryScanRepository):
                 "current_path": report.current_path,
                 "limit": report.limit,
                 "prefix": report.prefix,
+                "changed_only": report.changed_only,
                 **report.counts(),
             }
         )
@@ -104,6 +107,7 @@ def test_scan_persists_running_progress(tmp_path: Path) -> None:
         "current_path": "public/first.txt",
         "limit": None,
         "prefix": None,
+        "changed_only": False,
         "added": 1,
         "updated": 0,
         "deleted": 0,
@@ -117,6 +121,7 @@ def test_scan_persists_running_progress(tmp_path: Path) -> None:
         "current_path": None,
         "limit": None,
         "prefix": None,
+        "changed_only": False,
         "added": 2,
         "updated": 0,
         "deleted": 0,
@@ -143,6 +148,32 @@ def test_limited_scan_indexes_subset_and_does_not_delete_unscanned_sources(tmp_p
     assert limited.updated == 1
     assert limited.deleted == 0
     assert "public/b.txt" in repository.sources
+
+
+def test_changed_only_limited_scan_continues_remaining_changed_files(tmp_path: Path) -> None:
+    root = make_root(tmp_path)
+    for name in ("a.txt", "b.txt", "c.txt"):
+        (root / "public" / name).write_text(f"{name} answer", encoding="utf-8")
+    repository = InMemoryScanRepository()
+    service = ScanService(root, repository)
+
+    first_batch = service.scan(trigger="manual", limit=2, changed_only=True)
+    second_batch = service.scan(trigger="manual", limit=2, changed_only=True)
+    finished_batch = service.scan(trigger="manual", limit=2, changed_only=True)
+
+    assert first_batch.changed_only is True
+    assert first_batch.total == 2
+    assert first_batch.added == 2
+    assert second_batch.total == 1
+    assert second_batch.added == 1
+    assert finished_batch.status == "succeeded"
+    assert finished_batch.total == 0
+    assert finished_batch.processed == 0
+    assert set(repository.sources) == {
+        "public/a.txt",
+        "public/b.txt",
+        "public/c.txt",
+    }
 
 
 def test_prefixed_scan_indexes_matching_files_without_delete_reconciliation(tmp_path: Path) -> None:
