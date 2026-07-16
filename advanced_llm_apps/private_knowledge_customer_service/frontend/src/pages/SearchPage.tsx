@@ -20,7 +20,7 @@ export function SearchPage() {
     setError("");
     setSelected(null);
     try {
-      setResponse(await searchOriginals(normalized, identity.kind === "internal" ? "internal" : "external"));
+      setResponse(await searchOriginals(normalized, identity.kind === "internal" ? "internal" : "external", identity.requesterId));
     } catch (caught) {
       setResponse(null);
       setError(caught instanceof Error ? caught.message : "原文查询失败，请稍后重试。");

@@ -16,6 +16,7 @@ class AskRequest(BaseModel):
     identity: IdentityKind = IdentityKind.EXTERNAL
     provider: str = "deepseek"
     allow_sensitive_cloud: bool = False  # compatibility only; server policy is authoritative
+    requester_id: str = Field(default="web-anonymous", min_length=1, max_length=128)
 
 
 class CitationResponse(BaseModel):
@@ -67,7 +68,7 @@ def ask(payload: AskRequest, service: AskServiceDependency, request: Request) ->
         repository.record(
             channel="web",
             kind="ask",
-            requester_id="web-anonymous",
+            requester_id=payload.requester_id,
             identity=payload.identity.value,
             query=payload.question,
             answer=result.text,

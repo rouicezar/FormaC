@@ -14,6 +14,7 @@ class SearchRequest(BaseModel):
     query: str = Field(min_length=1)
     identity: IdentityKind = IdentityKind.EXTERNAL
     limit: int = Field(default=10, ge=1, le=20)
+    requester_id: str = Field(default="web-anonymous", min_length=1, max_length=128)
 
 
 class SearchResultResponse(BaseModel):
@@ -61,7 +62,7 @@ def search_originals(
         repository.record(
             channel="web",
             kind="search",
-            requester_id="web-anonymous",
+            requester_id=payload.requester_id,
             identity=payload.identity.value,
             query=payload.query,
             answer=None,

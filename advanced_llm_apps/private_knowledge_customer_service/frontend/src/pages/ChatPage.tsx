@@ -19,7 +19,7 @@ export function ChatPage() {
     setLoading(true);
     setError("");
     try {
-      setResponse(await askKnowledge(normalized, identity.kind === "internal" ? "internal" : "external", provider));
+      setResponse(await askKnowledge(normalized, identity.kind === "internal" ? "internal" : "external", provider, identity.requesterId));
     } catch (caught) {
       setResponse(null);
       setError(caught instanceof Error ? caught.message : "知识问答失败，请稍后重试。");

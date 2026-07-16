@@ -51,8 +51,8 @@ def test_web_search_and_ask_are_recorded_in_unified_admin_records() -> None:
     )
     client = TestClient(app)
 
-    assert client.post("/search", json={"query": "退款期限"}).status_code == 200
-    assert client.post("/ask", json={"question": "退款期限", "provider": "ollama"}).status_code == 200
+    assert client.post("/search", json={"query": "退款期限", "requester_id": "web-user-1"}).status_code == 200
+    assert client.post("/ask", json={"question": "退款期限", "provider": "ollama", "requester_id": "web-user-1"}).status_code == 200
 
     response = client.get("/admin/records")
 
@@ -62,6 +62,7 @@ def test_web_search_and_ask_are_recorded_in_unified_admin_records() -> None:
     assert [record["kind"] for record in payload["records"]] == ["ask", "search"]
     assert {record["channel"] for record in payload["records"]} == {"web"}
     assert payload["records"][0]["answer"] == "退款期为七个自然日。"
+    assert {record["requester_id"] for record in payload["records"]} == {"web-user-1"}
 
 
 def test_admin_records_can_filter_channel_and_kind() -> None:
@@ -91,3 +92,50 @@ def test_admin_records_can_filter_channel_and_kind() -> None:
     assert response.status_code == 200
     assert response.json()["total"] == 1
     assert response.json()["records"][0]["requester_id"] == "ou_test"
+
+
+def test_personal_records_only_return_selected_requester_and_stats() -> None:
+    repository = InMemoryInteractionRecordRepository()
+    repository.record(
+        channel="web",
+        kind="search",
+        requester_id="web-user-1",
+        identity=IdentityKind.EXTERNAL.value,
+        query="退款",
+        answer=None,
+        citations=[{"citation": "a"}],
+    )
+    repository.record(
+        channel="web",
+        kind="ask",
+        requester_id="web-user-1",
+        identity=IdentityKind.EXTERNAL.value,
+        query="退款期限",
+        answer="七天",
+        citations=[{"citation": "b"}, {"citation": "c"}],
+    )
+    repository.record(
+        channel="feishu",
+        kind="ask",
+        requester_id="ou_other",
+        identity=IdentityKind.INTERNAL.value,
+        query="内部规则",
+        answer="内部回答",
+        citations=[],
+    )
+    client = TestClient(create_app(records_repository=repository))
+
+    response = client.get("/app/records", params={"requester_id": "web-user-1"})
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["total"] == 2
+    assert [record["requester_id"] for record in payload["records"]] == ["web-user-1", "web-user-1"]
+    assert payload["stats"] == {
+        "total": 2,
+        "search": 1,
+        "ask": 1,
+        "web": 2,
+        "feishu": 0,
+        "citations": 3,
+    }

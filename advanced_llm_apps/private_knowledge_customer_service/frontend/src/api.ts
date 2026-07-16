@@ -69,6 +69,9 @@ export type InteractionRecord = {
   citations: Citation[]; metadata: Record<string, unknown>; created_at: string;
 };
 export type InteractionRecordList = { total: number; records: InteractionRecord[] };
+export type PersonalRecordList = InteractionRecordList & {
+  stats: { total: number; search: number; ask: number; web: number; feishu: number; citations: number };
+};
 
 async function postJson<T>(path: string, body: object): Promise<T> {
   const response = await fetch(`${API}${path}`, {
@@ -124,15 +127,22 @@ export function getInteractionRecords(filters: { channel?: string; kind?: string
   return requestJson<InteractionRecordList>(`/admin/records${suffix}`);
 }
 
-export function searchOriginals(query: string, identity: ApiIdentity) {
-  return postJson<SearchResponse>("/search", { query, identity, limit: 10 });
+export function getPersonalRecords(requesterId: string, filters: { kind?: string } = {}) {
+  const params = new URLSearchParams({ requester_id: requesterId });
+  if (filters.kind) params.set("kind", filters.kind);
+  return requestJson<PersonalRecordList>(`/app/records?${params.toString()}`);
 }
 
-export function askKnowledge(question: string, identity: ApiIdentity, provider: Provider) {
+export function searchOriginals(query: string, identity: ApiIdentity, requesterId: string) {
+  return postJson<SearchResponse>("/search", { query, identity, requester_id: requesterId, limit: 10 });
+}
+
+export function askKnowledge(question: string, identity: ApiIdentity, provider: Provider, requesterId: string) {
   return postJson<AskResponse>("/ask", {
     question,
     identity,
     provider,
+    requester_id: requesterId,
   });
 }
 

@@ -28,6 +28,19 @@ class InteractionRecordListResponse(BaseModel):
     records: list[InteractionRecordResponse]
 
 
+class PersonalRecordStatsResponse(BaseModel):
+    total: int
+    search: int
+    ask: int
+    web: int
+    feishu: int
+    citations: int
+
+
+class PersonalRecordListResponse(InteractionRecordListResponse):
+    stats: PersonalRecordStatsResponse
+
+
 def get_records_repository(request: Request):
     repository = request.app.state.records_repository
     if repository is None:
@@ -51,5 +64,28 @@ def list_admin_records(
     records = repository.list(channel=channel, kind=kind, limit=limit)
     return InteractionRecordListResponse(
         total=len(records),
+        records=[InteractionRecordResponse(**asdict(record)) for record in records],
+    )
+
+
+@router.get("/app/records", response_model=PersonalRecordListResponse)
+def list_personal_records(
+    repository: RecordsRepositoryDependency,
+    requester_id: str = Query(min_length=1, max_length=128),
+    kind: Literal["search", "ask"] | None = Query(default=None),
+    limit: int = Query(default=50, ge=1, le=100),
+) -> PersonalRecordListResponse:
+    records = repository.list(requester_id=requester_id, kind=kind, limit=limit)
+    stats = PersonalRecordStatsResponse(
+        total=len(records),
+        search=sum(1 for item in records if item.kind == "search"),
+        ask=sum(1 for item in records if item.kind == "ask"),
+        web=sum(1 for item in records if item.channel == "web"),
+        feishu=sum(1 for item in records if item.channel == "feishu"),
+        citations=sum(len(item.citations) for item in records),
+    )
+    return PersonalRecordListResponse(
+        total=len(records),
+        stats=stats,
         records=[InteractionRecordResponse(**asdict(record)) for record in records],
     )

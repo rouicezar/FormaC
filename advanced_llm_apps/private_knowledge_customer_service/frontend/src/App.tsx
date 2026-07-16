@@ -11,6 +11,7 @@ import { ModelsPage } from "./pages/ModelsPage";
 import { UsersPage } from "./pages/UsersPage";
 import { FeishuPage } from "./pages/FeishuPage";
 import { RecordsPage } from "./pages/RecordsPage";
+import { HistoryPage } from "./pages/HistoryPage";
 
 export default function App() {
   return (
@@ -21,7 +22,8 @@ export default function App() {
         <Route path="home" element={<HomePage />} />
         <Route path="search" element={<SearchPage />} />
         <Route path="chat" element={<ChatPage />} />
-        {['shortcuts', 'history', 'documents', 'bind-feishu', 'profile'].map((path) => <Route key={path} path={path} element={<PlaceholderPage />} />)}
+        <Route path="history" element={<HistoryPage />} />
+        {['shortcuts', 'documents', 'bind-feishu', 'profile'].map((path) => <Route key={path} path={path} element={<PlaceholderPage />} />)}
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Navigate to="dashboard" replace />} />

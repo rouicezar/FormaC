@@ -276,6 +276,12 @@ a {
 .record-meta { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 7px; color: #7f8985; font-size: 10px; }
 .record-meta span { padding: 4px 7px; background: #fff; border: 1px solid #e2e5df; border-radius: 999px; }
 .records-empty { min-height: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #74807b; text-align: center; }.records-empty h3 { margin: 12px 0 6px; color: #35413d; font-size: 16px; }.records-empty p { margin: 0; font-size: 12px; }
+.app-history-page { max-width: 1100px; }
+.history-identity-card { margin-bottom: 18px; padding: 16px 18px; display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 12px; color: #40504a; background: #eef4f0; border: 1px solid #d7e3dd; border-radius: 11px; }
+.history-identity-card > svg { width: 38px; height: 38px; padding: 9px; color: #356958; background: #fff; border-radius: 10px; }
+.history-identity-card strong { font-size: 14px; }.history-identity-card p { margin-top: 5px; color: #64726c; font-size: 12px; line-height: 1.55; }.history-identity-card code { padding: 2px 5px; color: #38574d; background: #fff; border-radius: 5px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; }
+.history-identity-card > span { padding: 6px 9px; color: #356958; background: #fff; border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.history-row .record-title strong { white-space: normal; }
 .dashboard-alert { margin: -10px 0 20px; padding: 12px 14px; display: flex; align-items: center; gap: 9px; color: #8b3d3d; border: 1px solid #ebcece; background: #fff5f4; border-radius: 9px; font-size: 13px; }
 .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 .metric-card { min-height: 148px; padding: 20px; background: #fff; border: 1px solid #e1e3de; border-radius: 11px; }

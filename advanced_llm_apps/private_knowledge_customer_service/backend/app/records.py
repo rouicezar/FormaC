@@ -54,12 +54,21 @@ class InMemoryInteractionRecordRepository:
         self.records.append(item)
         return item
 
-    def list(self, *, channel: str | None = None, kind: str | None = None, limit: int = 50) -> list[StoredInteractionRecord]:
+    def list(
+        self,
+        *,
+        channel: str | None = None,
+        kind: str | None = None,
+        requester_id: str | None = None,
+        limit: int = 50,
+    ) -> list[StoredInteractionRecord]:
         rows = list(reversed(self.records))
         if channel:
             rows = [row for row in rows if row.channel == channel]
         if kind:
             rows = [row for row in rows if row.kind == kind]
+        if requester_id:
+            rows = [row for row in rows if row.requester_id == requester_id]
         return rows[:limit]
 
 
@@ -109,12 +118,21 @@ class SqlAlchemyInteractionRecordRepository:
             session.commit()
             return self._item(row)
 
-    def list(self, *, channel: str | None = None, kind: str | None = None, limit: int = 50) -> list[StoredInteractionRecord]:
+    def list(
+        self,
+        *,
+        channel: str | None = None,
+        kind: str | None = None,
+        requester_id: str | None = None,
+        limit: int = 50,
+    ) -> list[StoredInteractionRecord]:
         statement = select(InteractionRecord)
         if channel:
             statement = statement.where(InteractionRecord.channel == channel)
         if kind:
             statement = statement.where(InteractionRecord.kind == kind)
+        if requester_id:
+            statement = statement.where(InteractionRecord.requester_id == requester_id)
         statement = statement.order_by(InteractionRecord.created_at.desc()).limit(limit)
         with self.factory() as session:
             return [self._item(row) for row in session.scalars(statement).all()]

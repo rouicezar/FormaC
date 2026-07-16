@@ -6,6 +6,7 @@ type IdentityProfile = {
   kind: IdentityKind;
   displayName: string;
   feishuBound: boolean;
+  requesterId: string;
 };
 
 type IdentityContextValue = IdentityProfile & {
@@ -15,10 +16,25 @@ type IdentityContextValue = IdentityProfile & {
 };
 
 const STORAGE_KEY = "coreknowledge.identity";
+const REQUESTER_KEY = "coreknowledge.requester_id";
+
+function loadRequesterId() {
+  try {
+    const saved = window.localStorage.getItem(REQUESTER_KEY);
+    if (saved) return saved;
+    const generated = `web-${crypto.randomUUID()}`;
+    window.localStorage.setItem(REQUESTER_KEY, generated);
+    return generated;
+  } catch {
+    return "web-anonymous";
+  }
+}
+
 const anonymousProfile: IdentityProfile = {
   kind: "anonymous",
   displayName: "访客",
   feishuBound: false,
+  requesterId: "web-anonymous",
 };
 
 const IdentityContext = createContext<IdentityContextValue | null>(null);
@@ -33,6 +49,7 @@ function loadProfile(): IdentityProfile {
       kind: saved.kind,
       displayName: saved.displayName || (saved.kind === "internal" ? "内部员工" : "外部用户"),
       feishuBound: Boolean(saved.feishuBound),
+      requesterId: saved.requesterId || loadRequesterId(),
     };
   } catch {
     return anonymousProfile;
@@ -40,7 +57,10 @@ function loadProfile(): IdentityProfile {
 }
 
 export function IdentityProvider({ children }: { children: React.ReactNode }) {
-  const [profile, setProfile] = useState<IdentityProfile>(loadProfile);
+  const [profile, setProfile] = useState<IdentityProfile>(() => {
+    const loaded = loadProfile();
+    return loaded.kind === "anonymous" ? { ...loaded, requesterId: loadRequesterId() } : loaded;
+  });
 
   useEffect(() => {
     if (profile.kind === "anonymous") {
@@ -57,8 +77,9 @@ export function IdentityProvider({ children }: { children: React.ReactNode }) {
       kind: "external",
       displayName,
       feishuBound: true,
+      requesterId: profile.requesterId,
     }),
-    resetAnonymous: () => setProfile(anonymousProfile),
+    resetAnonymous: () => setProfile({ ...anonymousProfile, requesterId: profile.requesterId }),
   }), [profile]);
 
   return <IdentityContext.Provider value={value}>{children}</IdentityContext.Provider>;
