@@ -10,6 +10,7 @@ from app.api.ask import router as ask_router
 from app.api.configuration import router as configuration_router
 from app.api.identities import router as identities_router
 from app.api.feishu import router as feishu_router
+from app.api.profile import router as profile_router
 from app.api.records import router as records_router
 from app.channels.feishu.events import FeishuChannelService, FeishuReplyClient
 from app.api.scans import router as scans_router
@@ -96,6 +97,7 @@ def create_app(
     app.include_router(configuration_router)
     app.include_router(identities_router)
     app.include_router(feishu_router)
+    app.include_router(profile_router)
     app.include_router(records_router)
 
     @app.get("/health", response_model=HealthResponse)

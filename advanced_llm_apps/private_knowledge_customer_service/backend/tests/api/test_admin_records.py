@@ -139,3 +139,47 @@ def test_personal_records_only_return_selected_requester_and_stats() -> None:
         "feishu": 0,
         "citations": 3,
     }
+
+
+def test_personal_records_can_merge_web_and_bound_feishu_requesters() -> None:
+    repository = InMemoryInteractionRecordRepository()
+    repository.record(
+        channel="web",
+        kind="search",
+        requester_id="web-user-1",
+        identity=IdentityKind.EXTERNAL.value,
+        query="退款",
+        answer=None,
+        citations=[],
+    )
+    repository.record(
+        channel="feishu",
+        kind="ask",
+        requester_id="ou_user_1",
+        identity=IdentityKind.EXTERNAL.value,
+        query="帮助",
+        answer="帮助文本",
+        citations=[{"citation": "a"}],
+    )
+    repository.record(
+        channel="feishu",
+        kind="ask",
+        requester_id="ou_other",
+        identity=IdentityKind.EXTERNAL.value,
+        query="其他",
+        answer="其他回答",
+        citations=[],
+    )
+    client = TestClient(create_app(records_repository=repository))
+
+    response = client.get(
+        "/app/records",
+        params={"requester_id": "web-user-1", "feishu_user_id": "ou_user_1"},
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["total"] == 2
+    assert {record["requester_id"] for record in payload["records"]} == {"web-user-1", "ou_user_1"}
+    assert payload["stats"]["web"] == 1
+    assert payload["stats"]["feishu"] == 1

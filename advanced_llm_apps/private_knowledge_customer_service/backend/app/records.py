@@ -60,6 +60,7 @@ class InMemoryInteractionRecordRepository:
         channel: str | None = None,
         kind: str | None = None,
         requester_id: str | None = None,
+        requester_ids: list[str] | None = None,
         limit: int = 50,
     ) -> list[StoredInteractionRecord]:
         rows = list(reversed(self.records))
@@ -67,6 +68,9 @@ class InMemoryInteractionRecordRepository:
             rows = [row for row in rows if row.channel == channel]
         if kind:
             rows = [row for row in rows if row.kind == kind]
+        if requester_ids:
+            allowed = set(requester_ids)
+            rows = [row for row in rows if row.requester_id in allowed]
         if requester_id:
             rows = [row for row in rows if row.requester_id == requester_id]
         return rows[:limit]
@@ -124,6 +128,7 @@ class SqlAlchemyInteractionRecordRepository:
         channel: str | None = None,
         kind: str | None = None,
         requester_id: str | None = None,
+        requester_ids: list[str] | None = None,
         limit: int = 50,
     ) -> list[StoredInteractionRecord]:
         statement = select(InteractionRecord)
@@ -131,6 +136,8 @@ class SqlAlchemyInteractionRecordRepository:
             statement = statement.where(InteractionRecord.channel == channel)
         if kind:
             statement = statement.where(InteractionRecord.kind == kind)
+        if requester_ids:
+            statement = statement.where(InteractionRecord.requester_id.in_(requester_ids))
         if requester_id:
             statement = statement.where(InteractionRecord.requester_id == requester_id)
         statement = statement.order_by(InteractionRecord.created_at.desc()).limit(limit)

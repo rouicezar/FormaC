@@ -43,7 +43,7 @@ export function HistoryPage() {
     setLoading(true);
     setError("");
     try {
-      setData(await getPersonalRecords(identity.requesterId, { kind }));
+      setData(await getPersonalRecords(identity.requesterId, { kind, feishuUserId: identity.feishuUserId }));
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "个人历史读取失败。");
     } finally {
@@ -51,7 +51,7 @@ export function HistoryPage() {
     }
   }
 
-  useEffect(() => { void load(); }, [identity.requesterId, kind]);
+  useEffect(() => { void load(); }, [identity.requesterId, identity.feishuUserId, kind]);
 
   const metrics = useMemo(() => data?.stats || {
     total: 0, search: 0, ask: 0, web: 0, feishu: 0, citations: 0,
@@ -68,7 +68,7 @@ export function HistoryPage() {
       <ShieldCheck size={20} />
       <div>
         <strong>{identityLabels[identity.kind]} · {identity.displayName}</strong>
-        <p>当前记录归属：<code>{identity.requesterId}</code>。{identity.feishuBound ? "飞书绑定后可继续接入跨端记录合并。" : "匿名记录保存在当前浏览器身份下。"}</p>
+        <p>当前记录归属：<code>{identity.requesterId}</code>{identity.feishuUserId ? <> 和 <code>{identity.feishuUserId}</code></> : null}。{identity.feishuBound ? "已合并网页与飞书记录。" : "匿名记录保存在当前浏览器身份下。"}</p>
       </div>
       <span>可访问：{identity.visibleScope}</span>
     </section>

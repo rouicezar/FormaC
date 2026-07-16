@@ -7,11 +7,12 @@ type IdentityProfile = {
   displayName: string;
   feishuBound: boolean;
   requesterId: string;
+  feishuUserId: string | null;
 };
 
 type IdentityContextValue = IdentityProfile & {
   visibleScope: "公开知识" | "公开与敏感知识";
-  setBoundExternal: (displayName?: string) => void;
+  updateFromProfile: (profile: { role: IdentityKind | "anonymous"; display_name: string; feishu_bound: boolean; feishu_user_id: string | null }) => void;
   resetAnonymous: () => void;
 };
 
@@ -35,6 +36,7 @@ const anonymousProfile: IdentityProfile = {
   displayName: "访客",
   feishuBound: false,
   requesterId: "web-anonymous",
+  feishuUserId: null,
 };
 
 const IdentityContext = createContext<IdentityContextValue | null>(null);
@@ -50,6 +52,7 @@ function loadProfile(): IdentityProfile {
       displayName: saved.displayName || (saved.kind === "internal" ? "内部员工" : "外部用户"),
       feishuBound: Boolean(saved.feishuBound),
       requesterId: saved.requesterId || loadRequesterId(),
+      feishuUserId: saved.feishuUserId || null,
     };
   } catch {
     return anonymousProfile;
@@ -73,11 +76,12 @@ export function IdentityProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo<IdentityContextValue>(() => ({
     ...profile,
     visibleScope: profile.kind === "internal" ? "公开与敏感知识" : "公开知识",
-    setBoundExternal: (displayName = "飞书用户") => setProfile({
-      kind: "external",
-      displayName,
-      feishuBound: true,
+    updateFromProfile: (serverProfile) => setProfile({
+      kind: serverProfile.role === "internal" ? "internal" : serverProfile.feishu_bound ? "external" : "anonymous",
+      displayName: serverProfile.display_name,
+      feishuBound: serverProfile.feishu_bound,
       requesterId: profile.requesterId,
+      feishuUserId: serverProfile.feishu_user_id,
     }),
     resetAnonymous: () => setProfile({ ...anonymousProfile, requesterId: profile.requesterId }),
   }), [profile]);

@@ -231,6 +231,17 @@
 - 真实浏览器验收通过：在 `/app/search` 查询“退款期限”后，`/app/history` 显示“我的记录 1 / 原文查询 1 / 知识问答 0 / 引用总数 3”，无英文占位文案。
 - 自动化回归为 12 项后端记录、问答与原文查询测试通过；前端 TypeScript 与 Vite 生产构建通过。
 
+## 2026-07-16 普通用户端身份映射阶段
+
+- 新增 `GET /app/profile` 与 `POST /app/profile/bind-feishu`：用户端可读取当前浏览器 requester、飞书 open_id、外部/内部角色、可访问范围和个人记录统计。
+- 用户端绑定飞书身份默认创建外部用户；管理员后续在 `/admin/users` 提权或降级后，`/app/profile` 会反映服务端真实授权结果。
+- `/app/records` 支持同时传入浏览器 requester 与飞书 open_id，合并展示 Web 与飞书个人历史，但仍不会暴露全局记录。
+- `/app/profile` 与 `/app/bind-feishu` 已替换占位页，显示身份映射、绑定状态、可访问范围和记录统计；真实 OAuth 接入前，飞书 open_id 手动输入用于验收 Web/飞书记录合并。
+- 真实 HTTP 验收通过：匿名 profile 初始为公开知识范围；绑定 `ou_profile_smoke` 后默认外部用户，并保留 Web 记录统计。
+- 真实浏览器验收通过：在 `/app/bind-feishu` 绑定 `ou_browser_profile_smoke` 后自动进入 `/app/profile`，页面显示外部用户、飞书 open_id 与公开知识范围，无英文占位文案。
+- 当前知识库根目录已配置为 `/Users/rouice/myknowlege/00_资源库`，后续普通用户完整验收将使用用户新放入的测试知识库目录。
+- 自动化回归为 16 项身份、profile、记录和审计测试通过；前端 TypeScript 与 Vite 生产构建通过。
+
 ## 下一步
 
-继续补齐 Web/飞书身份映射与 `/app/profile`，让飞书 open_id、浏览器 requester 和内部/外部授权状态形成可解释的个人身份闭环；飞书群聊验收待账号具备企业权限后补做。
+使用当前测试知识库目录完成普通用户端完整验收：外部用户公开查询/问答、绑定后个人历史合并、管理员提权后的内部敏感访问与降级后的权限恢复；随后进入 `/app/shortcuts` 与个人高频入口。

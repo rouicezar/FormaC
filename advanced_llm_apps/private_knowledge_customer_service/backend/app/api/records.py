@@ -72,10 +72,14 @@ def list_admin_records(
 def list_personal_records(
     repository: RecordsRepositoryDependency,
     requester_id: str = Query(min_length=1, max_length=128),
+    feishu_user_id: str | None = Query(default=None, min_length=1, max_length=128),
     kind: Literal["search", "ask"] | None = Query(default=None),
     limit: int = Query(default=50, ge=1, le=100),
 ) -> PersonalRecordListResponse:
-    records = repository.list(requester_id=requester_id, kind=kind, limit=limit)
+    requester_ids = [requester_id]
+    if feishu_user_id:
+        requester_ids.append(feishu_user_id)
+    records = repository.list(requester_ids=requester_ids, kind=kind, limit=limit)
     stats = PersonalRecordStatsResponse(
         total=len(records),
         search=sum(1 for item in records if item.kind == "search"),

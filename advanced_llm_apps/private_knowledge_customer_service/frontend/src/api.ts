@@ -72,6 +72,15 @@ export type InteractionRecordList = { total: number; records: InteractionRecord[
 export type PersonalRecordList = InteractionRecordList & {
   stats: { total: number; search: number; ask: number; web: number; feishu: number; citations: number };
 };
+export type AppProfile = {
+  requester_id: string;
+  feishu_user_id: string | null;
+  display_name: string;
+  role: "anonymous" | "external" | "internal";
+  feishu_bound: boolean;
+  visible_scope: string;
+  records: PersonalRecordList["stats"];
+};
 
 async function postJson<T>(path: string, body: object): Promise<T> {
   const response = await fetch(`${API}${path}`, {
@@ -127,10 +136,30 @@ export function getInteractionRecords(filters: { channel?: string; kind?: string
   return requestJson<InteractionRecordList>(`/admin/records${suffix}`);
 }
 
-export function getPersonalRecords(requesterId: string, filters: { kind?: string } = {}) {
+export function getPersonalRecords(requesterId: string, filters: { kind?: string; feishuUserId?: string | null } = {}) {
   const params = new URLSearchParams({ requester_id: requesterId });
+  if (filters.feishuUserId) params.set("feishu_user_id", filters.feishuUserId);
   if (filters.kind) params.set("kind", filters.kind);
   return requestJson<PersonalRecordList>(`/app/records?${params.toString()}`);
+}
+
+export function getAppProfile(requesterId: string, feishuUserId?: string | null, displayName?: string) {
+  const params = new URLSearchParams({ requester_id: requesterId });
+  if (feishuUserId) params.set("feishu_user_id", feishuUserId);
+  if (displayName) params.set("display_name", displayName);
+  return requestJson<AppProfile>(`/app/profile?${params.toString()}`);
+}
+
+export function bindAppFeishuProfile(body: { requesterId: string; feishuUserId: string; displayName?: string }) {
+  return requestJson<AppProfile>("/app/profile/bind-feishu", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      requester_id: body.requesterId,
+      feishu_user_id: body.feishuUserId,
+      display_name: body.displayName || null,
+    }),
+  });
 }
 
 export function searchOriginals(query: string, identity: ApiIdentity, requesterId: string) {
