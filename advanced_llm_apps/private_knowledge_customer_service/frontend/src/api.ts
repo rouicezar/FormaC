@@ -47,6 +47,18 @@ export type ScanReport = {
   errors: Array<{ path: string; error: string }>;
 };
 
+export type ManagedIdentity = {
+  id: string; feishu_user_id: string; display_name: string | null;
+  role: "external" | "internal"; bound: boolean; added_by: string;
+  created_at: string; updated_at: string;
+};
+export type IdentityList = { total: number; external: number; internal: number; users: ManagedIdentity[] };
+export type IdentityAudit = {
+  id: string; actor_id: string;
+  action: "bind_feishu_identity" | "promote_internal_identity" | "downgrade_external_identity";
+  identity_id: string; details: Record<string, string>; created_at: string;
+};
+
 async function postJson<T>(path: string, body: object): Promise<T> {
   const response = await fetch(`${API}${path}`, {
     method: "POST",
@@ -79,6 +91,15 @@ export function saveAdminConfig(body: Record<string, unknown>) {
 
 export function startManualScan() {
   return requestJson<ScanReport>("/admin/scans", { method: "POST" });
+}
+
+export function getManagedIdentities() { return requestJson<IdentityList>("/admin/users"); }
+export function getIdentityAudits() { return requestJson<IdentityAudit[]>("/admin/users/audits"); }
+export function bindFeishuIdentity(feishuUserId: string, displayName: string) {
+  return requestJson<ManagedIdentity>("/admin/users", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ feishu_user_id: feishuUserId, display_name: displayName || null }) });
+}
+export function updateIdentityRole(identityId: string, role: "external" | "internal") {
+  return requestJson<{ identity: ManagedIdentity; audit_recorded: boolean }>(`/admin/users/${identityId}/role`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ role }) });
 }
 
 export function searchOriginals(query: string, identity: ApiIdentity) {

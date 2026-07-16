@@ -8,6 +8,7 @@ from pydantic import BaseModel
 
 from app.api.ask import router as ask_router
 from app.api.configuration import router as configuration_router
+from app.api.identities import router as identities_router
 from app.api.scans import router as scans_router
 from app.api.search import router as search_router
 from app.config import get_settings
@@ -15,6 +16,7 @@ from app.configuration import ConfigurationStore
 from app.customer_service.answers import AskService
 from app.ingestion.service import ScanService
 from app.retrieval.search_service import OriginalSearchService
+from app.permissions.identities import IdentityService
 from app.runtime import ApplicationRuntime, build_runtime
 
 
@@ -35,6 +37,7 @@ def create_app(
     search_service: OriginalSearchService | None = None,
     ask_service: AskService | None = None,
     configuration_store: ConfigurationStore | None = None,
+    identity_service: IdentityService | None = None,
     *,
     auto_configure: bool = False,
 ) -> FastAPI:
@@ -51,6 +54,7 @@ def create_app(
             app.state.search_service = runtime.search_service
             app.state.ask_service = runtime.ask_service
             app.state.configuration_store = store
+            app.state.identity_service = runtime.identity_service
         try:
             yield
         finally:
@@ -73,10 +77,12 @@ def create_app(
     app.state.search_service = search_service
     app.state.ask_service = ask_service
     app.state.configuration_store = configuration_store
+    app.state.identity_service = identity_service
     app.include_router(scans_router)
     app.include_router(search_router)
     app.include_router(ask_router)
     app.include_router(configuration_router)
+    app.include_router(identities_router)
 
     @app.get("/health", response_model=HealthResponse)
     def health() -> HealthResponse:

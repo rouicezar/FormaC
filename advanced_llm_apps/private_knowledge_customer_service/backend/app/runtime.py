@@ -16,6 +16,7 @@ from app.model_providers.deepseek import DeepSeekProvider
 from app.model_providers.ollama import OllamaProvider
 from app.retrieval.raglite_adapter import RagLiteHybridRetriever, RetrievalStore
 from app.retrieval.search_service import OriginalSearchService
+from app.permissions.identities import IdentityService, SqlAlchemyIdentityRepository
 
 
 @dataclass(slots=True)
@@ -25,6 +26,7 @@ class ApplicationRuntime:
     scan_service: ScanService
     search_service: OriginalSearchService
     ask_service: AskService
+    identity_service: IdentityService
 
     def close(self) -> None:
         self.session.close()
@@ -98,4 +100,5 @@ def build_runtime(settings: Settings) -> ApplicationRuntime:
             retriever=retriever,
             providers=ProviderRegistry(providers),
         ),
+        identity_service=IdentityService(SqlAlchemyIdentityRepository(engine)),
     )
