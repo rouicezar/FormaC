@@ -1,12 +1,14 @@
 import { Bot, Copy, FileText, Loader2, LockKeyhole, MessageSquareText, Send, ShieldAlert, Sparkles } from "lucide-react";
 import { type FormEvent, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { askKnowledge, locationText, type AskResponse, type Provider } from "../api";
 import { PageHeader } from "../components/Layouts";
 import { useIdentity } from "../identity";
 
 export function ChatPage() {
   const identity = useIdentity();
-  const [question, setQuestion] = useState("");
+  const [params] = useSearchParams();
+  const [question, setQuestion] = useState(() => params.get("q") || "");
   const [provider, setProvider] = useState<Provider>("ollama");
   const [response, setResponse] = useState<AskResponse | null>(null);
   const [loading, setLoading] = useState(false);

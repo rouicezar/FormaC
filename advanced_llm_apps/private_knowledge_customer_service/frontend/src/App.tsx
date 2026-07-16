@@ -14,6 +14,7 @@ import { RecordsPage } from "./pages/RecordsPage";
 import { HistoryPage } from "./pages/HistoryPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { BindFeishuPage } from "./pages/BindFeishuPage";
+import { ShortcutsPage } from "./pages/ShortcutsPage";
 
 export default function App() {
   return (
@@ -25,9 +26,10 @@ export default function App() {
         <Route path="search" element={<SearchPage />} />
         <Route path="chat" element={<ChatPage />} />
         <Route path="history" element={<HistoryPage />} />
+        <Route path="shortcuts" element={<ShortcutsPage />} />
         <Route path="bind-feishu" element={<BindFeishuPage />} />
         <Route path="profile" element={<ProfilePage />} />
-        {['shortcuts', 'documents'].map((path) => <Route key={path} path={path} element={<PlaceholderPage />} />)}
+        <Route path="documents" element={<PlaceholderPage />} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Navigate to="dashboard" replace />} />

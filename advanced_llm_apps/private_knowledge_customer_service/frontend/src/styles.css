@@ -292,6 +292,16 @@ a {
 .mapping-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }.mapping-list > div { min-width: 0; padding: 14px; background: #f7f8f4; border: 1px solid #e4e6e0; border-radius: 9px; }.mapping-list span, .mapping-list code, .mapping-list strong { display: block; }.mapping-list span { color: #7b8581; font-size: 11px; }.mapping-list code, .mapping-list strong { margin-top: 8px; overflow: hidden; text-overflow: ellipsis; color: #34413c; font-size: 13px; white-space: nowrap; }
 .profile-bind-link { margin-top: 18px; width: fit-content; min-height: 38px; padding: 0 13px; display: inline-flex; align-items: center; gap: 7px; color: #fff; background: #356958; border-radius: 8px; font-size: 12px; font-weight: 700; }
 .bind-form { max-width: 620px; display: grid; gap: 15px; }.bind-form label { display: grid; gap: 7px; color: #4d5954; font-size: 12px; font-weight: 650; }.bind-form input { min-height: 42px; padding: 0 11px; border: 1px solid #d4d9d5; border-radius: 8px; font: inherit; }.bind-form .primary-action { width: fit-content; }
+.shortcuts-page { max-width: 1120px; }
+.shortcut-layout { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(300px, .7fr); gap: 18px; }
+.shortcut-panel { min-width: 0; padding: 22px; background: #fff; border: 1px solid #e0e2dc; border-radius: 11px; }
+.shortcut-grid { display: grid; gap: 11px; }
+.shortcut-card { min-width: 0; padding: 15px; display: grid; grid-template-columns: 40px 1fr 18px; align-items: center; gap: 12px; color: #394741; background: #fafbf8; border: 1px solid #e4e7e1; border-radius: 10px; }
+.shortcut-card:hover { border-color: #b9cbc3; background: #f2f6f3; }
+.shortcut-icon { width: 40px; height: 40px; display: grid; place-items: center; color: #356958; background: #e8f0ec; border-radius: 10px; }
+.shortcut-card div { min-width: 0; }.shortcut-card strong { display: block; overflow: hidden; color: #303d38; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }.shortcut-card p { margin-top: 6px; color: #76817c; font-size: 11px; }
+.recent-shortcut-list { display: grid; gap: 10px; }.recent-shortcut-list a { min-width: 0; padding: 13px; color: #40504a; background: #f7f8f4; border: 1px solid #e4e6e0; border-radius: 9px; }.recent-shortcut-list strong, .recent-shortcut-list span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }.recent-shortcut-list strong { font-size: 12px; }.recent-shortcut-list span { margin-top: 6px; color: #7d8782; font-size: 10px; }
+.shortcut-empty { min-height: 360px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #75807b; text-align: center; background: #fff; border: 1px solid #e0e2dc; border-radius: 12px; }.shortcut-empty h2 { margin-top: 15px; color: #34413c; font-size: 19px; }.shortcut-empty p { max-width: 560px; margin-top: 8px; font-size: 13px; line-height: 1.7; }.shortcut-empty > div { margin-top: 20px; display: flex; gap: 10px; }.shortcut-empty a { min-height: 38px; padding: 0 12px; display: inline-flex; align-items: center; gap: 6px; color: #fff; background: #356958; border-radius: 8px; font-size: 12px; font-weight: 700; }
 .dashboard-alert { margin: -10px 0 20px; padding: 12px 14px; display: flex; align-items: center; gap: 9px; color: #8b3d3d; border: 1px solid #ebcece; background: #fff5f4; border-radius: 9px; font-size: 13px; }
 .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 .metric-card { min-height: 148px; padding: 20px; background: #fff; border: 1px solid #e1e3de; border-radius: 11px; }
@@ -1503,6 +1513,7 @@ select {
   .admin-config-grid, .model-grid { grid-template-columns: 1fr; }
   .config-card.full, .config-submit.full { grid-column: 1; }
   .identity-audit-list { grid-template-columns: 1fr; }
+  .shortcut-layout { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 720px) {
@@ -1555,4 +1566,5 @@ select {
   .admin-users-page .page-header { flex-direction: column; }
   .admin-users-page .page-actions, .admin-users-page .page-actions .primary-action { width: 100%; }
   .user-metric-grid { grid-template-columns: 1fr; }
+  .shortcut-empty > div { flex-direction: column; }
 }

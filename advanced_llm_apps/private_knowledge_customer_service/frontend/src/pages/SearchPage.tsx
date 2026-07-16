@@ -1,12 +1,14 @@
 import { FileSearch, FileText, Loader2, LockKeyhole, Search, ShieldCheck, X } from "lucide-react";
 import { type FormEvent, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { locationText, searchOriginals, type Citation, type SearchResponse } from "../api";
 import { PageHeader } from "../components/Layouts";
 import { useIdentity } from "../identity";
 
 export function SearchPage() {
   const identity = useIdentity();
-  const [query, setQuery] = useState("");
+  const [params] = useSearchParams();
+  const [query, setQuery] = useState(() => params.get("q") || "");
   const [response, setResponse] = useState<SearchResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
