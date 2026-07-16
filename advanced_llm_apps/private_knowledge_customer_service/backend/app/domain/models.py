@@ -245,3 +245,18 @@ class AuditEvent(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
+
+
+class FeishuEvent(Base):
+    __tablename__ = "feishu_events"
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    event_id: Mapped[str] = mapped_column(String(128), unique=True, nullable=False)
+    sender_id: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    command: Mapped[str] = mapped_column(String(32), nullable=False)
+    request_text: Mapped[str] = mapped_column(Text, nullable=False)
+    response_text: Mapped[str] = mapped_column(Text, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )

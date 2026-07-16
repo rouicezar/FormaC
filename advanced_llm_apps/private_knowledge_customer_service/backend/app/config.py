@@ -19,6 +19,8 @@ class Settings(BaseSettings):
     admin_config_path: str = ".data/admin-config.json"
     feishu_app_id: str | None = None
     feishu_app_secret: str | None = None
+    feishu_verification_token: str | None = None
+    feishu_encrypt_key: str | None = None
 
     model_config = SettingsConfigDict(
         env_prefix="PKCS_",

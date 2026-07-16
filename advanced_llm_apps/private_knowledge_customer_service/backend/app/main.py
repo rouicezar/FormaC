@@ -9,6 +9,8 @@ from pydantic import BaseModel
 from app.api.ask import router as ask_router
 from app.api.configuration import router as configuration_router
 from app.api.identities import router as identities_router
+from app.api.feishu import router as feishu_router
+from app.channels.feishu.events import FeishuChannelService, FeishuReplyClient
 from app.api.scans import router as scans_router
 from app.api.search import router as search_router
 from app.config import get_settings
@@ -38,6 +40,8 @@ def create_app(
     ask_service: AskService | None = None,
     configuration_store: ConfigurationStore | None = None,
     identity_service: IdentityService | None = None,
+    feishu_service: FeishuChannelService | None = None,
+    feishu_reply_client: FeishuReplyClient | None = None,
     *,
     auto_configure: bool = False,
 ) -> FastAPI:
@@ -55,6 +59,8 @@ def create_app(
             app.state.ask_service = runtime.ask_service
             app.state.configuration_store = store
             app.state.identity_service = runtime.identity_service
+            app.state.feishu_service = runtime.feishu_service
+            app.state.feishu_reply_client = runtime.feishu_reply_client
         try:
             yield
         finally:
@@ -78,23 +84,42 @@ def create_app(
     app.state.ask_service = ask_service
     app.state.configuration_store = configuration_store
     app.state.identity_service = identity_service
+    app.state.feishu_service = feishu_service
+    app.state.feishu_reply_client = feishu_reply_client
     app.include_router(scans_router)
     app.include_router(search_router)
     app.include_router(ask_router)
     app.include_router(configuration_router)
     app.include_router(identities_router)
+    app.include_router(feishu_router)
 
     @app.get("/health", response_model=HealthResponse)
     def health() -> HealthResponse:
         knowledge_ready = app.state.scan_service is not None
         answer_ready = app.state.ask_service is not None
+        store = app.state.configuration_store
+        feishu_ready = False
+        if (
+            store is not None
+            and app.state.feishu_service is not None
+            and app.state.feishu_reply_client is not None
+        ):
+            settings = store.snapshot()
+            feishu_ready = all(
+                (
+                    settings.feishu_app_id,
+                    settings.feishu_app_secret,
+                    settings.feishu_verification_token,
+                    settings.feishu_encrypt_key,
+                )
+            )
         return HealthResponse(
             service="ok",
             database="ok" if knowledge_ready else "not_configured",
             scheduler="not_started",
             embedding="ok" if knowledge_ready else "not_configured",
             model="ok" if answer_ready else "not_configured",
-            feishu="not_configured",
+            feishu="ok" if feishu_ready else "not_configured",
         )
 
     return app

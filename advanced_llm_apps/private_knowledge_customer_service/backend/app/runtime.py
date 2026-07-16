@@ -17,6 +17,11 @@ from app.model_providers.ollama import OllamaProvider
 from app.retrieval.raglite_adapter import RagLiteHybridRetriever, RetrievalStore
 from app.retrieval.search_service import OriginalSearchService
 from app.permissions.identities import IdentityService, SqlAlchemyIdentityRepository
+from app.channels.feishu.events import (
+    FeishuChannelService,
+    FeishuReplyClient,
+    SqlAlchemyFeishuEventRepository,
+)
 
 
 @dataclass(slots=True)
@@ -27,6 +32,8 @@ class ApplicationRuntime:
     search_service: OriginalSearchService
     ask_service: AskService
     identity_service: IdentityService
+    feishu_service: FeishuChannelService
+    feishu_reply_client: FeishuReplyClient | None
 
     def close(self) -> None:
         self.session.close()
@@ -87,6 +94,12 @@ def build_runtime(settings: Settings) -> ApplicationRuntime:
             reason="DeepSeek API 密钥尚未配置",
         )
 
+    search_service = OriginalSearchService(retriever=retriever)
+    ask_service = AskService(
+        retriever=retriever,
+        providers=ProviderRegistry(providers),
+    )
+    identity_service = IdentityService(SqlAlchemyIdentityRepository(engine))
     return ApplicationRuntime(
         engine=engine,
         session=session,
@@ -95,10 +108,18 @@ def build_runtime(settings: Settings) -> ApplicationRuntime:
             SqlAlchemyScanRepository(session),
             writer,
         ),
-        search_service=OriginalSearchService(retriever=retriever),
-        ask_service=AskService(
-            retriever=retriever,
-            providers=ProviderRegistry(providers),
+        search_service=search_service,
+        ask_service=ask_service,
+        identity_service=identity_service,
+        feishu_service=FeishuChannelService(
+            repository=SqlAlchemyFeishuEventRepository(engine),
+            identities=identity_service,
+            search_service=search_service,
+            ask_service=ask_service,
         ),
-        identity_service=IdentityService(SqlAlchemyIdentityRepository(engine)),
+        feishu_reply_client=(
+            FeishuReplyClient(settings.feishu_app_id, settings.feishu_app_secret)
+            if settings.feishu_app_id and settings.feishu_app_secret
+            else None
+        ),
     )

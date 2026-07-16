@@ -18,6 +18,10 @@ class ConfigurationStore:
         "ollama_model",
         "ollama_host",
         "allow_sensitive_cloud",
+        "feishu_app_id",
+        "feishu_app_secret",
+        "feishu_verification_token",
+        "feishu_encrypt_key",
     }
 
     def __init__(self, path: Path, defaults: Settings) -> None:

@@ -96,6 +96,7 @@ def test_vector_extension_and_expected_tables_exist(database_engine) -> None:
         "audit_events",
         "conversations",
         "document_chunks",
+        "feishu_events",
         "handoff_tickets",
         "identity_whitelist",
         "knowledge_sources",

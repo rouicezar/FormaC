@@ -111,6 +111,10 @@
 - 服务端强制权限过滤，前端隐藏不是安全边界。
 - 云端请求使用可测试的策略网关，禁止模型适配器直接读取数据库。
 - 飞书事件按事件 ID 幂等；回调快速确认，耗时工作异步执行。
+- `POST /feishu/events` 校验时间戳、nonce、Encrypt Key 组合签名及 Verification Token；URL challenge 原样确认，群聊无 `@机器人` 的消息直接忽略。
+- 回调解析只生成纯文本，复用身份服务、原文检索和知识问答；回复通过后台任务调用飞书 `tenant_access_token/internal` 与消息 reply 接口，重复事件不会再次发送。
+- `feishu_events` 持久化事件 ID、发送者、命令、请求和回复，既承担跨重启幂等，也为 `历史` 返回本人最近五条请求。
+- `GET/PUT /admin/feishu/config` 读取和保存 App ID、App Secret、Verification Token 与 Encrypt Key；三项密钥均为只写字段，不通过读取接口回显。
 - 模型失败时返回可靠原文或转人工，不回退到无证据自由回答。
 - 新索引构建失败时继续使用旧版本，并向管理员展示失败状态。
 - 日志禁止记录 API Key、完整敏感片段和飞书凭证。

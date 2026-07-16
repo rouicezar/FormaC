@@ -6,6 +6,7 @@ from app.domain.models import Base, DocumentChunk, KnowledgeSource
 EXPECTED_TABLES = {
     "knowledge_sources",
     "document_chunks",
+    "feishu_events",
     "scan_runs",
     "identity_whitelist",
     "conversations",

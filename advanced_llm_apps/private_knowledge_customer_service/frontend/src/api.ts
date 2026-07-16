@@ -58,6 +58,11 @@ export type IdentityAudit = {
   action: "bind_feishu_identity" | "promote_internal_identity" | "downgrade_external_identity";
   identity_id: string; details: Record<string, string>; created_at: string;
 };
+export type FeishuConfig = {
+  app_id: string | null; app_secret_configured: boolean;
+  verification_token_configured: boolean; encrypt_key_configured: boolean;
+  callback_path: string; protocol: string[];
+};
 
 async function postJson<T>(path: string, body: object): Promise<T> {
   const response = await fetch(`${API}${path}`, {
@@ -100,6 +105,10 @@ export function bindFeishuIdentity(feishuUserId: string, displayName: string) {
 }
 export function updateIdentityRole(identityId: string, role: "external" | "internal") {
   return requestJson<{ identity: ManagedIdentity; audit_recorded: boolean }>(`/admin/users/${identityId}/role`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ role }) });
+}
+export function getFeishuConfig() { return requestJson<FeishuConfig>("/admin/feishu/config"); }
+export function saveFeishuConfig(body: Record<string, string>) {
+  return requestJson<FeishuConfig>("/admin/feishu/config", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
 }
 
 export function searchOriginals(query: string, identity: ApiIdentity) {

@@ -9,6 +9,7 @@ import RetrievalLab from "./RetrievalLab";
 import { KnowledgePage } from "./pages/KnowledgePage";
 import { ModelsPage } from "./pages/ModelsPage";
 import { UsersPage } from "./pages/UsersPage";
+import { FeishuPage } from "./pages/FeishuPage";
 
 export default function App() {
   return (
@@ -27,7 +28,8 @@ export default function App() {
         <Route path="knowledge" element={<KnowledgePage />} />
         <Route path="models" element={<ModelsPage />} />
         <Route path="users" element={<UsersPage />} />
-        {['records', 'analytics', 'shortcuts', 'feishu', 'audit'].map((path) => <Route key={path} path={path} element={<PlaceholderPage />} />)}
+        <Route path="feishu" element={<FeishuPage />} />
+        {['records', 'analytics', 'shortcuts', 'audit'].map((path) => <Route key={path} path={path} element={<PlaceholderPage />} />)}
       </Route>
       <Route path="/admin/retrieval-lab" element={<RetrievalLab />} />
       <Route path="*" element={<Navigate to="/app/home" replace />} />
