@@ -263,6 +263,15 @@
 - 真实 API 复验通过：新扫描启动后，`GET /admin/scans/{id}` 已能看到运行中计数从 0 增长到 `skipped=3`，证明前端轮询可展示实际进度。
 - 自动化回归为 24 项配置、profile、记录和扫描测试通过；前端 TypeScript 与 Vite 生产构建通过。
 
+## 2026-07-16 普通用户端真实闭环验收
+
+- 真实公开检索通过：外部身份 `POST /search` 可从真实测试知识库返回 `public/...` 引用结果，并写入个人记录。
+- DeepSeek 公开问答通过：外部身份 `POST /ask` 使用 `deepseek-v4-flash` 返回 `mode=generate`，答案包含真实公开知识库引用；`GET /app/records` 随后返回该 requester 的 1 条 Web 问答记录和引用统计。
+- Web/飞书身份映射通过：`POST /app/profile/bind-feishu` 将浏览器 requester 绑定到飞书 open_id 后默认保持外部用户，`GET /app/profile` 显示公开知识范围，`GET /app/records` 可按浏览器 requester + 飞书 open_id 合并读取个人历史。
+- 内部敏感访问通过：内部身份检索 `AI` 时可返回 `sensitive/内部折扣规则.md`，证明敏感分区只对内部身份开放。
+- 敏感云端策略复验通过：管理员策略 `allow_sensitive_cloud=false` 时，内部身份命中敏感引用后问答返回 `mode=excerpt_only` 和本地原文，未把敏感内容交给 DeepSeek 生成。
+- 外部降级边界通过：外部身份查询“内部折扣规则 八五折”时，检索结果和 DeepSeek 问答引用均只包含 `public/...`，未返回 `sensitive/...`，回答明确未找到内部折扣规则。
+
 ## 下一步
 
-等待真实知识库后台扫描完成，随后用普通用户端继续完整验收：外部用户公开查询/问答、绑定后 Web/飞书个人历史合并、管理员提权后的内部敏感访问、降级后的权限恢复，以及 DeepSeek 与敏感云端策略复验。
+继续等待真实知识库后台扫描完成并补做最终收口：确认扫描最终报告、用完成后的索引复跑普通用户端关键查询，然后进入 `/app/shortcuts` 与个人高频入口。
