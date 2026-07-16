@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from app.channels.feishu.events import (
     FeishuChannelService,
     FeishuReplyClient,
+    decrypt_payload,
     verify_signature,
 )
 from app.configuration import ConfigurationStore
@@ -78,26 +79,45 @@ async def receive_feishu_event(
 ) -> dict[str, object]:
     settings = _store(request).snapshot()
     service: FeishuChannelService | None = request.app.state.feishu_service
-    if not settings.feishu_verification_token or not settings.feishu_encrypt_key or service is None:
-        raise HTTPException(status_code=503, detail="飞书通道尚未配置")
-
     body = await request.body()
-    timestamp = request.headers.get("X-Lark-Request-Timestamp", "")
-    nonce = request.headers.get("X-Lark-Request-Nonce", "")
-    signature = request.headers.get("X-Lark-Signature", "")
-    if not verify_signature(body, timestamp, nonce, settings.feishu_encrypt_key, signature):
-        raise HTTPException(status_code=401, detail="飞书回调签名无效")
     try:
         payload = json.loads(body)
     except json.JSONDecodeError as error:
         raise HTTPException(status_code=400, detail="飞书回调不是有效 JSON") from error
 
+    encrypted_text = payload.get("encrypt")
+    if isinstance(encrypted_text, str):
+        if not settings.feishu_encrypt_key:
+            raise HTTPException(status_code=503, detail="飞书 Encrypt Key 尚未配置")
+        timestamp = request.headers.get("X-Lark-Request-Timestamp", "")
+        nonce = request.headers.get("X-Lark-Request-Nonce", "")
+        signature = request.headers.get("X-Lark-Signature", "")
+        if not verify_signature(body, timestamp, nonce, settings.feishu_encrypt_key, signature):
+            raise HTTPException(status_code=401, detail="飞书回调签名无效")
+        try:
+            payload = decrypt_payload(encrypted_text, settings.feishu_encrypt_key)
+        except Exception as error:
+            raise HTTPException(status_code=400, detail="飞书加密回调解密失败") from error
+
     header = payload.get("header", {})
     token = payload.get("token") or header.get("token")
+    if not settings.feishu_verification_token:
+        raise HTTPException(status_code=503, detail="飞书 Verification Token 尚未配置")
     if not isinstance(token, str) or not hmac.compare_digest(token, settings.feishu_verification_token):
         raise HTTPException(status_code=401, detail="飞书回调令牌无效")
     if payload.get("type") == "url_verification":
         return {"challenge": payload.get("challenge", "")}
+
+    if not settings.feishu_encrypt_key or service is None:
+        raise HTTPException(status_code=503, detail="飞书通道尚未配置")
+
+    if not isinstance(encrypted_text, str):
+        timestamp = request.headers.get("X-Lark-Request-Timestamp", "")
+        nonce = request.headers.get("X-Lark-Request-Nonce", "")
+        signature = request.headers.get("X-Lark-Signature", "")
+        if not verify_signature(body, timestamp, nonce, settings.feishu_encrypt_key, signature):
+            raise HTTPException(status_code=401, detail="飞书回调签名无效")
+
     if header.get("event_type") != "im.message.receive_v1":
         return {"ok": True, "ignored": True}
 

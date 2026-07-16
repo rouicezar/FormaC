@@ -1,6 +1,10 @@
 import hashlib
 import json
+from base64 import b64encode
+from os import urandom
 
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.primitives.padding import PKCS7
 from fastapi.testclient import TestClient
 
 from app.channels.feishu.events import FeishuChannelService, InMemoryFeishuEventRepository
@@ -51,16 +55,42 @@ def make_app(tmp_path, reply_client=None):
     )
 
 
+def make_challenge_app(tmp_path):
+    settings = Settings(feishu_verification_token="token")
+    store = ConfigurationStore(tmp_path / "config.json", settings)
+    return create_app(configuration_store=store)
+
+
 def signed_headers(body: bytes):
     timestamp, nonce = "1700000000", "nonce"
     signature = hashlib.sha256(timestamp.encode() + nonce.encode() + b"encrypt" + body).hexdigest()
     return {"X-Lark-Request-Timestamp": timestamp, "X-Lark-Request-Nonce": nonce, "X-Lark-Signature": signature, "Content-Type": "application/json"}
 
 
+def encrypt_payload(payload: dict) -> str:
+    key = hashlib.sha256(b"encrypt").digest()
+    iv = urandom(16)
+    padder = PKCS7(algorithms.AES.block_size).padder()
+    padded = padder.update(json.dumps(payload, ensure_ascii=False).encode()) + padder.finalize()
+    encryptor = Cipher(algorithms.AES(key), modes.CBC(iv)).encryptor()
+    return b64encode(iv + encryptor.update(padded) + encryptor.finalize()).decode()
+
+
 def test_url_verification_challenge(tmp_path) -> None:
     client = TestClient(make_app(tmp_path))
     body = json.dumps({"type": "url_verification", "token": "token", "challenge": "abc"}).encode()
     response = client.post("/feishu/events", content=body, headers=signed_headers(body))
+    assert response.status_code == 200
+    assert response.json() == {"challenge": "abc"}
+
+
+def test_url_verification_challenge_does_not_require_encrypt_key(tmp_path) -> None:
+    client = TestClient(make_challenge_app(tmp_path))
+    response = client.post(
+        "/feishu/events",
+        json={"type": "url_verification", "token": "token", "challenge": "abc"},
+    )
+
     assert response.status_code == 200
     assert response.json() == {"challenge": "abc"}
 
@@ -77,6 +107,30 @@ def test_message_callback_defaults_unknown_user_to_external_and_deduplicates(tmp
     assert first.json()["reply"].startswith("CoreKnowledge 纯文本助手")
     assert second.json()["duplicate"] is True
     assert reply_client.replies == [("om-1", first.json()["reply"])]
+
+
+def test_encrypted_message_callback_is_decrypted_and_replied(tmp_path) -> None:
+    reply_client = FakeReplyClient()
+    client = TestClient(make_app(tmp_path, reply_client))
+    payload = {
+        "schema": "2.0",
+        "header": {"event_id": "evt-encrypted", "token": "token", "event_type": "im.message.receive_v1"},
+        "event": {
+            "sender": {"sender_id": {"open_id": "ou-encrypted"}},
+            "message": {
+                "message_id": "om-encrypted",
+                "chat_type": "p2p",
+                "content": json.dumps({"text": "帮助"}),
+            },
+        },
+    }
+    body = json.dumps({"encrypt": encrypt_payload(payload)}, ensure_ascii=False).encode()
+
+    response = client.post("/feishu/events", content=body, headers=signed_headers(body))
+
+    assert response.status_code == 200
+    assert response.json()["reply"].startswith("CoreKnowledge 纯文本助手")
+    assert reply_client.replies == [("om-encrypted", response.json()["reply"])]
 
 
 def test_feishu_admin_config_is_write_only_for_secrets(tmp_path) -> None:

@@ -22,6 +22,7 @@ dependencies = [
     "numpy>=1.26.4,<2",
     "ollama>=0.6,<1",
     "xx-sent-ud-sm",
+    "cryptography>=42,<47",
 ]
 
 [dependency-groups]

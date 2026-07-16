@@ -1,12 +1,15 @@
 import hashlib
 import hmac
 import json
+from base64 import b64decode
 from urllib.request import Request, urlopen
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from enum import StrEnum
 from uuid import UUID, uuid4
 
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.primitives.padding import PKCS7
 from sqlalchemy import select
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import IntegrityError
@@ -74,6 +77,16 @@ def parse_command(text: str) -> tuple[FeishuCommand, str]:
 def verify_signature(body: bytes, timestamp: str, nonce: str, encrypt_key: str, signature: str) -> bool:
     digest = hashlib.sha256(timestamp.encode() + nonce.encode() + encrypt_key.encode() + body).hexdigest()
     return hmac.compare_digest(digest, signature)
+
+
+def decrypt_payload(encrypted_text: str, encrypt_key: str) -> dict:
+    key = hashlib.sha256(encrypt_key.encode()).digest()
+    encrypted = b64decode(encrypted_text)
+    decryptor = Cipher(algorithms.AES(key), modes.CBC(encrypted[:16])).decryptor()
+    padded = decryptor.update(encrypted[16:]) + decryptor.finalize()
+    unpadder = PKCS7(algorithms.AES.block_size).unpadder()
+    plain = unpadder.update(padded) + unpadder.finalize()
+    return json.loads(plain)
 
 
 @dataclass(frozen=True, slots=True)
