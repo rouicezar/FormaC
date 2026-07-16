@@ -47,6 +47,9 @@ class ScanReport:
     deleted: int = 0
     failed: int = 0
     skipped: int = 0
+    total: int = 0
+    processed: int = 0
+    current_path: str | None = None
     errors: list[dict[str, str]] = field(default_factory=list)
 
     def counts(self) -> dict[str, int]:
@@ -139,6 +142,9 @@ class InMemoryScanRepository:
             deleted=report.deleted,
             failed=report.failed,
             skipped=report.skipped,
+            total=report.total,
+            processed=report.processed,
+            current_path=report.current_path,
             errors=list(report.errors),
         )
 
@@ -268,7 +274,12 @@ class SqlAlchemyScanRepository:
             row.deleted_count = report.deleted
             row.failed_count = report.failed
             row.skipped_count = report.skipped
-            row.error_summary = {"errors": report.errors}
+            row.error_summary = {
+                "errors": report.errors,
+                "total": report.total,
+                "processed": report.processed,
+                "current_path": report.current_path,
+            }
             if existing is None:
                 session.add(row)
             session.commit()
@@ -287,6 +298,9 @@ class SqlAlchemyScanRepository:
                 deleted=row.deleted_count,
                 failed=row.failed_count,
                 skipped=row.skipped_count,
+                total=row.error_summary.get("total", 0),
+                processed=row.error_summary.get("processed", 0),
+                current_path=row.error_summary.get("current_path"),
                 errors=row.error_summary.get("errors", []),
             )
 
@@ -351,6 +365,9 @@ class ScanService:
                 id=report.id,
                 trigger=report.trigger,
                 status="failed",
+                total=report.total,
+                processed=report.processed,
+                current_path=report.current_path,
                 errors=[{"path": "<scan>", "error": f"{type(error).__name__}: {error}"}],
             )
             self.repository.save_report(completed)
@@ -361,14 +378,19 @@ class ScanService:
     def scan(self, trigger: str, *, report_id: UUID | None = None) -> ScanReport:
         report = ScanReport(id=report_id or uuid4(), trigger=trigger)
         entries = inventory_knowledge_root(self.knowledge_root)
+        report.total = len(entries)
+        self.repository.save_report(report)
         stored_sources = self.repository.list_sources(self.knowledge_root)
         current_paths = {entry.relative_path.as_posix() for entry in entries}
 
         for entry in entries:
             relative_path = entry.relative_path.as_posix()
+            report.current_path = relative_path
+            self.repository.save_report(report)
             previous = stored_sources.get(relative_path)
             if previous and previous.content_hash == entry.fingerprint.content_hash:
                 report.skipped += 1
+                report.processed += 1
                 self.repository.save_report(report)
                 continue
 
@@ -401,6 +423,7 @@ class ScanService:
                         "error": f"{type(error).__name__}: {error}",
                     }
                 )
+                report.processed += 1
                 self.repository.save_report(report)
                 continue
 
@@ -408,10 +431,13 @@ class ScanService:
                 report.added += 1
             else:
                 report.updated += 1
+            report.processed += 1
             self.repository.save_report(report)
 
         for relative_path in sorted(set(stored_sources) - current_paths):
             try:
+                report.current_path = relative_path
+                self.repository.save_report(report)
                 if self.knowledge_index:
                     self.knowledge_index.delete_source(
                         stored_sources[relative_path].partition,
@@ -419,6 +445,7 @@ class ScanService:
                     )
                 self.repository.delete_source(self.knowledge_root, relative_path)
                 report.deleted += 1
+                report.processed += 1
                 self.repository.save_report(report)
             except Exception as error:
                 report.failed += 1
@@ -428,6 +455,7 @@ class ScanService:
                         "error": f"{type(error).__name__}: {error}",
                     }
                 )
+                report.processed += 1
                 self.repository.save_report(report)
 
         report.status = "partial" if report.failed else "succeeded"
@@ -435,6 +463,7 @@ class ScanService:
             (report.added, report.updated, report.deleted, report.skipped)
         ):
             report.status = "failed"
+        report.current_path = None
         self.repository.save_report(report)
         return report
 

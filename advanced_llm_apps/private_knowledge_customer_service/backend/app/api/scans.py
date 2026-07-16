@@ -19,6 +19,9 @@ class ScanReportResponse(BaseModel):
     deleted: int
     failed: int
     skipped: int
+    total: int
+    processed: int
+    current_path: str | None
     errors: list[dict[str, str]]
 
     @classmethod
@@ -32,6 +35,9 @@ class ScanReportResponse(BaseModel):
             deleted=report.deleted,
             failed=report.failed,
             skipped=report.skipped,
+            total=report.total,
+            processed=report.processed,
+            current_path=report.current_path,
             errors=report.errors,
         )
 

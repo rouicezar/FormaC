@@ -44,6 +44,9 @@ export type ScanReport = {
   deleted: number;
   failed: number;
   skipped: number;
+  total: number;
+  processed: number;
+  current_path: string | null;
   errors: Array<{ path: string; error: string }>;
 };
 

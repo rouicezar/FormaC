@@ -48,7 +48,15 @@ class ProgressProbeRepository(InMemoryScanRepository):
 
     def save_report(self, report) -> None:
         super().save_report(report)
-        self.snapshots.append({"status": report.status, **report.counts()})
+        self.snapshots.append(
+            {
+                "status": report.status,
+                "total": report.total,
+                "processed": report.processed,
+                "current_path": report.current_path,
+                **report.counts(),
+            }
+        )
 
 
 def test_initial_scan_and_unchanged_scan(tmp_path: Path) -> None:
@@ -87,9 +95,22 @@ def test_scan_persists_running_progress(tmp_path: Path) -> None:
     report = service.scan(trigger="manual")
 
     assert report.added == 2
-    assert {"status": "running", "added": 1, "updated": 0, "deleted": 0, "failed": 0, "skipped": 0} in repository.snapshots
+    assert {
+        "status": "running",
+        "total": 2,
+        "processed": 1,
+        "current_path": "public/first.txt",
+        "added": 1,
+        "updated": 0,
+        "deleted": 0,
+        "failed": 0,
+        "skipped": 0,
+    } in repository.snapshots
     assert repository.snapshots[-1] == {
         "status": "succeeded",
+        "total": 2,
+        "processed": 2,
+        "current_path": None,
         "added": 2,
         "updated": 0,
         "deleted": 0,
