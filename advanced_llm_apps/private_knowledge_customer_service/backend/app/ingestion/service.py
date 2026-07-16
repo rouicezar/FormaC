@@ -369,6 +369,7 @@ class ScanService:
             previous = stored_sources.get(relative_path)
             if previous and previous.content_hash == entry.fingerprint.content_hash:
                 report.skipped += 1
+                self.repository.save_report(report)
                 continue
 
             try:
@@ -400,12 +401,14 @@ class ScanService:
                         "error": f"{type(error).__name__}: {error}",
                     }
                 )
+                self.repository.save_report(report)
                 continue
 
             if previous is None:
                 report.added += 1
             else:
                 report.updated += 1
+            self.repository.save_report(report)
 
         for relative_path in sorted(set(stored_sources) - current_paths):
             try:
@@ -416,6 +419,7 @@ class ScanService:
                     )
                 self.repository.delete_source(self.knowledge_root, relative_path)
                 report.deleted += 1
+                self.repository.save_report(report)
             except Exception as error:
                 report.failed += 1
                 report.errors.append(
@@ -424,6 +428,7 @@ class ScanService:
                         "error": f"{type(error).__name__}: {error}",
                     }
                 )
+                self.repository.save_report(report)
 
         report.status = "partial" if report.failed else "succeeded"
         if report.failed and not any(

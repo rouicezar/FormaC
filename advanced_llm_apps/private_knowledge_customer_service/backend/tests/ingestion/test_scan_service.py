@@ -41,6 +41,16 @@ class FakeKnowledgeIndex:
         self.deleted.append((partition.value, relative_path))
 
 
+class ProgressProbeRepository(InMemoryScanRepository):
+    def __init__(self) -> None:
+        super().__init__()
+        self.snapshots: list[dict[str, int | str]] = []
+
+    def save_report(self, report) -> None:
+        super().save_report(report)
+        self.snapshots.append({"status": report.status, **report.counts()})
+
+
 def test_initial_scan_and_unchanged_scan(tmp_path: Path) -> None:
     root = make_root(tmp_path)
     (root / "public" / "faq.txt").write_text("Shipping takes two days", encoding="utf-8")
@@ -65,6 +75,27 @@ def test_initial_scan_and_unchanged_scan(tmp_path: Path) -> None:
         "skipped": 1,
     }
     assert repository.sources["public/faq.txt"].chunks[0].text == "Shipping takes two days"
+
+
+def test_scan_persists_running_progress(tmp_path: Path) -> None:
+    root = make_root(tmp_path)
+    (root / "public" / "first.txt").write_text("First answer", encoding="utf-8")
+    (root / "public" / "second.txt").write_text("Second answer", encoding="utf-8")
+    repository = ProgressProbeRepository()
+    service = ScanService(root, repository)
+
+    report = service.scan(trigger="manual")
+
+    assert report.added == 2
+    assert {"status": "running", "added": 1, "updated": 0, "deleted": 0, "failed": 0, "skipped": 0} in repository.snapshots
+    assert repository.snapshots[-1] == {
+        "status": "succeeded",
+        "added": 2,
+        "updated": 0,
+        "deleted": 0,
+        "failed": 0,
+        "skipped": 0,
+    }
 
 
 def test_changed_and_deleted_files_update_inventory(tmp_path: Path) -> None:
